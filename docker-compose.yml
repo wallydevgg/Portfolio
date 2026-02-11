@@ -1,0 +1,13 @@
+services:
+  frontend:
+    build: .
+    container_name: portfolio_frontend
+    restart: always
+    ports:
+      - "3000:80"
+    networks:
+      - vps-network
+
+networks:
+  vps-network:
+    external: true

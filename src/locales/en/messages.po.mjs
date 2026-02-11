@@ -1,0 +1,1 @@
+/*eslint-disable*/export const messages=JSON.parse("{\"8pnYhg\":[\"Hi! I'm <0>Waldir Apaza</0>\"],\"EqYyaK\":[\"hero.linkedInButton\"],\"II/WAU\":[\"+3 Years of experience <0>Fullstack Web Developer</0> with a solid background in <1>software development</1>\"],\"yLTwzf\":[\"hero.status\"],\"zZuhBh\":[\"hero.contactButton\"]}");

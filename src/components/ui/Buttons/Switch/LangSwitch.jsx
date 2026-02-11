@@ -1,12 +1,11 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
+import i18n, { dynamicActivate } from "../../../../i18n"; // Adjust the path if necessary
 import "./LangSwitch.scss";
 
 const LangSwitch = () => {
-  const { i18n } = useTranslation();
-
   const toggleLanguage = () => {
-    i18n.changeLanguage(i18n.language === "en" ? "es" : "en");
+    const newLocale = i18n.locale === "en" ? "es" : "en";
+    dynamicActivate(newLocale);
   };
 
   return (
@@ -15,12 +14,12 @@ const LangSwitch = () => {
         id="language-toggle"
         className="check-toggle check-toggle-round-flat"
         type="checkbox"
-        checked={i18n.language === "es"}
+        checked={i18n.locale === "es"}
         onChange={toggleLanguage}
       />
       <label htmlFor="language-toggle">
-        <span className={i18n.language === "en" ? "off" : "on"}>
-          {i18n.language === "en" ? "EN" : "ES"}
+        <span className={i18n.locale === "en" ? "off" : "on"}>
+          {i18n.locale === "en" ? "EN" : "ES"}
         </span>
       </label>
     </div>

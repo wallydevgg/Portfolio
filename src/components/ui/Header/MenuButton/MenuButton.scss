@@ -1,4 +1,5 @@
-@import "../../../../index.scss";
+@use "sass:color";
+@use "../../../../index.scss" as *;
 $primary-color: #ff8906;
 
 // Estilos para el botón del menú
@@ -32,7 +33,7 @@ $primary-color: #ff8906;
     display: none;
   }
   &:hover {
-    background-color: darken($primary-color, 5%);
+    background-color: color.adjust($primary-color, $lightness: -5%);
   }
 
   &__icon {

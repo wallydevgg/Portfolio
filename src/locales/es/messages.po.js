@@ -1,0 +1,1 @@
+/*eslint-disable*/module.exports={messages:JSON.parse("{\"II/WAU\":\"+3 Years of experience <0>Fullstack Web Developer</0> with a solid background in <1>software development</1>\",\"zZuhBh\":\"hero.contactButton\",\"EqYyaK\":\"hero.linkedInButton\",\"yLTwzf\":\"hero.status\",\"8pnYhg\":\"Hi! I'm <0>Waldir Apaza</0>\"}")};

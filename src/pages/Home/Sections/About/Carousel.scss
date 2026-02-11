@@ -7,7 +7,7 @@
 
   .carousel-images {
     display: flex;
-    transition: transform 1s infinite;
+    transition: transform 1s;
     will-change: transform;
     /* Para mejorar el rendimiento */
 

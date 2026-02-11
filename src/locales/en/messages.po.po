@@ -1,0 +1,34 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2025-11-02 22:21-0500\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: en\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: src/pages/Home/Sections/Hero/Hero.jsx:20
+msgid "+3 Years of experience <0>Fullstack Web Developer</0> with a solid background in <1>software development</1>"
+msgstr ""
+
+#: src/pages/Home/Sections/Hero/Hero.jsx:30
+msgid "hero.contactButton"
+msgstr ""
+
+#: src/pages/Home/Sections/Hero/Hero.jsx:39
+msgid "hero.linkedInButton"
+msgstr ""
+
+#: src/pages/Home/Sections/Hero/Hero.jsx:46
+msgid "hero.status"
+msgstr ""
+
+#: src/pages/Home/Sections/Hero/Hero.jsx:15
+msgid "Hi! I'm <0>Waldir Apaza</0>"
+msgstr ""

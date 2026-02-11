@@ -130,5 +130,5 @@ h4,
 h5,
 h6 {
   overflow-wrap: break-word;
-  text-wrap: pretty
+  // text-wrap: pretty; // This is a new CSS feature and may not be supported by all browsers.
 }
