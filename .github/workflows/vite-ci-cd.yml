@@ -1,4 +1,4 @@
-name: vite-deploy to VPS - CI/CD
+name: Docker Deploy Portfolio to VPS
 
 on:
   push:
@@ -11,101 +11,59 @@ on:
       - ".github/workflows/**"
 
 jobs:
-  build:
-    name: Build for Production
-    runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        node-version: [20.x]
+  build-and-deploy:
+    name: Build Docker & Deploy to VPS
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' # Only deploy on main branch push
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: "npm"
-      - name: Install dependencies
-        run: npm ci
-      - name: Build
-        run: npm run build
-      - name: Upload production-ready build files
-        uses: actions/upload-artifact@v4
-        with:
-          name: production-files
-          path: |
-            ./dist
-            ./package.json
 
-  deploy:
-    name: Deploy on VPS
-    needs: build
-    runs-on: ubuntu-22.04
-    if: github.ref == 'refs/heads/main'
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
+      - name: Build Docker Image
+        uses: docker/build-push-action@v5
         with:
-          name: production-files
-          path: .
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: portfolio_frontend:latest
+          outputs: type=docker,dest=/tmp/portfolio_frontend.tar
 
-      - name: Copy production files to public_html
-        uses: appleboy/scp-action@v0.1.0
+      - name: Copy Docker Image and Compose file to VPS
+        uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{secrets.SSH_HOST}}
-          username: ${{ secrets.SSH_USER}}
-          password: ${{secrets.INPUT_PASSWORD}}
-          port: ${{secrets.SSH_PORT}}
-          source: "./dist/*,./package.json"
-          target: "/home/wallydev-ops/web/wallydev.dev/public_html/"
-          overwrite: true
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.INPUT_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "/tmp/portfolio_frontend.tar,docker-compose.yml"
+          target: "/home/wallydev-ops/apps/portfolio-frontend/"
+          strip_components: 1 # Removes /tmp/ from the target path for the tar
 
-      - name: Copy files from Dist to public_html
+      - name: Deploy on VPS
         uses: appleboy/ssh-action@v0.1.1
         with:
-          host: ${{secrets.SSH_HOST}}
-          username: ${{ secrets.SSH_USER}}
-          password: ${{secrets.INPUT_PASSWORD}}
-          port: ${{secrets.SSH_PORT}}
-          script: cp -r /home/wallydev-ops/web/wallydev.dev/public_html/dist/* /home/wallydev-ops/web/wallydev.dev/public_html
-
-      - name: Execute
-        uses: appleboy/ssh-action@v0.1.1
-        with:
-          host: ${{secrets.SSH_HOST}}
-          username: ${{ secrets.SSH_USER}}
-          password: ${{secrets.INPUT_PASSWORD}}
-          port: ${{secrets.SSH_PORT}}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.INPUT_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /home/wallydev-ops/web/wallydev.dev/public_html
-            source /home/wallydev-ops/.nvm/nvm.sh  # Cargar NVM
-            nvm use v20.13.1  # Establecer la versión de Node.js
-            /home/wallydev-ops/.nvm/versions/node/v20.13.1/bin/npm install --omit=dev
-            nohup /home/wallydev-ops/.nvm/versions/node/v20.13.1/bin/npm run preview --port 3000 > nohup.out 2>&1 &
-            sleep 5  # Asegurarse de que el comando nohup se ejecute correctamente
+            # Navigate to project directory
+            mkdir -p /home/wallydev-ops/apps/portfolio-frontend
+            cd /home/wallydev-ops/apps/portfolio-frontend
 
-      - name: Track Deployed Port
-        uses: appleboy/ssh-action@v0.1.1
-        with:
-          host: ${{secrets.SSH_HOST}}
-          username: ${{ secrets.SSH_USER}}
-          password: ${{secrets.INPUT_PASSWORD}}
-          port: ${{secrets.SSH_PORT}}
-          script: |
-            echo "Finding deployed port..."
-            sleep 2  # A small delay to ensure the app has started
-            PORT=$(lsof -i -P -n | grep LISTEN | grep node | awk '{print $9}' | cut -d':' -f2)
-            echo "Application is running on port: $PORT"
-            echo "Application is running on port: $PORT" > /home/wallydev-ops/web/wallydev.dev/public_html/deployed_port.txt
+            # Load new image
+            echo "Loading Docker image..."
+            docker load -i portfolio_frontend.tar
 
-  debug_ip:
-    name: Debug IP Address
-    runs-on: ubuntu-latest
-    needs: deploy
-    if: always()
+            # Restart container
+            echo "Restarting service..."
+            docker compose down
+            docker compose up -d
 
-    steps:
-      - name: Debug IP
-        run: |
-          curl ifconfig.me
+            # Cleanup
+            rm portfolio_frontend.tar
+            echo "Deployment successful!"
