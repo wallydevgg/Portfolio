@@ -64,6 +64,11 @@ jobs:
             docker compose down
             docker compose up -d
 
-            # Cleanup
+
+            # Cleanup files
             rm portfolio_frontend.tar
+
+            # Prune dangling images (prevents disk fill-up)
+            docker image prune -f
+
             echo "Deployment successful!"
