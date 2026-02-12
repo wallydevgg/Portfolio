@@ -32,6 +32,12 @@ jobs:
           tags: portfolio_frontend:latest
           outputs: type=docker,dest=/tmp/portfolio_frontend.tar
 
+      - name: Prepare files for transfer
+        run: |
+          mkdir staging
+          cp /tmp/portfolio_frontend.tar staging/
+          cp docker-compose.yml staging/
+
       - name: Copy Docker Image and Compose file to VPS
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -39,9 +45,9 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.INPUT_PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
-          source: "/tmp/portfolio_frontend.tar,docker-compose.yml"
+          source: "staging/*"
           target: "/home/wallydev-ops/apps/portfolio-frontend/"
-          strip_components: 1 # Removes /tmp/ from the target path for the tar
+          strip_components: 1 # Removes 'staging/' directory structure
 
       - name: Deploy on VPS
         uses: appleboy/ssh-action@v0.1.1
