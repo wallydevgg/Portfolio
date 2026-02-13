@@ -1,0 +1,101 @@
+name: Full Stack Deploy Portfolio (Front+Back) to VPS
+
+on:
+  push:
+    branches: ["main"]
+    paths-ignore:
+      - ".github/workflows/**"
+      - "README.md"
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build-and-deploy:
+    name: Build Docker Images & Deploy
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Frontend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: false
+          tags: portfolio_frontend:latest
+          outputs: type=docker,dest=/tmp/portfolio_frontend.tar
+
+      - name: Build Backend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: false
+          tags: portfolio_backend:latest
+          outputs: type=docker,dest=/tmp/portfolio_backend.tar
+
+      - name: Prepare files for transfer
+        run: |
+          mkdir staging
+          cp /tmp/portfolio_frontend.tar staging/
+          cp /tmp/portfolio_backend.tar staging/
+          cp docker-compose.yml staging/
+
+      - name: Copy Files to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.INPUT_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "staging/*"
+          target: "/home/wallydev-ops/apps/portfolio/"
+          strip_components: 1
+
+      - name: Deploy on VPS
+        uses: appleboy/ssh-action@v0.1.1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.INPUT_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            set -e
+
+            # Setup Directory
+            mkdir -p /home/wallydev-ops/apps/portfolio
+            cd /home/wallydev-ops/apps/portfolio
+
+            # Create .env file for production
+            echo "Creating .env file..."
+            cat > .env <<EOF
+            POSTGRES_SERVER=vps_postgres
+            POSTGRES_USER=${{ secrets.DB_USER }}
+            POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }}
+            POSTGRES_DB=portfolio
+            BACKEND_CORS_ORIGINS=["https://wallydev.dev"]
+            EOF
+
+            # Load Images
+            echo "Loading images..."
+            docker load -i portfolio_frontend.tar
+            docker load -i portfolio_backend.tar
+
+            # Cleanup Tars
+            rm portfolio_frontend.tar portfolio_backend.tar
+
+            # Restart Services
+            echo "Restarting stack..."
+            docker compose down
+            docker compose up -d
+
+            # Maintenance
+            docker image prune -f
+
+            echo "Full Stack Deployment Successful! 🚀"

@@ -1,14 +1,49 @@
+version: "3.8"
+
 services:
   frontend:
-    image: portfolio_frontend:latest
-    # build: .
     container_name: portfolio_frontend
+    image: portfolio_frontend:latest
+    build:
+      context: ./frontend
     restart: always
     ports:
       - "3000:80"
     networks:
-      - vps-network
+      - proxy-network
+    depends_on:
+      - backend
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+
+  backend:
+    container_name: portfolio_backend
+    image: portfolio_backend:latest
+    build:
+      context: ./backend
+    restart: always
+    ports:
+      - "127.0.0.1:8000:8000" # Internal access only (via Nginx or localhost)
+    environment:
+      - POSTGRES_SERVER=${POSTGRES_SERVER:-vps_postgres}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB:-portfolio}
+      - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS}
+    networks:
+      - data-network
+      - proxy-network
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
 
 networks:
-  vps-network:
+  proxy-network:
+    external: true
+  data-network:
     external: true

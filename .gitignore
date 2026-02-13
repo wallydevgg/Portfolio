@@ -27,3 +27,6 @@ dist-ssr
 
 #archivos de prueba 
 pm2run.json
+backend/__pycache__/
+backend/venv/
+backend/.env
