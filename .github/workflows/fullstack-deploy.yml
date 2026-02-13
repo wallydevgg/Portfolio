@@ -92,6 +92,8 @@ jobs:
 
             # Restart Services
             echo "Restarting stack..."
+            # Force remove execution to handle migration from other folders
+            docker rm -f portfolio_frontend portfolio_backend || true
             docker compose down
             docker compose up -d
 
