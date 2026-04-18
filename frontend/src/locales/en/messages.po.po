@@ -32,3 +32,15 @@ msgstr ""
 #: src/pages/Home/Sections/Hero/Hero.jsx:15
 msgid "Hi! I'm <0>Waldir Apaza</0>"
 msgstr ""
+
+#: src/components/ui/Header/Menu/Menu.jsx:26
+msgid "menu.about"
+msgstr "menu.about"
+
+#: src/components/ui/Header/Menu/Menu.jsx:14
+msgid "menu.experience"
+msgstr "menu.experience"
+
+#: src/components/ui/Header/Menu/Menu.jsx:20
+msgid "menu.projects"
+msgstr "menu.projects"
