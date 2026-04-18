@@ -45,7 +45,7 @@ jobs:
           mkdir staging
           cp /tmp/portfolio_frontend.tar staging/
           cp /tmp/portfolio_backend.tar staging/
-          cp docker-compose.yml staging/
+          cp docker-compose.prod.yml staging/docker-compose.yml
 
       - name: Copy Files to VPS
         uses: appleboy/scp-action@v0.1.7
@@ -75,7 +75,7 @@ jobs:
             # Create .env file for production
             echo "Creating .env file..."
             cat > .env <<EOF
-            POSTGRES_SERVER=vps_postgres
+            POSTGRES_SERVER=vps-postgres
             POSTGRES_USER=${{ secrets.DB_USER }}
             POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }}
             POSTGRES_DB=portfolio

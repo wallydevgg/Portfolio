@@ -23,7 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-
+proximos-posts
 
 #archivos de prueba 
 pm2run.json

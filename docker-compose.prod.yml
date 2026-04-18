@@ -2,12 +2,9 @@ services:
   frontend:
     container_name: portfolio_frontend
     image: portfolio_frontend:latest
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
     restart: always
     ports:
-      - "${FRONTEND_PORT:-3030}:80"
+      - "127.0.0.1:3030:80"
     networks:
       - proxy-network
     depends_on:
@@ -21,18 +18,15 @@ services:
   backend:
     container_name: portfolio_backend
     image: portfolio_backend:latest
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
     restart: always
     ports:
-      - "127.0.0.1:8003:8000"
+      - "127.0.0.1:8003:8000" # Internal access only (via Nginx or localhost)
     environment:
       - POSTGRES_SERVER=${POSTGRES_SERVER:-vps-postgres}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB:-portfolio}
-      - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS}
+      - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS:-[]}
     networks:
       - data-network
       - proxy-network
