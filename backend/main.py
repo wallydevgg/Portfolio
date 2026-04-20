@@ -19,7 +19,12 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_headers=["*"],
     )
 
+from domains.users.router import router as users_router
+from domains.blog.router import router as blog_router
+
 app.include_router(portfolio_router, prefix=f"{settings.API_V1_STR}/portfolio", tags=["portfolio"])
+app.include_router(users_router, prefix=f"{settings.API_V1_STR}", tags=["users"])
+app.include_router(blog_router, prefix=f"{settings.API_V1_STR}", tags=["blogs"])
 
 @app.get("/")
 def root():

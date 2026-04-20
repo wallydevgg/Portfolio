@@ -29,4 +29,5 @@ proximos-posts
 pm2run.json
 backend/__pycache__/
 backend/venv/
-backend/.env
+*.env
+.env
