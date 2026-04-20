@@ -1,36 +1,36 @@
 [
   {
+    "id": "portfolio-v2",
+    "title": "WallyDev Portfolio (Full-Stack)",
+    "image": "proy-portfolio.webp",
+    "description": "Portfolio personal + Blog + CMS admin construido con React 19, Tailwind CSS, FastAPI y PostgreSQL. CI/CD con Docker y GitHub Actions. i18n EN/ES con LinguiJS.",
+    "skills": ["React 19", "Tailwind", "FastAPI", "PostgreSQL", "Docker", "GitHub Actions"],
+    "websiteLink": "https://wallydev.dev",
+    "githubLink": "https://github.com/wallydevgg/Portfolio"
+  },
+  {
     "id": "0",
     "title": "Github Searcher",
     "image": "/proy1.webp",
-    "description": "Buscador de usuarios de github, da info,detalles y repos del usuario buscado",
+    "description": "Buscador de usuarios de github, da info, detalles y repos del usuario buscado",
     "skills": ["React", "CSS", "MUI"],
     "websiteLink": "https://github-searcher-2-0.vercel.app/",
     "githubLink": "https://github.com/waldir-xam/github-searcher-2.0"
   },
   {
-    "id": "1",
-    "title": "Portfolio",
-    "image": "proy2.webp",
-    "description": "Portfolio con info acerca de mi, proyectos y contacto",
-    "skills": ["React", "SCSS"],
-    "websiteLink": "https://vercel.com",
-    "githubLink": "https://github.com"
-  },
-  {
     "id": "2",
-    "title": "Rick & Morty",
+    "title": "Rick & Morty App",
     "image": "proy2.webp",
-    "description": "App usando la API fake de Rick & Morty",
+    "description": "App usando la API de Rick & Morty con listado de personajes, filtros y paginación",
     "skills": ["Javascript", "Bootstrap"],
     "websiteLink": "https://rick-y-morty-api-phi.vercel.app/",
     "githubLink": "https://github.com/waldir-xam/Rick-y-Morty-API"
   },
   {
     "id": "3",
-    "title": "Task List/To do ",
+    "title": "Task List / To Do",
     "image": "proy3.webp",
-    "description": "More projects in progress...",
+    "description": "CRUD de tareas con estado global, filtros y persistencia local",
     "skills": ["React", "Tailwind", "Redux"],
     "websiteLink": "https://react-crud-todo-phi.vercel.app/",
     "githubLink": "https://github.com/waldir-xam/react-crud-todo"

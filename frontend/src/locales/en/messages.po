@@ -1,0 +1,95 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+
+msgid "menu.home"
+msgstr "home"
+
+msgid "menu.experience"
+msgstr "experience"
+
+msgid "menu.projects"
+msgstr "projects"
+
+msgid "menu.blog"
+msgstr "blog"
+
+msgid "menu.about"
+msgstr "about-me"
+
+msgid "menu.contact"
+msgstr "contact"
+
+msgid "hero.contactButton"
+msgstr "Email"
+
+msgid "hero.linkedInButton"
+msgstr "LinkedIn"
+
+msgid "hero.status"
+msgstr "Available for work"
+
+msgid "hero.viewProjects"
+msgstr "View projects"
+
+msgid "hero.readBlog"
+msgstr "Read blog"
+
+msgid "hero.downloadCV"
+msgstr "Download CV"
+
+msgid "skills.title"
+msgstr "skills"
+
+msgid "skills.frontend"
+msgstr "Frontend"
+
+msgid "skills.backend"
+msgstr "Backend"
+
+msgid "skills.devops"
+msgstr "DevOps & Tools"
+
+msgid "blog.subtitle"
+msgstr "Articles about fullstack development, React, Python, DevOps and software architecture."
+
+msgid "blog.searchPlaceholder"
+msgstr "Search articles..."
+
+msgid "blog.readMore"
+msgstr "Read more"
+
+msgid "blog.noPosts"
+msgstr "No posts yet. Check back soon!"
+
+msgid "blog.error"
+msgstr "Could not load posts. Please try again later."
+
+msgid "contact.title"
+msgstr "contact"
+
+msgid "contact.name"
+msgstr "Name"
+
+msgid "contact.email"
+msgstr "Email"
+
+msgid "contact.subject"
+msgstr "Subject"
+
+msgid "contact.message"
+msgstr "Message"
+
+msgid "contact.send"
+msgstr "Send message"
+
+msgid "contact.sending"
+msgstr "Sending..."
+
+msgid "contact.success"
+msgstr "Message sent! I'll get back to you soon."
+
+msgid "contact.error"
+msgstr "Something went wrong. Please try again."

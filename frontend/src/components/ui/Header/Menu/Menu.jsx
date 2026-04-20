@@ -1,3 +1,4 @@
+// ✅ GENERADO POR CLAUDE - Archivo: frontend/src/components/ui/Header/Menu/Menu.jsx
 import { Link } from "react-router-dom";
 import { Switch } from "@/barrell";
 import "./Menu.scss";
@@ -8,6 +9,12 @@ const Menu = ({ handleLinkClick }) => {
   return (
     <nav className="menu-header">
       <ul>
+        <li>
+          <Link to="/" onClick={() => handleLinkClick("hero")}>
+            <span className="hashTag">#</span>
+            {t`menu.home`}
+          </Link>
+        </li>
         <li>
           <Link to="/" onClick={() => handleLinkClick("experience")}>
             <span className="hashTag">#</span>
@@ -21,9 +28,21 @@ const Menu = ({ handleLinkClick }) => {
           </Link>
         </li>
         <li>
+          <Link to="/blog" onClick={() => handleLinkClick("")}>
+            <span className="hashTag">#</span>
+            {t`menu.blog`}
+          </Link>
+        </li>
+        <li>
           <Link to="/" onClick={() => handleLinkClick("about")}>
             <span className="hashTag">#</span>
             {t`menu.about`}
+          </Link>
+        </li>
+        <li>
+          <Link to="/" onClick={() => handleLinkClick("contact")}>
+            <span className="hashTag">#</span>
+            {t`menu.contact`}
           </Link>
         </li>
         <li>

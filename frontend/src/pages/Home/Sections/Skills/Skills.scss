@@ -1,0 +1,104 @@
+// ✅ GENERADO POR CLAUDE - Archivo: frontend/src/pages/Home/Sections/Skills/Skills.scss
+@use "../../../../index.scss" as *;
+
+.skills {
+  width: 100%;
+  margin: 2rem auto;
+  padding: 2rem;
+
+  @media (max-width: 599px) {
+    padding: 1rem;
+  }
+
+  .title-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+
+    h2 {
+      font-size: 2rem;
+      font-weight: var(--fw-4);
+      white-space: nowrap;
+
+      .dark-theme & {
+        color: $DM-Title;
+      }
+      .light-theme & {
+        color: $LM-Title;
+      }
+    }
+
+    .space-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--color-primary), transparent);
+    }
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+
+    @media (max-width: 991px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 599px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .skill-category {
+    h3 {
+      font-size: 1.1rem;
+      font-weight: var(--fw-4);
+      color: var(--color-primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(255, 137, 6, 0.3);
+    }
+  }
+
+  .skill-item {
+    margin-bottom: 1.25rem;
+
+    .skill-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.4rem;
+      font-size: 0.9rem;
+
+      .skill-name {
+        font-weight: var(--fw-2);
+
+        .dark-theme & {
+          color: $DM-Title;
+        }
+        .light-theme & {
+          color: $LM-Title;
+        }
+      }
+
+      .skill-level {
+        color: var(--parrafos);
+        font-size: 0.8rem;
+      }
+    }
+
+    .skill-bar {
+      height: 6px;
+      background: rgba(167, 169, 190, 0.2);
+      border-radius: 3px;
+      overflow: hidden;
+
+      .skill-progress {
+        height: 100%;
+        background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+        border-radius: 3px;
+        transition: width 0.8s ease;
+      }
+    }
+  }
+}
