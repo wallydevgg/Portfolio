@@ -1,18 +1,13 @@
 import { useEffect } from "react";
 import MetaTags from "../meta/MetaTags";
-import "./error.scss";
-
 export default function NotFoundPage() {
   useEffect(() => {
-    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-      .matches
-      ? "dark"
-      : "light";
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     document.documentElement.setAttribute("data-theme", systemTheme);
   }, []);
 
   return (
-    <div id="error-page">
+    <div className="mx-auto flex flex-col justify-center items-center h-screen">
       <MetaTags
         title="404 - Page Not Found"
         description="The page you are looking for might have been removed or is temporarily unavailable."

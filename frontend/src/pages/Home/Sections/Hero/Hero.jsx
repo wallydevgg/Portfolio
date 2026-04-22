@@ -1,14 +1,8 @@
-// ✅ GENERADO POR CLAUDE - Archivo: frontend/src/pages/Home/Sections/Hero/Hero.jsx
 import { Icon } from "@/barrell";
 import { Link } from "react-router-dom";
 import fotowaldir from "@/images/fotowaldir.webp";
-import {
-  faEnvelope,
-  faDownload,
-  faArrowRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faDownload, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faLinkedin, faGithub } from "@fortawesome/free-brands-svg-icons";
-import "./Hero.scss";
 import { Trans, t } from "@lingui/macro";
 
 const Hero = () => {
@@ -28,14 +22,18 @@ const Hero = () => {
   };
 
   return (
-    <div className="hero-container" id="hero">
-      <div className="hero-left">
-        <h1>
+    <div
+      className="w-full mx-auto flex justify-center max-[599px]:flex-col max-[599px]:flex-grow max-[599px]:mt-[7.5vh] max-[599px]:mb-20 max-[991px]:flex-col max-[991px]:h-screen lg:h-[90vh] lg:mt-0 xl:mt-16"
+      id="hero"
+    >
+      {/* Left: text + buttons */}
+      <div className="w-1/2 p-12 flex flex-col justify-center max-[599px]:w-full max-[599px]:order-1 max-[599px]:p-0 max-[991px]:w-full max-[991px]:items-center lg:p-4 lg:items-start xl:justify-center xl:p-8 text-[var(--LM-Title)] dark:text-[var(--DM-Title)]">
+        <h1 className="font-semibold text-[2em] max-[599px]:text-[1.75rem]">
           <Trans>
             Hi! I'm <span className="hashTag">Waldir Apaza</span>
           </Trans>
         </h1>
-        <p>
+        <p className="mt-4 font-semibold text-[1.25rem]">
           <Trans>
             +3 Years of experience{" "}
             <span className="hashTag">Fullstack Web Developer</span> with a
@@ -43,46 +41,38 @@ const Hero = () => {
             <span className="hashTag">software development</span>
           </Trans>
         </p>
-        <div className="social-buttons">
-          <button
-            className="social-btn"
-            onClick={() => scrollToSection("projects")}
-          >
+        <div className="mt-6 flex flex-wrap gap-[8%]">
+          <button className="social-btn" onClick={() => scrollToSection("projects")}>
             <Icon css="icon" icon={faArrowRight} /> {t`hero.viewProjects`}
           </button>
           <Link to="/blog" className="social-btn">
             <Icon css="icon" icon={faArrowRight} /> {t`hero.readBlog`}
           </Link>
-          <Link
-            to="https://github.com/wallydevgg"
-            className="social-btn"
-            target="_blank"
-            rel="noreferrer"
-          >
+          <Link to="https://github.com/wallydevgg" className="social-btn" target="_blank" rel="noreferrer">
             <Icon css="icon" icon={faGithub} /> GitHub
           </Link>
-          <Link
-            to="https://www.linkedin.com/in/waldirxam/"
-            className="social-btn"
-            target="_blank"
-            rel="noreferrer"
-          >
+          <Link to="https://www.linkedin.com/in/waldirxam/" className="social-btn" target="_blank" rel="noreferrer">
             <Icon css="icon" icon={faLinkedin} /> LinkedIn
           </Link>
           <Link to="mailto:contact@wallydev.dev" className="social-btn">
             <Icon css="icon" icon={faEnvelope} /> {t`hero.contactButton`}
           </Link>
-          <button
-            className="social-btn social-btn--cv"
-            onClick={handleDownloadCV}
-          >
+          <button className="social-btn" onClick={handleDownloadCV}>
             <Icon css="icon" icon={faDownload} /> {t`hero.downloadCV`}
           </button>
         </div>
       </div>
-      <div className="hero-right">
-        <img src={fotowaldir} alt="profile pic" />
-        <div className="status">{t`hero.status`}</div>
+
+      {/* Right: photo + status */}
+      <div className="w-1/2 p-12 flex flex-col justify-center items-center max-[599px]:w-full max-[599px]:p-2 max-[599px]:pt-8 max-[599px]:relative max-[599px]:justify-start max-[599px]:items-start max-[991px]:w-full max-[991px]:p-0">
+        <img
+          src={fotowaldir}
+          alt="profile pic"
+          className="rounded-full border-[0.2rem] border-[var(--color-primary)] w-[19rem] aspect-square max-[599px]:w-24"
+        />
+        <div className="border-[1.75px] border-solid rounded-[2.5rem] px-3 py-1 flex items-center text-[#166534] bg-[#dcfce7] -mt-4 max-[599px]:absolute max-[599px]:left-[6.5rem] max-[599px]:bottom-12 max-[599px]:text-[0.95rem]">
+          {t`hero.status`}
+        </div>
       </div>
     </div>
   );

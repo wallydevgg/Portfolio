@@ -1,0 +1,95 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+
+msgid "menu.home"
+msgstr "inicio"
+
+msgid "menu.experience"
+msgstr "experiencia"
+
+msgid "menu.projects"
+msgstr "proyectos"
+
+msgid "menu.blog"
+msgstr "blog"
+
+msgid "menu.about"
+msgstr "sobre-mí"
+
+msgid "menu.contact"
+msgstr "contacto"
+
+msgid "hero.contactButton"
+msgstr "Email"
+
+msgid "hero.linkedInButton"
+msgstr "LinkedIn"
+
+msgid "hero.status"
+msgstr "Disponible para trabajar"
+
+msgid "hero.viewProjects"
+msgstr "Ver proyectos"
+
+msgid "hero.readBlog"
+msgstr "Leer blog"
+
+msgid "hero.downloadCV"
+msgstr "Descargar CV"
+
+msgid "skills.title"
+msgstr "habilidades"
+
+msgid "skills.frontend"
+msgstr "Frontend"
+
+msgid "skills.backend"
+msgstr "Backend"
+
+msgid "skills.devops"
+msgstr "DevOps & Herramientas"
+
+msgid "blog.subtitle"
+msgstr "Artículos sobre desarrollo fullstack, React, Python, DevOps y arquitectura de software."
+
+msgid "blog.searchPlaceholder"
+msgstr "Buscar artículos..."
+
+msgid "blog.readMore"
+msgstr "Leer más"
+
+msgid "blog.noPosts"
+msgstr "Aún no hay posts. ¡Vuelve pronto!"
+
+msgid "blog.error"
+msgstr "No se pudieron cargar los posts. Intenta de nuevo."
+
+msgid "contact.title"
+msgstr "contacto"
+
+msgid "contact.name"
+msgstr "Nombre"
+
+msgid "contact.email"
+msgstr "Correo"
+
+msgid "contact.subject"
+msgstr "Asunto"
+
+msgid "contact.message"
+msgstr "Mensaje"
+
+msgid "contact.send"
+msgstr "Enviar mensaje"
+
+msgid "contact.sending"
+msgstr "Enviando..."
+
+msgid "contact.success"
+msgstr "¡Mensaje enviado! Te responderé pronto."
+
+msgid "contact.error"
+msgstr "Algo salió mal. Por favor intenta de nuevo."

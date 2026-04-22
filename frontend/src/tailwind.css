@@ -1,3 +1,95 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Dark mode: applies when element is inside .dark-theme */
+@variant dark (&:where(.dark-theme *));
+
+@layer components {
+  /* Nav link with underline animation */
+  .nav-link {
+    text-decoration: none;
+    border-radius: 20px;
+    font-weight: 600;
+    display: inline-block;
+    position: relative;
+    color: var(--LM-Title);
+    transition: color 0.2s;
+  }
+  .dark-theme .nav-link { color: var(--DM-Title); }
+  .nav-link:hover { color: var(--color-primary); }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: var(--color-primary);
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+  }
+  .nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+
+  /* Hero CTA buttons */
+  .social-btn {
+    border: 0.12rem solid currentColor;
+    border-radius: 1.25rem;
+    padding: 0.35rem 1rem;
+    background-color: transparent;
+    cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-family: var(--font-1);
+    transition: color 0.3s ease, border-color 0.3s ease;
+    color: var(--LM-Title);
+  }
+  .dark-theme .social-btn { color: var(--DM-Title); }
+  .social-btn:hover { color: var(--color-primary); border-color: var(--color-primary); }
+}
+
+@layer utilities {
+  .hashTag {
+    color: var(--color-primary);
+    margin-right: 0.3rem;
+  }
+}
+
+/* Animations used across the app */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(30px, -40px) scale(1.05); }
+  66%       { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+@keyframes cardEntrance {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes badgePulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+@keyframes loginShake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+
+@keyframes btnSpin {
+  to { transform: rotate(360deg); }
+}

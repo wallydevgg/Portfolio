@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Header, Footer } from "../../../barrell";
 import { ThemeContext } from "../../../barrell";
-import "./Layout.scss";
 import { Outlet } from "react-router-dom";
 import { GoogleFontsOptimizer } from "../../Context/FontsOptimizer";
-//import SEO from "../../../pages/meta/HelmetSEO";
-import { Helmet } from "react-helmet-async";
-//import MetaTags from "../../../pages/meta/MetaTagsTS";
 
 const Layout = () => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
@@ -23,7 +19,7 @@ const Layout = () => {
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      <div className={`App ${theme}-theme`}>
+      <div className={`${theme}-theme min-h-screen`}>
         <GoogleFontsOptimizer />
         <Header />
         <Outlet />

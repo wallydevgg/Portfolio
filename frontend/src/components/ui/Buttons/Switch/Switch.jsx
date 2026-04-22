@@ -1,16 +1,7 @@
 import { useContext } from "react";
 import { Icon } from "../../../Icons";
-import {
-  faMoon,
-  faSun,
-  faAdjust,
-  faComputer,
-  faLaptop,
-  faLaptopCode,
-  faHouseLaptop,
-} from "@fortawesome/free-solid-svg-icons";
+import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import { ThemeContext } from "../../../Context/ThemeContext";
-import "./Switch.scss";
 
 const Switch = () => {
   const { theme, toggleTheme, followSystemTheme } = useContext(ThemeContext);
@@ -18,7 +9,7 @@ const Switch = () => {
   return (
     <>
       <button
-        className="toggle-theme"
+        className="h-8 w-8 bg-transparent border-none text-[var(--color-primary)] text-[1.4rem] cursor-pointer transition-transform duration-300 hover:scale-105"
         aria-label="Cambiar tema"
         onClick={toggleTheme}
       >
