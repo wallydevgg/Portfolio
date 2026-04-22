@@ -2,7 +2,11 @@
 import { Icon } from "@/barrell";
 import { Link } from "react-router-dom";
 import fotowaldir from "@/images/fotowaldir.webp";
-import { faEnvelope, faDownload, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEnvelope,
+  faDownload,
+  faArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { faLinkedin, faGithub } from "@fortawesome/free-brands-svg-icons";
 import "./Hero.scss";
 import { Trans, t } from "@lingui/macro";
@@ -40,7 +44,10 @@ const Hero = () => {
           </Trans>
         </p>
         <div className="social-buttons">
-          <button className="social-btn" onClick={() => scrollToSection("projects")}>
+          <button
+            className="social-btn"
+            onClick={() => scrollToSection("projects")}
+          >
             <Icon css="icon" icon={faArrowRight} /> {t`hero.viewProjects`}
           </button>
           <Link to="/blog" className="social-btn">
@@ -62,10 +69,13 @@ const Hero = () => {
           >
             <Icon css="icon" icon={faLinkedin} /> LinkedIn
           </Link>
-          <Link to="mailto:waliuxd@gmail.com" className="social-btn">
+          <Link to="mailto:contact@wallydev.dev" className="social-btn">
             <Icon css="icon" icon={faEnvelope} /> {t`hero.contactButton`}
           </Link>
-          <button className="social-btn social-btn--cv" onClick={handleDownloadCV}>
+          <button
+            className="social-btn social-btn--cv"
+            onClick={handleDownloadCV}
+          >
             <Icon css="icon" icon={faDownload} /> {t`hero.downloadCV`}
           </button>
         </div>

@@ -80,6 +80,9 @@ jobs:
             POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }}
             POSTGRES_DB=portfolio
             BACKEND_CORS_ORIGINS=["https://wallydev.dev"]
+            SECRET_KEY=${{ secrets.SECRET_KEY }}
+            ADMIN_USERNAME=${{ secrets.ADMIN_USERNAME }}
+            ADMIN_PASSWORD_HASH=${{ secrets.ADMIN_PASSWORD_HASH }}
             EOF
 
             # Load Images

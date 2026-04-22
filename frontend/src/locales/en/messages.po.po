@@ -15,128 +15,144 @@ msgstr ""
 
 #: src/pages/Home/Sections/Hero/Hero.jsx:35
 msgid "+3 Years of experience <0>Fullstack Web Developer</0> with a solid background in <1>software development</1>"
-msgstr ""
+msgstr "+3 Years of experience <0>Fullstack Web Developer</0> with a solid background in <1>software development</1>"
 
 #: src/pages/Blog/BlogPage.jsx:83
 msgid "blog.error"
-msgstr "blog.error"
+msgstr "Could not load posts. Please try again later."
 
 #: src/pages/Blog/BlogPage.jsx:90
 msgid "blog.noPosts"
-msgstr "blog.noPosts"
+msgstr "No posts yet. Check back soon!"
 
 #: src/pages/Blog/BlogPage.jsx:121
 msgid "blog.readMore"
-msgstr "blog.readMore"
+msgstr "Read more"
 
 #: src/pages/Blog/BlogPage.jsx:66
 msgid "blog.searchPlaceholder"
-msgstr "blog.searchPlaceholder"
+msgstr "Search articles..."
 
 #: src/pages/Blog/BlogPage.jsx:59
 msgid "blog.subtitle"
-msgstr "blog.subtitle"
+msgstr "Articles about fullstack development, React, Python, DevOps and software architecture."
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:71
 msgid "contact.email"
-msgstr "contact.email"
+msgstr "Email"
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:32
 msgid "contact.error"
-msgstr "contact.error"
+msgstr "Something went wrong. Please try again."
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:97
 msgid "contact.message"
-msgstr "contact.message"
+msgstr "Message"
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:59
 msgid "contact.name"
-msgstr "contact.name"
+msgstr "Name"
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:110
 msgid "contact.send"
-msgstr "contact.send"
+msgstr "Send message"
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:110
 msgid "contact.sending"
-msgstr "contact.sending"
+msgstr "Sending..."
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:85
 msgid "contact.subject"
-msgstr "contact.subject"
+msgstr "Subject"
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:51
 msgid "contact.success"
-msgstr "contact.success"
+msgstr "Message sent! I'll get back to you soon."
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:43
 msgid "contact.title"
-msgstr "contact.title"
+msgstr "contact"
 
 #: src/pages/Home/Sections/Hero/Hero.jsx:66
 msgid "hero.contactButton"
-msgstr ""
+msgstr "Email"
 
 #: src/pages/Home/Sections/Hero/Hero.jsx:69
 msgid "hero.downloadCV"
-msgstr "hero.downloadCV"
-
-#: src/pages/Home/Sections/Hero/Hero.jsx:39
-#~ msgid "hero.linkedInButton"
-#~ msgstr ""
+msgstr "Download CV"
 
 #: src/pages/Home/Sections/Hero/Hero.jsx:47
 msgid "hero.readBlog"
-msgstr "hero.readBlog"
+msgstr "Read blog"
 
 #: src/pages/Home/Sections/Hero/Hero.jsx:75
 msgid "hero.status"
-msgstr ""
+msgstr "Available for work"
 
 #: src/pages/Home/Sections/Hero/Hero.jsx:44
 msgid "hero.viewProjects"
-msgstr "hero.viewProjects"
+msgstr "View projects"
 
 #: src/pages/Home/Sections/Hero/Hero.jsx:30
 msgid "Hi! I'm <0>Waldir Apaza</0>"
-msgstr ""
+msgstr "Hi! I'm <0>Waldir Apaza</0>"
 
 #: src/components/ui/Header/Menu/Menu.jsx:39
 msgid "menu.about"
-msgstr "menu.about"
+msgstr "about-me"
 
 #: src/components/ui/Header/Menu/Menu.jsx:33
 msgid "menu.blog"
-msgstr "menu.blog"
+msgstr "blog"
 
 #: src/components/ui/Header/Menu/Menu.jsx:45
 msgid "menu.contact"
-msgstr "menu.contact"
+msgstr "contact"
 
 #: src/components/ui/Header/Menu/Menu.jsx:21
 msgid "menu.experience"
-msgstr "menu.experience"
+msgstr "experience"
 
 #: src/components/ui/Header/Menu/Menu.jsx:15
 msgid "menu.home"
-msgstr "menu.home"
+msgstr "home"
 
 #: src/components/ui/Header/Menu/Menu.jsx:27
 msgid "menu.projects"
-msgstr "menu.projects"
+msgstr "projects"
 
 #: src/pages/Home/Sections/Skills/Skills.jsx:64
 msgid "skills.backend"
-msgstr "skills.backend"
+msgstr "Backend"
 
 #: src/pages/Home/Sections/Skills/Skills.jsx:70
 msgid "skills.devops"
-msgstr "skills.devops"
+msgstr "DevOps & Tools"
 
 #: src/pages/Home/Sections/Skills/Skills.jsx:58
 msgid "skills.frontend"
-msgstr "skills.frontend"
+msgstr "Frontend"
 
 #: src/pages/Home/Sections/Skills/Skills.jsx:51
 msgid "skills.title"
-msgstr "skills.title"
+msgstr "skills"
+
+#: src/pages/Blog/BlogPage.jsx
+msgid "blog.empty.title"
+msgstr "Coming soon"
+
+#: src/pages/Blog/BlogPage.jsx
+msgid "blog.empty.subtitle"
+msgstr "I'm currently writing articles about React, Python, DevOps and more. Come back soon!"
+
+#: src/pages/Blog/BlogPage.jsx
+msgid "blog.empty.cta"
+msgstr "Create first post"
+
+#: src/pages/Blog/BlogPage.jsx
+msgid "blog.noResults"
+msgstr "No posts match your search"
+
+#: src/pages/Blog/BlogPage.jsx
+msgid "blog.noResults.clear"
+msgstr "Clear search"

@@ -15,128 +15,144 @@ msgstr ""
 
 #: src/pages/Home/Sections/Hero/Hero.jsx:35
 msgid "+3 Years of experience <0>Fullstack Web Developer</0> with a solid background in <1>software development</1>"
-msgstr ""
+msgstr "+3 Años de experiencia <0>Desarrollador Web Fullstack</0> con base sólida en <1>desarrollo de software</1>"
 
 #: src/pages/Blog/BlogPage.jsx:83
 msgid "blog.error"
-msgstr ""
+msgstr "No se pudieron cargar los posts. Intenta de nuevo."
 
 #: src/pages/Blog/BlogPage.jsx:90
 msgid "blog.noPosts"
-msgstr ""
+msgstr "Aún no hay posts. ¡Vuelve pronto!"
 
 #: src/pages/Blog/BlogPage.jsx:121
 msgid "blog.readMore"
-msgstr ""
+msgstr "Leer más"
 
 #: src/pages/Blog/BlogPage.jsx:66
 msgid "blog.searchPlaceholder"
-msgstr ""
+msgstr "Buscar artículos..."
 
 #: src/pages/Blog/BlogPage.jsx:59
 msgid "blog.subtitle"
-msgstr ""
+msgstr "Artículos sobre desarrollo fullstack, React, Python, DevOps y arquitectura de software."
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:71
 msgid "contact.email"
-msgstr ""
+msgstr "Correo"
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:32
 msgid "contact.error"
-msgstr ""
+msgstr "Algo salió mal. Por favor intenta de nuevo."
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:97
 msgid "contact.message"
-msgstr ""
+msgstr "Mensaje"
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:59
 msgid "contact.name"
-msgstr ""
+msgstr "Nombre"
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:110
 msgid "contact.send"
-msgstr ""
+msgstr "Enviar mensaje"
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:110
 msgid "contact.sending"
-msgstr ""
+msgstr "Enviando..."
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:85
 msgid "contact.subject"
-msgstr ""
+msgstr "Asunto"
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:51
 msgid "contact.success"
-msgstr ""
+msgstr "¡Mensaje enviado! Te responderé pronto."
 
 #: src/pages/Home/Sections/Contact/Contact.jsx:43
 msgid "contact.title"
-msgstr ""
+msgstr "contacto"
 
 #: src/pages/Home/Sections/Hero/Hero.jsx:66
 msgid "hero.contactButton"
-msgstr ""
+msgstr "Email"
 
 #: src/pages/Home/Sections/Hero/Hero.jsx:69
 msgid "hero.downloadCV"
-msgstr ""
-
-#: src/pages/Home/Sections/Hero/Hero.jsx:39
-#~ msgid "hero.linkedInButton"
-#~ msgstr ""
+msgstr "Descargar CV"
 
 #: src/pages/Home/Sections/Hero/Hero.jsx:47
 msgid "hero.readBlog"
-msgstr ""
+msgstr "Leer blog"
 
 #: src/pages/Home/Sections/Hero/Hero.jsx:75
 msgid "hero.status"
-msgstr ""
+msgstr "Disponible para trabajar"
 
 #: src/pages/Home/Sections/Hero/Hero.jsx:44
 msgid "hero.viewProjects"
-msgstr ""
+msgstr "Ver proyectos"
 
 #: src/pages/Home/Sections/Hero/Hero.jsx:30
 msgid "Hi! I'm <0>Waldir Apaza</0>"
-msgstr ""
+msgstr "¡Hola! Soy <0>Waldir Apaza</0>"
 
 #: src/components/ui/Header/Menu/Menu.jsx:39
 msgid "menu.about"
-msgstr ""
+msgstr "sobre-mí"
 
 #: src/components/ui/Header/Menu/Menu.jsx:33
 msgid "menu.blog"
-msgstr ""
+msgstr "blog"
 
 #: src/components/ui/Header/Menu/Menu.jsx:45
 msgid "menu.contact"
-msgstr ""
+msgstr "contacto"
 
 #: src/components/ui/Header/Menu/Menu.jsx:21
 msgid "menu.experience"
-msgstr ""
+msgstr "experiencia"
 
 #: src/components/ui/Header/Menu/Menu.jsx:15
 msgid "menu.home"
-msgstr ""
+msgstr "inicio"
 
 #: src/components/ui/Header/Menu/Menu.jsx:27
 msgid "menu.projects"
-msgstr ""
+msgstr "proyectos"
 
 #: src/pages/Home/Sections/Skills/Skills.jsx:64
 msgid "skills.backend"
-msgstr ""
+msgstr "Backend"
 
 #: src/pages/Home/Sections/Skills/Skills.jsx:70
 msgid "skills.devops"
-msgstr ""
+msgstr "DevOps & Herramientas"
 
 #: src/pages/Home/Sections/Skills/Skills.jsx:58
 msgid "skills.frontend"
-msgstr ""
+msgstr "Frontend"
 
 #: src/pages/Home/Sections/Skills/Skills.jsx:51
 msgid "skills.title"
-msgstr ""
+msgstr "habilidades"
+
+#: src/pages/Blog/BlogPage.jsx
+msgid "blog.empty.title"
+msgstr "Próximamente"
+
+#: src/pages/Blog/BlogPage.jsx
+msgid "blog.empty.subtitle"
+msgstr "Estoy escribiendo artículos sobre React, Python, DevOps y más. ¡Vuelve pronto!"
+
+#: src/pages/Blog/BlogPage.jsx
+msgid "blog.empty.cta"
+msgstr "Crear primer post"
+
+#: src/pages/Blog/BlogPage.jsx
+msgid "blog.noResults"
+msgstr "Ningún post coincide con tu búsqueda"
+
+#: src/pages/Blog/BlogPage.jsx
+msgid "blog.noResults.clear"
+msgstr "Limpiar búsqueda"

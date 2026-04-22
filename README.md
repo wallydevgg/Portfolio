@@ -207,16 +207,21 @@ docker-compose -f docker-compose.prod.yml up -d
 docker-compose logs -f
 ```
 
-**GitHub Actions** despliega automáticamente en cada push a `main`. Secrets requeridos en el repo:
+**GitHub Actions** despliega automáticamente en cada push a `main`. Secrets requeridos en el repo (configurar en *Settings → Secrets and variables → Actions*):
 
-| Secret | Descripción |
-|--------|-------------|
-| `SSH_HOST` | IP o dominio del VPS |
-| `SSH_USER` | Usuario SSH |
-| `SSH_PORT` | Puerto SSH |
-| `INPUT_PASSWORD` | Password SSH |
-| `DB_USER` | Usuario PostgreSQL de prod |
-| `DB_PASSWORD` | Password PostgreSQL de prod |
+| Secret | Descripción | Cómo obtener |
+|--------|-------------|--------------|
+| `SSH_HOST` | IP o dominio del VPS | Panel VPS |
+| `SSH_USER` | Usuario SSH | Panel VPS |
+| `SSH_PORT` | Puerto SSH | Panel VPS |
+| `INPUT_PASSWORD` | Password SSH | Panel VPS |
+| `DB_USER` | Usuario PostgreSQL de prod | Base de datos existente |
+| `DB_PASSWORD` | Password PostgreSQL de prod | Base de datos existente |
+| `SECRET_KEY` | Clave secreta JWT (mín. 32 chars) | `python -c "import secrets; print(secrets.token_hex(32))"` |
+| `ADMIN_USERNAME` | Usuario del dashboard admin | Elegir libremente |
+| `ADMIN_PASSWORD_HASH` | Hash bcrypt del password admin | `cd backend && python -c "from core.security import get_password_hash; print(get_password_hash('tu_password'))"` |
+
+> **Nota:** `SECRET_KEY`, `ADMIN_USERNAME` y `ADMIN_PASSWORD_HASH` nunca se commitean. Se generan localmente y se pegan directo en GitHub Secrets — el workflow los inyecta en el `.env` del VPS en cada deploy.
 
 ---
 

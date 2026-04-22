@@ -12,14 +12,24 @@ export const locales = {
   es: "Español",
 };
 
-export const defaultLocale = detect(fromStorage("locale"), fromNavigator(), "en");
+const SUPPORTED = Object.keys(locales);
+
+function normalizeLocale(raw) {
+  const base = raw?.split("-")[0];
+  return SUPPORTED.includes(base) ? base : "en";
+}
+
+export const defaultLocale = normalizeLocale(
+  detect(fromStorage("locale"), fromNavigator(), "en")
+);
 
 export function dynamicActivate(locale) {
+  const normalized = normalizeLocale(locale);
   const messages = {
     en: enMessages,
     es: esMessages,
   };
-  i18n.loadAndActivate({ locale, messages: messages[locale] });
+  i18n.loadAndActivate({ locale: normalized, messages: messages[normalized] });
 }
 
 // Activate the default locale on load

@@ -9,7 +9,6 @@ const config: LinguiConfig = {
     },
   ],
   compileNamespace: "ts",
-  sourceLocale: "en",
   fallbackLocales: {
     default: "en"
   }
