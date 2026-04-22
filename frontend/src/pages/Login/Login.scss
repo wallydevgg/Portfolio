@@ -1,0 +1,345 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+// ─── Design tokens ────────────────────────────────────────────────────────────
+$font-sans       : "Inter", sans-serif;
+
+$bg-page         : #060610;
+$bg-card         : rgba(255 255 255 / 0.04);
+$bg-input        : rgba(255 255 255 / 0.05);
+$bg-input-hover  : rgba(255 255 255 / 0.07);
+$bg-input-focus  : rgba(99 37 255 / 0.06);
+
+$border-card     : rgba(255 255 255 / 0.08);
+$border-input    : rgba(255 255 255 / 0.08);
+$border-hover    : rgba(255 255 255 / 0.14);
+$border-focus    : rgba(99 37 255 / 0.6);
+$border-badge    : rgba(99 37 255 / 0.3);
+$border-error    : rgba(239 68 68 / 0.25);
+
+$color-violet    : #6325ff;
+$color-violet-lt : #8b5cf6;
+$color-badge     : rgba(99 37 255 / 0.15);
+$color-text-badge: #a78bfa;
+$color-dot       : #a78bfa;
+$color-orange    : #ff8906;
+$color-error-bg  : rgba(239 68 68 / 0.10);
+$color-error-text: #f87171;
+$color-muted     : rgba(255 255 255 / 0.40);
+$color-label     : rgba(255 255 255 / 0.45);
+$color-icon      : rgba(255 255 255 / 0.25);
+$color-footer    : rgba(255 255 255 / 0.20);
+
+$shadow-card     : 0 0 0 1px rgba(255 255 255 / 0.04),
+                   0 32px 64px rgba(0 0 0 / 0.50),
+                   0 0 80px rgba(99 37 255 / 0.06);
+$shadow-btn      : 0 4px 24px rgba(99 37 255 / 0.35);
+$shadow-btn-hover: 0 8px 32px rgba(99 37 255 / 0.45);
+$shadow-ring     : 0 0 0 3px rgba(99 37 255 / 0.15);
+
+$radius-card     : 24px;
+$radius-input    : 12px;
+$radius-btn      : 12px;
+$radius-badge    : 100px;
+$radius-error    : 10px;
+
+// ─── Keyframes ────────────────────────────────────────────────────────────────
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(30px, -40px) scale(1.05); }
+  66%       { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+@keyframes cardEntrance {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes badgePulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+@keyframes loginShake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+
+@keyframes btnSpin {
+  to { transform: rotate(360deg); }
+}
+
+// ─── Mixins ───────────────────────────────────────────────────────────────────
+@mixin flex-center { display: flex; align-items: center; justify-content: center; }
+@mixin absolute-fill { position: absolute; inset: 0; }
+@mixin label-base {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $color-label;
+}
+
+// ─── Root ─────────────────────────────────────────────────────────────────────
+.login {
+  min-height: 100vh;
+  @include flex-center;
+  background: $bg-page;
+  font-family: $font-sans;
+  position: relative;
+  overflow: hidden;
+
+  // ── Ambient orbs ──
+  &__orb {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+
+    &--1 {
+      width: 600px; height: 600px;
+      top: -150px; left: -100px;
+      background: radial-gradient(circle, rgba(99, 37, 255, 0.18) 0%, transparent 70%);
+      animation: orbFloat 8s ease-in-out infinite;
+    }
+
+    &--2 {
+      width: 500px; height: 500px;
+      bottom: -100px; right: -80px;
+      background: radial-gradient(circle, rgba(255, 137, 6, 0.13) 0%, transparent 70%);
+      animation: orbFloat 10s ease-in-out infinite reverse;
+    }
+  }
+
+  // ── Grid overlay ──
+  &__grid {
+    @include absolute-fill;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  // ── Card ──
+  &__card {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 1.5rem;
+    background: $bg-card;
+    border: 1px solid $border-card;
+    border-radius: $radius-card;
+    padding: 3rem 2.5rem;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: $shadow-card;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: cardEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  // ── Badge ──
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: $color-badge;
+    border: 1px solid $border-badge;
+    border-radius: $radius-badge;
+    padding: 4px 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $color-text-badge;
+    margin-bottom: 1.5rem;
+
+    &-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: $color-dot;
+      animation: badgePulse 2s ease-in-out infinite;
+    }
+  }
+
+  // ── Title ──
+  &__title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.03em;
+
+    &-gradient {
+      background: linear-gradient(135deg, #a78bfa 0%, $color-violet 50%, $color-orange 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+
+  // ── Subtitle ──
+  &__subtitle {
+    font-size: 0.875rem;
+    color: $color-muted;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+  }
+
+  // ── Divider ──
+  &__divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, $border-card, transparent);
+    margin-bottom: 2rem;
+  }
+
+  // ── Form ──
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  // ── Field ──
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label { @include label-base; }
+  }
+
+  // ── Input wrapper + input ──
+  &__input-wrap {
+    position: relative;
+
+    // Icon slot
+    &-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $color-icon;
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+
+    input {
+      width: 100%;
+      background: $bg-input;
+      border: 1px solid $border-input;
+      border-radius: $radius-input;
+      padding: 0.75rem 1rem 0.75rem 2.75rem;
+      color: #fff;
+      font-size: 0.9rem;
+      font-family: $font-sans;
+      outline: none;
+      transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+
+      &::placeholder { color: rgba(255, 255, 255, 0.20); }
+
+      &:hover {
+        border-color: $border-hover;
+        background: $bg-input-hover;
+      }
+
+      &:focus {
+        border-color: $border-focus;
+        background: $bg-input-focus;
+        box-shadow: $shadow-ring;
+      }
+    }
+
+    // icon turns violet when input is focused
+    &:focus-within &-icon { color: $color-text-badge; }
+  }
+
+  // ── Error ──
+  &__error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: $color-error-bg;
+    border: 1px solid $border-error;
+    border-radius: $radius-error;
+    padding: 0.625rem 1rem;
+    font-size: 0.8rem;
+    color: $color-error-text;
+    animation: loginShake 0.4s ease;
+  }
+
+  // ── Submit button ──
+  &__btn {
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: $radius-btn;
+    background: linear-gradient(135deg, $color-violet 0%, $color-violet-lt 100%);
+    color: #fff;
+    font-family: $font-sans;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: $shadow-btn;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    // Shine overlay
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255 255 255 / 0.12) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: $shadow-btn-hover;
+
+      &::before { opacity: 1; }
+    }
+
+    &:active:not(:disabled) { transform: translateY(0); }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    // Spinner
+    &-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: btnSpin 0.7s linear infinite;
+    }
+  }
+
+  // ── Footer note ──
+  &__footer {
+    margin-top: 2rem;
+    @include flex-center;
+    gap: 6px;
+    font-size: 0.68rem;
+    color: $color-footer;
+  }
+}
