@@ -4,6 +4,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: en\n"
 
+msgid "Hi! I'm <0>Waldir Apaza</0>"
+msgstr "Hi! I'm <0>Waldir Apaza</0>"
+
+msgid "+3 Years of experience <0>Fullstack Web Developer</0> with a solid background in <1>software development</1>"
+msgstr "+3 Years of experience <0>Fullstack Web Developer</0> with a solid background in <1>software development</1>"
+
 msgid "menu.home"
 msgstr "home"
 
@@ -93,3 +99,18 @@ msgstr "Message sent! I'll get back to you soon."
 
 msgid "contact.error"
 msgstr "Something went wrong. Please try again."
+
+msgid "blog.empty.title"
+msgstr "Coming soon"
+
+msgid "blog.empty.subtitle"
+msgstr "I'm currently writing articles about React, Python, DevOps and more. Come back soon!"
+
+msgid "blog.empty.cta"
+msgstr "Create first post"
+
+msgid "blog.noResults"
+msgstr "No posts match your search"
+
+msgid "blog.noResults.clear"
+msgstr "Clear search"

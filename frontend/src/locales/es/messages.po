@@ -4,6 +4,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: es\n"
 
+msgid "Hi! I'm <0>Waldir Apaza</0>"
+msgstr "¡Hola! Soy <0>Waldir Apaza</0>"
+
+msgid "+3 Years of experience <0>Fullstack Web Developer</0> with a solid background in <1>software development</1>"
+msgstr "+3 Años de experiencia <0>Desarrollador Web Fullstack</0> con base sólida en <1>desarrollo de software</1>"
+
 msgid "menu.home"
 msgstr "inicio"
 
@@ -93,3 +99,18 @@ msgstr "¡Mensaje enviado! Te responderé pronto."
 
 msgid "contact.error"
 msgstr "Algo salió mal. Por favor intenta de nuevo."
+
+msgid "blog.empty.title"
+msgstr "Próximamente"
+
+msgid "blog.empty.subtitle"
+msgstr "Estoy escribiendo artículos sobre React, Python, DevOps y más. ¡Vuelve pronto!"
+
+msgid "blog.empty.cta"
+msgstr "Crear primer post"
+
+msgid "blog.noResults"
+msgstr "Ningún post coincide con tu búsqueda"
+
+msgid "blog.noResults.clear"
+msgstr "Limpiar búsqueda"
