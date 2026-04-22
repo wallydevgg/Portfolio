@@ -1,0 +1,28 @@
+.toggle-theme,
+.toggle-system-theme {
+  height: 2rem;
+  width: 2rem;
+  background-image: none;
+  background-color: transparent;
+  border: none;
+  color: var(--color-primary);
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.toggle-theme:hover,
+.toggle-system-theme:hover {
+  height: 2rem;
+  width: 2rem;
+  color: var(--color-primary);
+  transform: scale(1.05);
+  background-image: none;
+  background-color: transparent;
+  font-size: 1.5rem;
+  border: none;
+}
+
+.toggle-theme:active {
+  color: var(--color-primary);
+}

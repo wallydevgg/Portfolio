@@ -2,17 +2,22 @@ import { useEffect } from "react";
 import { useRouteError } from "react-router-dom";
 import MetaTags from "../meta/MetaTags";
 
+import "./error.scss";
+
 export default function ErrorPage() {
   const error = useRouteError();
   console.error(error);
 
   useEffect(() => {
-    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+      .matches
+      ? "dark"
+      : "light";
     document.documentElement.setAttribute("data-theme", systemTheme);
   }, []);
 
   return (
-    <div className="mx-auto flex flex-col justify-center items-center h-screen">
+    <div id="error-page">
       <MetaTags
         title="Oops - Not authorized"
         description="An unexpected error has occurred. Please try again later."

@@ -1,30 +1,28 @@
 import React from "react";
-import i18n, { dynamicActivate } from "../../../../i18n";
+import i18n, { dynamicActivate } from "../../../../i18n"; // Adjust the path if necessary
+import "./LangSwitch.scss";
 
 const LangSwitch = () => {
-  const isEs = i18n.locale === "es";
-
   const toggleLanguage = () => {
-    dynamicActivate(isEs ? "en" : "es");
+    const newLocale = i18n.locale === "en" ? "es" : "en";
+    dynamicActivate(newLocale);
   };
 
   return (
-    <button
-      onClick={toggleLanguage}
-      aria-label="Toggle language"
-      className="relative inline-flex items-center w-20 h-8 rounded-full bg-[#f36f25] cursor-pointer border-none transition-colors duration-200 shrink-0"
-    >
-      {/* sliding circle */}
-      <span
-        className={`absolute top-[0.2rem] h-[1.6rem] w-10 bg-white rounded-full transition-[margin] duration-200 ease-in-out ${
-          isEs ? "ml-[calc(5rem-2.7rem)]" : "ml-[0.2rem]"
-        }`}
+    <div className="switch">
+      <input
+        id="language-toggle"
+        className="check-toggle check-toggle-round-flat"
+        type="checkbox"
+        checked={i18n.locale === "es"}
+        onChange={toggleLanguage}
       />
-      {/* text label */}
-      <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-[#f36f25] z-10 pointer-events-none">
-        {isEs ? "ES" : "EN"}
-      </span>
-    </button>
+      <label htmlFor="language-toggle">
+        <span className={i18n.locale === "en" ? "off" : "on"}>
+          {i18n.locale === "en" ? "EN" : "ES"}
+        </span>
+      </label>
+    </div>
   );
 };
 

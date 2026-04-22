@@ -1,16 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
+import "./Experience.scss";
 import ListExperience from "./listExperience";
 
 const Experience = () => {
+  const [showMore, setShowMore] = useState(false);
+
+  const toggleShowMore = () => {
+    setShowMore(!showMore);
+  };
+
   return (
-    <div className="flex flex-col" id="experience">
-      <div className="flex items-center gap-4 mb-10">
-        <h2 className="text-[2rem] font-semibold whitespace-nowrap text-[var(--LM-Title)] dark:text-[var(--DM-Title)]">
+    <div className="experience" id="experience">
+      <div className="title-container">
+        <h2>
           <span className="hashTag">#</span>experiencia
         </h2>
-        <div className="flex-1 h-px bg-gradient-to-r from-[var(--color-primary)] to-transparent" />
+        <div className="space-line"></div>
       </div>
-      <div className="flex py-12 max-[599px]:py-10">
+
+      <div className="experience-container">
         <ListExperience />
       </div>
     </div>

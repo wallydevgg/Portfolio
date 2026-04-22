@@ -1,0 +1,252 @@
+@use "../../../../index.scss" as *;
+
+.hero-container {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 599px) {
+    flex-direction: column;
+    width: 100%;
+    flex-grow: 1;
+    margin-top: 7.5vh;
+    margin-bottom: 5rem;
+  }
+
+  @media (min-width: 600px) and (max-width: 991px) {
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+  }
+
+  @media (min-width: 992px) and (max-width: 1199px) {
+    margin-top: 0rem;
+    height: 90vh;
+  }
+
+  @media (min-width: 1200px) {
+    margin-top: 4rem;
+    height: 90vh;
+  }
+
+  .hero-right {
+    width: 50%;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    // Mobile
+    @media (max-width: 599px) {
+      flex-direction: column;
+      width: 100%;
+      padding: 2rem 0 0.5rem 1rem;
+      position: relative;
+      justify-content: start;
+      align-items: baseline;
+    }
+
+    //tablet
+    @media (min-width: 600px) and (max-width: 991px) {
+      padding: 0rem;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    @media (min-width: 992px) and (max-width: 1199px) {
+    }
+
+    @media (min-width: 1200px) {
+    }
+
+    img {
+      border-radius: 50%;
+      border: solid 0.2rem $primary-color;
+      width: 19rem;
+      aspect-ratio: 1;
+
+      @media (max-width: 599px) {
+        width: 6rem;
+      }
+
+      @media (min-width: 600px) and (max-width: 991px) {
+      }
+
+      @media (min-width: 992px) and (max-width: 1199px) {
+      }
+
+      @media (min-width: 1200px) {
+      }
+    }
+
+    .status {
+      border: solid 1.75px;
+      border-radius: 2.5rem;
+      padding: 0.25rem 0.85rem;
+      display: flex;
+      align-items: center;
+      color: #166534;
+      background-color: #dcfce7;
+      margin-top: -1rem;
+
+      .dark-theme & {
+        border-color: $DM-Title;
+      }
+
+      .light-theme & {
+        border-color: $LM-Title;
+      }
+
+      @media (max-width: 599px) {
+        width: auto;
+        position: relative;
+        left: 6.5rem;
+        bottom: 3rem;
+        font-size: 0.95rem;
+      }
+    }
+  }
+
+  .hero-left {
+    width: 50%;
+    padding: 3em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    @media (max-width: 599px) {
+      width: 100%;
+      order: 1;
+      padding: 0;
+    }
+
+    @media (min-width: 600px) and (max-width: 991px) {
+      align-items: center;
+
+      width: 100%;
+      order: 1;
+    }
+
+    @media (min-width: 992px) and (max-width: 1199px) {
+      padding: 1rem;
+      align-items: left;
+      align-items: flex-start;
+    }
+
+    @media (min-width: 1200px) {
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-weight: var(--fw-4);
+      font-size: 2em;
+
+      @media (max-width: 599px) {
+        font-size: 1.75rem;
+      }
+
+      @media (min-width: 600px) and (max-width: 991px) {
+      }
+
+      @media (min-width: 992px) and (max-width: 1199px) {
+      }
+
+      @media (min-width: 1200px) {
+      }
+    }
+
+    .dark-theme & {
+      color: $DM-Title;
+    }
+
+    .light-theme & {
+      color: $LM-Title;
+    }
+
+    p {
+      margin-top: 1em;
+      font-weight: var(--fw-4);
+      font-size: 1.25rem;
+
+      @media (max-width: 599px) {
+      }
+
+      @media (min-width: 600px) and (max-width: 991px) {
+      }
+
+      @media (min-width: 992px) and (max-width: 1199px) {
+      }
+
+      @media (min-width: 1200px) {
+      }
+    }
+
+    .dark-theme & {
+      color: $DM-Title;
+    }
+
+    .light-theme & {
+      color: $LM-Title;
+    }
+
+    .social-buttons {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 8%;
+      font-size: 1rem;
+      a {
+        text-decoration: none;
+      }
+      .social-btn {
+        border: solid 0.12rem;
+        border-radius: 1.25rem;
+        padding: 0.35rem 1rem;
+        background-color: transparent;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 10rem;
+        gap: 5%;
+        text-decoration: none;
+        font-weight: var(--fw-4);
+
+        .dark-theme & {
+          color: $DM-Title;
+        }
+
+        .light-theme & {
+          color: $LM-Title;
+        }
+        button {
+          background-color: transparent;
+          border: none;
+          color: white;
+          &:hover {
+            color: var(--color-primary);
+          }
+        }
+        &:hover {
+          transition: 0.3s ease;
+          cursor: pointer;
+
+          .dark-theme & {
+            color: var(--color-primary);
+          }
+
+          .light-theme & {
+            color: var(--color-primary);
+            border: var(--color-primary) solid 0.12rem;
+          }
+        }
+
+        *:hover {
+          transition: 0.3s ease;
+        }
+      }
+    }
+  }
+}
