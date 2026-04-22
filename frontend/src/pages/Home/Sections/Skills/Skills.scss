@@ -1,38 +1,33 @@
-// ✅ GENERADO POR CLAUDE - Archivo: frontend/src/pages/Home/Sections/Skills/Skills.scss
-@use "../../../../index.scss" as *;
+// ─── Skills Section ───────────────────────────────────────────────────────────
+
+@use "@/styles/abstracts" as *;
 
 .skills {
   width: 100%;
   margin: 2rem auto;
   padding: 2rem;
 
-  @media (max-width: 599px) {
-    padding: 1rem;
-  }
+  @include respond-to(mobile) { padding: 1rem; }
 
+  // Overrides global .title-container specifically for this context
   .title-container {
-    display: flex;
-    align-items: center;
+    @include flex-center;
+    justify-content: flex-start;
     gap: 1rem;
     margin-bottom: 2.5rem;
 
     h2 {
       font-size: 2rem;
-      font-weight: var(--fw-4);
+      font-weight: $fw-semibold;
       white-space: nowrap;
-
-      .dark-theme & {
-        color: $DM-Title;
-      }
-      .light-theme & {
-        color: $LM-Title;
-      }
+      @include theme-color(color, $DM-Title, $LM-Title);
     }
 
     .space-line {
       flex: 1;
       height: 1px;
-      background: linear-gradient(90deg, var(--color-primary), transparent);
+      background: linear-gradient(90deg, $color-primary, transparent);
+      margin: 0; // Reset mixin margin
     }
   }
 
@@ -41,20 +36,15 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 2.5rem;
 
-    @media (max-width: 991px) {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    @media (max-width: 599px) {
-      grid-template-columns: 1fr;
-    }
+    @include respond-to(tablet) { grid-template-columns: repeat(2, 1fr); }
+    @include respond-to(mobile) { grid-template-columns: 1fr; }
   }
 
   .skill-category {
     h3 {
       font-size: 1.1rem;
-      font-weight: var(--fw-4);
-      color: var(--color-primary);
+      font-weight: $fw-semibold;
+      color: $color-primary;
       margin-bottom: 1.5rem;
       padding-bottom: 0.5rem;
       border-bottom: 1px solid rgba(255, 137, 6, 0.3);
@@ -65,20 +55,13 @@
     margin-bottom: 1.25rem;
 
     .skill-header {
-      display: flex;
-      justify-content: space-between;
+      @include flex-between;
       margin-bottom: 0.4rem;
       font-size: 0.9rem;
 
       .skill-name {
-        font-weight: var(--fw-2);
-
-        .dark-theme & {
-          color: $DM-Title;
-        }
-        .light-theme & {
-          color: $LM-Title;
-        }
+        font-weight: $fw-regular;
+        @include theme-color(color, $DM-Title, $LM-Title);
       }
 
       .skill-level {
@@ -95,7 +78,7 @@
 
       .skill-progress {
         height: 100%;
-        background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+        background: linear-gradient(90deg, $color-primary, $color-secondary);
         border-radius: 3px;
         transition: width 0.8s ease;
       }

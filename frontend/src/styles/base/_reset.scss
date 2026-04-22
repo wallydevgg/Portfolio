@@ -1,0 +1,79 @@
+// ─── CSS Reset ────────────────────────────────────────────────────────────────
+// Based on Andy Bell's modern CSS reset.
+
+// Box sizing
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+// Remove default margin and padding
+body,
+h1, h2, h3, h4, h5, h6,
+p, figure, blockquote, dl, dd, * {
+  margin: 0;
+  padding: 0;
+}
+
+// Remove list styles on semantic lists
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+}
+
+// Smooth scrolling (unless motion-sensitive)
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+// Core body defaults
+html,
+body {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+}
+
+// Link defaults
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+// Media defaults
+img,
+picture,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+// Form elements inherit font
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+// Reduce motion
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

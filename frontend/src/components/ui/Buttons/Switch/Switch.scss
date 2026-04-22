@@ -1,28 +1,23 @@
+// ─── Theme Toggle Button ──────────────────────────────────────────────────────
+
+@use "@/styles/abstracts" as *;
+
 .toggle-theme,
 .toggle-system-theme {
-  height: 2rem;
+  @include flex-center;
   width: 2rem;
-  background-image: none;
-  background-color: transparent;
+  height: 2rem;
+  background: transparent;
   border: none;
-  color: var(--color-primary);
+  color: $color-primary;
   font-size: 1.4rem;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
+  @include transition;
 
-.toggle-theme:hover,
-.toggle-system-theme:hover {
-  height: 2rem;
-  width: 2rem;
-  color: var(--color-primary);
-  transform: scale(1.05);
-  background-image: none;
-  background-color: transparent;
-  font-size: 1.5rem;
-  border: none;
-}
+  &:hover {
+    font-size: 1.5rem;
+    transform: scale(1.05);
+  }
 
-.toggle-theme:active {
-  color: var(--color-primary);
+  &:active { color: $color-primary; }
 }

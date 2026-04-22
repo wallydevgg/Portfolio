@@ -1,0 +1,35 @@
+// ─── CSS Custom Properties (Design Tokens) ────────────────────────────────────
+// These are the runtime CSS variables consumed by components.
+// SCSS variables live in abstracts/_variables.scss.
+
+:root {
+  // ── Brand palette ──────────────────────────────────────────────────────────
+  --color-primary   : #ff8906;
+  --color-secondary : #f25f4c;
+  --color-tertiary  : #e8005c;
+  --color-fourth    : #6700ff;
+  --color-fifth     : #00e8d8;
+
+  // ── Text ───────────────────────────────────────────────────────────────────
+  --DM-Title        : #fffffe;
+  --LM-Title        : #002654;
+  --parrafos        : #a7a9be;
+
+  // ── Backgrounds ────────────────────────────────────────────────────────────
+  --BgLight         : #f5f5f5;
+  --BgDark          : #0f0e17;
+
+  // ── Spacing ────────────────────────────────────────────────────────────────
+  --padding-1       : 1rem;
+  --padding-2       : 2rem;
+  --padding-3       : 1.5rem;
+
+  // ── Typography ─────────────────────────────────────────────────────────────
+  --font-1          : "Fira Code", monospace;
+
+  --fw-1            : 300;
+  --fw-2            : 400;
+  --fw-3            : 500;
+  --fw-4            : 600;
+  --fw-5            : 700;
+}

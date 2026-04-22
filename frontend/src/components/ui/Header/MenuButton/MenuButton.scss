@@ -1,79 +1,52 @@
-@use "sass:color";
-@use "../../../../index.scss" as *;
-$primary-color: #ff8906;
+// ─── Hamburger Menu Button + Mobile Drawer ────────────────────────────────────
 
-// Estilos para el botón del menú
+@use "sass:color";
+@use "@/styles/abstracts" as *;
+
+// ── Toggle button ─────────────────────────────────────────────────────────────
 .menu-toggle {
-  z-index: 999;
-  right: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
+  z-index: $z-menu;
   width: 40px;
   height: 40px;
   border: none;
   border-radius: 20px;
-  background-color: $primary-color;
-  color: $BgDark;
+  background-color: $color-primary;
+  color: $bg-dark;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
+  @include transition;
 
-  @media (max-width: 599px) {
-    display: block;
-    z-index: 20;
+  // Only visible on mobile/tablet
+  @include respond-to(tablet)  { display: flex; }
+  @include respond-between(tablet, wide) { display: none; }
 
-  }
-  @media (min-width: 600px) and (max-width: 991px) {
-    display: block;
-  }
-  @media (min-width: 992px) and (max-width: 1199px) {
-    display: none;
-  }
-  @media (min-width: 1200px) {
-    display: none;
-  }
-  &:hover {
-    background-color: color.adjust($primary-color, $lightness: -5%);
-  }
+  &:hover { background-color: color.adjust($color-primary, $lightness: -5%); }
 
   &__icon {
     display: block;
     width: 20px;
     height: 2px;
-    background-color: $BgDark;
+    background-color: $bg-dark;
     border-radius: 2px;
-    transition: all 0.3s ease-in-out;
+    @include transition;
 
-    &:not(:last-child) {
-      margin-bottom: 4px;
-    }
+    &:not(:last-child) { margin-bottom: 4px; }
 
-    &.open:nth-child(1) {
-      transform: translateY(-10px) translateX(10px) rotate(270deg);
-    }
-
-    &.open:nth-child(2) {
-      opacity: 0;
-    }
-
-    &.open:nth-child(3) {
-      transform: translateY(10px)  translateX(10px) rotate(-90deg);
-    }
+    &.open:nth-child(1) { transform: translateY(-10px) translateX(10px) rotate(270deg); }
+    &.open:nth-child(2) { opacity: 0; }
+    &.open:nth-child(3) { transform: translateY(10px) translateX(10px) rotate(-90deg); }
   }
 }
 
-// Estilos para la capa de fondo del menú
+// ── Overlay ───────────────────────────────────────────────────────────────────
 .overlay {
   position: fixed;
-  z-index: 998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  z-index: $z-overlay;
+  inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease-in-out;
+  @include transition;
 
   &.open {
     opacity: 1;
@@ -81,86 +54,61 @@ $primary-color: #ff8906;
   }
 }
 
-// Estilos para el menú
+// ── Drawer ────────────────────────────────────────────────────────────────────
 .menu {
   position: fixed;
-  z-index: 999;
+  z-index: $z-menu;
   top: 0;
   right: 0;
   width: 80%;
   max-width: 400px;
   height: 100vh;
   transform: translateX(100%);
-  transition: all 0.3s ease-in-out;
-  .dark-theme & {
-    background-color: $BgDark;
-  }
+  @include transition;
+
+  .dark-theme & { background-color: $bg-dark; }
   .light-theme & {
-    background-color: $BgLight;
-    border-left: 0.15rem solid $LM-Title;
+    background-color: $bg-light;
+    border-left: 0.15rem solid $color-title-light;
   }
 
-  &.open {
-    transform: translateX(0);
-  }
+  &.open { transform: translateX(0); }
 
   ul {
     list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
+    @include flex-column;
     justify-content: center;
     height: 100%;
     font-size: 1.25rem;
     gap: 1%;
 
     li {
-      margin: 0.5rem 0 0.5rem 0;
-      text-decoration: none;
-      display: flex;
-      justify-content: center;
+      margin: 0.5rem 0;
+      @include flex-center;
 
-      &:last-child {
-        margin-bottom: 0;
-      }
+      &:last-child { margin-bottom: 0; }
 
       a {
         border-radius: 20px;
-        color: $primary-color;
-        font-weight: bold;
+        font-weight: $fw-bold;
         text-align: center;
         text-decoration: none;
-        transition: all 0.3s ease-in-out;
-
         display: inline-block;
         position: relative;
+        @include transition;
+        @include theme-color(color, $DM-Title, $LM-Title);
 
-        &:hover {
-          text-decoration: none;
-          color: $primary-color;
-          .hashTag {
-            color: #fff;
-            .light-theme & {
-              color: $primary-color;
-            }
-          }
-        }
-        .dark-theme & {
-          color: $DM-Title;
-        }
-        .light-theme & {
-          color: $LM-Title;
-        }
+        &:hover { color: $color-primary; }
+
         &::after {
           content: "";
           position: absolute;
           width: 100%;
-          transform: scaleX(0);
           height: 2px;
           bottom: -2px;
           left: 0;
-          background-color: $primary-color;
+          background-color: $color-primary;
+          transform: scaleX(0);
           transform-origin: bottom right;
           transition: transform 0.25s ease-out;
         }
@@ -172,7 +120,6 @@ $primary-color: #ff8906;
       }
     }
   }
-  .resume {
-    margin: 0 auto;
-  }
+
+  .resume { margin: 0 auto; }
 }

@@ -1,0 +1,56 @@
+// ─── Design Tokens ────────────────────────────────────────────────────────────
+// Single source of truth for all SCSS variables.
+// Usage: @use "@/styles/abstracts" as *;
+
+// ── Colors ────────────────────────────────────────────────────────────────────
+$color-primary    : #ff8906;
+$color-secondary  : #f25f4c;
+$color-tertiary   : #e8005c;
+$color-fourth     : #6700ff;
+$color-fifth      : #00e8d8;
+
+// ── Theme text colors ─────────────────────────────────────────────────────────
+$color-title-dark : #fffffe;
+$color-title-light: #002654;
+$color-muted      : #a7a9be;
+
+// ── Theme backgrounds ─────────────────────────────────────────────────────────
+$bg-dark          : #0f0e17;
+$bg-light         : #f5f5f5;
+
+// ── Legacy aliases (keep for backwards compat during migration) ───────────────
+$primary-color    : $color-primary;
+$secondary-color  : $color-fourth;
+$DM-Title         : $color-title-dark;
+$LM-Title         : $color-title-light;
+$BgDark           : $bg-dark;
+$BgLight          : $bg-light;
+
+// ── Typography ────────────────────────────────────────────────────────────────
+$font-primary     : "Fira Code", monospace;
+$font-sans        : "Inter", sans-serif;
+
+$fw-light         : 300;
+$fw-regular       : 400;
+$fw-medium        : 500;
+$fw-semibold      : 600;
+$fw-bold          : 700;
+
+// ── Spacing ───────────────────────────────────────────────────────────────────
+$space-1          : 1rem;
+$space-2          : 2rem;
+$space-3          : 1.5rem;
+
+// ── Breakpoints ───────────────────────────────────────────────────────────────
+// Usage: @include respond-to(mobile) { ... }
+$breakpoints: (
+  "mobile"  : 599px,
+  "tablet"  : 991px,
+  "desktop" : 1199px,
+  "wide"    : 1600px,
+);
+
+// ── Z-index scale ─────────────────────────────────────────────────────────────
+$z-overlay        : 998;
+$z-menu           : 999;
+$z-nav            : 1000;

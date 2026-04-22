@@ -1,0 +1,10 @@
+// ─── Abstracts Barrel ─────────────────────────────────────────────────────────
+// Single import point for all abstracts.
+// Usage in any SCSS file:
+//   @use "@/styles/abstracts" as *;
+//
+// This gives access to all $variables, mixins, and %placeholders.
+// Animations are NOT forwarded here — they live in main.scss as global @keyframes.
+
+@forward "variables";
+@forward "mixins";

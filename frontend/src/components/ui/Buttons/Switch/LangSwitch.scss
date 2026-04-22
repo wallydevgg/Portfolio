@@ -1,8 +1,14 @@
+// ─── Language Toggle Switch ───────────────────────────────────────────────────
+// Custom toggle pill for switching display language.
+
+@use "@/styles/abstracts" as *;
+
 .switch {
   position: relative;
   display: inline-block;
 
   input.check-toggle-round-flat {
+    @include visually-hidden; // accessibility: hide but keep focusable... wait, need abstracts
     position: absolute;
     margin-left: -9999px;
     visibility: hidden;
@@ -20,14 +26,14 @@
       border-radius: 2rem;
       transition: background 0.4s;
 
-      &:before,
-      &:after {
+      &::before,
+      &::after {
         display: block;
         position: absolute;
         content: "";
       }
 
-      &:after {
+      &::after {
         top: 0.2rem;
         left: 0.2rem;
         bottom: 0.2rem;
@@ -50,38 +56,19 @@
         text-align: center;
         transition: color 0.4s;
 
-        &.off {
-          left: 0.2rem;
-          color: #f36f25;
-          z-index: 100;
-        }
-
-        &.on {
-          right: 0.2rem;
-          color: #fff;
-          z-index: 100;
-        }
+        &.off { left: 0.2rem;  color: #f36f25; z-index: 100; }
+        &.on  { right: 0.2rem; color: #fff;    z-index: 100; }
       }
     }
 
     &:checked + label {
       background-color: #f36f25;
 
-      &:after {
-        margin-left: 2.1rem;
-        background-color: #fff;
-      }
+      &::after { margin-left: 2.1rem; }
 
       span {
-        &.off {
-          color: #f36f25;
-          z-index: 100;
-        }
-
-        &.on {
-          color: #f36f25;
-          z-index: 100;
-        }
+        &.off { color: #f36f25; }
+        &.on  { color: #f36f25; }
       }
     }
   }
