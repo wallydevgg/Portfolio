@@ -7,6 +7,9 @@ import NotFoundPage from "@/pages/error/errorPage";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import PostsPage from "@/pages/Dashboard/Posts/index";
 import PostEditorPage from "@/pages/Dashboard/Posts/Editor";
+import ExperiencePage from "@/pages/Dashboard/Experience/index";
+import SkillsPage from "@/pages/Dashboard/Skills/index";
+import ProjectsPage from "@/pages/Dashboard/Projects/index";
 import BlogPage from "@/pages/Blog/BlogPage";
 import { AuthProvider } from "@/contexts/AuthContext";
 import LoginPage from "@/pages/Login/Login";
@@ -45,6 +48,9 @@ const router = createBrowserRouter(
         { path: "posts", element: <PostsPage /> },
         { path: "posts/new", element: <PostEditorPage /> },
         { path: "posts/:id/edit", element: <PostEditorPage /> },
+        { path: "experience", element: <ExperiencePage /> },
+        { path: "skills", element: <SkillsPage /> },
+        { path: "projects", element: <ProjectsPage /> },
       ],
     },
   ],

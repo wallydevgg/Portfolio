@@ -1,6 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { BookOpen, LayoutDashboard, LogOut, Settings, Menu } from "lucide-react";
+import { BookOpen, LayoutDashboard, LogOut, Settings, Menu, Briefcase, Code2, FolderOpen } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ToastProvider } from "../contexts/ToastContext";
 import "./DashboardLayout.scss";
@@ -36,6 +36,18 @@ export default function DashboardLayout() {
           <Link to="/dashboard/posts" className="dashboard__nav-link">
             <BookOpen className="icon" />
             {sidebarOpen && <span>Blog Posts</span>}
+          </Link>
+          <Link to="/dashboard/experience" className="dashboard__nav-link">
+            <Briefcase className="icon" />
+            {sidebarOpen && <span>Experience</span>}
+          </Link>
+          <Link to="/dashboard/skills" className="dashboard__nav-link">
+            <Code2 className="icon" />
+            {sidebarOpen && <span>Skills</span>}
+          </Link>
+          <Link to="/dashboard/projects" className="dashboard__nav-link">
+            <FolderOpen className="icon" />
+            {sidebarOpen && <span>Projects</span>}
           </Link>
           <Link to="/dashboard/settings" className="dashboard__nav-link">
             <Settings className="icon" />
