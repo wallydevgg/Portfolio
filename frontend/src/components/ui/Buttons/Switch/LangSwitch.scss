@@ -3,12 +3,34 @@
 
 @use "@/styles/abstracts" as *;
 
+// ── Keyframes ──────────────────────────────────────────────────────────────────
+
+@keyframes thumb-bounce {
+  0%   { transform: scaleX(1); }
+  30%  { transform: scaleX(1.25); }
+  60%  { transform: scaleX(0.88); }
+  80%  { transform: scaleX(1.08); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes label-in {
+  0%   { opacity: 0; transform: translateY(-50%) scale(0.7); }
+  60%  { opacity: 1; transform: translateY(-50%) scale(1.1); }
+  100% { opacity: 1; transform: translateY(-50%) scale(1); }
+}
+
+@keyframes ripple {
+  0%   { box-shadow: 0 0 0 0   rgba(#f36f25, 0.45); }
+  100% { box-shadow: 0 0 0 10px rgba(#f36f25, 0); }
+}
+
+// ── Component ─────────────────────────────────────────────────────────────────
+
 .switch {
   position: relative;
   display: inline-block;
 
   input.check-toggle-round-flat {
-    @include visually-hidden; // accessibility: hide but keep focusable... wait, need abstracts
     position: absolute;
     margin-left: -9999px;
     visibility: hidden;
@@ -24,7 +46,17 @@
       height: 2rem;
       background-color: #f36f25;
       border-radius: 2rem;
-      transition: background 0.4s;
+
+      // Smooth background + slight scale on the pill itself
+      transition:
+        background 0.35s ease,
+        transform  0.12s ease,
+        box-shadow 0.35s ease;
+
+      // Active / click press feedback
+      &:active {
+        transform: scale(0.93);
+      }
 
       &::before,
       &::after {
@@ -33,6 +65,7 @@
         content: "";
       }
 
+      // Thumb (white pill)
       &::after {
         top: 0.2rem;
         left: 0.2rem;
@@ -40,9 +73,13 @@
         width: 2.5rem;
         background-color: #fff;
         border-radius: 2rem;
-        transition: margin 0.2s, background 0.4s;
+        transition:
+          margin      0.35s cubic-bezier(0.34, 1.56, 0.64, 1), // springy slide
+          background  0.35s ease;
+        transform-origin: center;
       }
 
+      // Text labels
       span {
         position: absolute;
         top: 50%;
@@ -54,21 +91,44 @@
         text-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
         width: 50%;
         text-align: center;
-        transition: color 0.4s;
+        z-index: 100;
+        transition:
+          color   0.3s ease,
+          opacity 0.25s ease;
 
-        &.off { left: 0.2rem;  color: #f36f25; z-index: 100; }
-        &.on  { right: 0.2rem; color: #fff;    z-index: 100; }
+        &.off {
+          left: 0.2rem;
+          color: #f36f25;
+          // Animate label in when it becomes active (EN side)
+          animation: label-in 0.35s ease forwards;
+        }
+
+        &.on {
+          right: 0.2rem;
+          color: #fff;
+        }
       }
     }
 
+    // ── Checked state ────────────────────────────────────────────────────────
+
     &:checked + label {
       background-color: #f36f25;
+      // Ripple pulse to confirm the toggle
+      animation: ripple 0.5s ease forwards;
 
-      &::after { margin-left: 2.1rem; }
+      &::after {
+        margin-left: 2.1rem;
+        // Bounce the thumb on arrival
+        animation: thumb-bounce 0.4s ease forwards;
+      }
 
       span {
         &.off { color: #f36f25; }
-        &.on  { color: #f36f25; }
+        &.on  {
+          color: #f36f25;
+          animation: label-in 0.35s ease forwards;
+        }
       }
     }
   }

@@ -56,3 +56,8 @@
 @keyframes btnSpin {
   to { transform: rotate(360deg); }
 }
+
+// ── Spinning utility (for Loader2 icons) ──────────────────────────────────────
+.spinning {
+  animation: btnSpin 0.8s linear infinite;
+}

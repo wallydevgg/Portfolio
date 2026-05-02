@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import { Send, CheckCircle } from "lucide-react";
 import "./Contact.scss";
 import { t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 
 const INITIAL = { name: "", email: "", subject: "", message: "" };
 
 const Contact = () => {
+  useLingui();
   const [form, setForm] = useState(INITIAL);
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);

@@ -1,6 +1,7 @@
 // ─── Mixins ───────────────────────────────────────────────────────────────────
 // Usage: @use "@/styles/abstracts" as *;
 
+@use "sass:map";
 @use "variables" as *;
 
 // ── Responsive (mobile-first) ─────────────────────────────────────────────────
@@ -9,7 +10,7 @@
 //   @include respond-to(tablet)  { ... }   → max-width: 991px
 //   @include respond-to(desktop) { ... }   → max-width: 1199px
 @mixin respond-to($bp) {
-  $value: map-get($breakpoints, $bp);
+  $value: map.get($breakpoints, $bp);
   @if $value {
     @media (max-width: $value) { @content; }
   } @else {
@@ -20,8 +21,8 @@
 // ── Respond between two breakpoints ──────────────────────────────────────────
 // Usage: @include respond-between(tablet, desktop) { ... }
 @mixin respond-between($lower, $upper) {
-  $min: map-get($breakpoints, $lower);
-  $max: map-get($breakpoints, $upper);
+  $min: map.get($breakpoints, $lower);
+  $max: map.get($breakpoints, $upper);
   @if $min and $max {
     @media (min-width: #{$min + 1}) and (max-width: $max) { @content; }
   }

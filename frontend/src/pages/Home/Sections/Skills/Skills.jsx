@@ -1,34 +1,8 @@
-// ✅ GENERADO POR CLAUDE - Archivo: frontend/src/pages/Home/Sections/Skills/Skills.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Skills.scss";
 import { t } from "@lingui/macro";
-
-const SKILLS = {
-  frontend: [
-    { name: "React 19", level: 90 },
-    { name: "TypeScript", level: 80 },
-    { name: "Tailwind CSS", level: 95 },
-    { name: "Next.js", level: 80 },
-    { name: "Vite", level: 90 },
-    { name: "SCSS / CSS", level: 90 },
-  ],
-  backend: [
-    { name: "Python / FastAPI", level: 80 },
-    { name: "Node.js / Express", level: 80 },
-    { name: "PostgreSQL", level: 85 },
-    { name: "SQLAlchemy", level: 75 },
-    { name: "JWT / Auth", level: 90 },
-    { name: "REST APIs", level: 90 },
-  ],
-  devops: [
-    { name: "Docker", level: 80 },
-    { name: "Git / GitHub", level: 95 },
-    { name: "GitHub Actions", level: 75 },
-    { name: "Linux / Bash", level: 80 },
-    { name: "Nginx", level: 75 },
-    { name: "VPS / Hetzner", level: 75 },
-  ],
-};
+import { useLingui } from "@lingui/react";
+import { usePortfolioApi } from "@/features/portfolio/usePortfolioApi";
 
 const SkillBar = ({ name, level }) => (
   <div className="skill-item">
@@ -43,6 +17,36 @@ const SkillBar = ({ name, level }) => (
 );
 
 const Skills = () => {
+  useLingui();
+  const { getSkills } = usePortfolioApi();
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getSkills()
+      .then(setCategories)
+      .catch((err) => {
+        console.error("Failed to load skills:", err);
+        setCategories([]);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="skills" id="skills">
+        <div className="title-container">
+          <h2>
+            <span className="hashTag">#</span>
+            {t`skills.title`}
+          </h2>
+          <div className="space-line"></div>
+        </div>
+        <div>Loading skills...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="skills" id="skills">
       <div className="title-container">
@@ -54,24 +58,14 @@ const Skills = () => {
       </div>
 
       <div className="skills-grid">
-        <div className="skill-category">
-          <h3>{t`skills.frontend`}</h3>
-          {SKILLS.frontend.map((s) => (
-            <SkillBar key={s.name} {...s} />
-          ))}
-        </div>
-        <div className="skill-category">
-          <h3>{t`skills.backend`}</h3>
-          {SKILLS.backend.map((s) => (
-            <SkillBar key={s.name} {...s} />
-          ))}
-        </div>
-        <div className="skill-category">
-          <h3>{t`skills.devops`}</h3>
-          {SKILLS.devops.map((s) => (
-            <SkillBar key={s.name} {...s} />
-          ))}
-        </div>
+        {categories.map((category) => (
+          <div key={category.id} className="skill-category">
+            <h3>{category.name}</h3>
+            {category.skills.map((s) => (
+              <SkillBar key={s.id} name={s.name} level={s.level} />
+            ))}
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -1,54 +1,121 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TiptapEditor from "../../../features/blog/components/TiptapEditor";
-import { ArrowLeft, Save } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ArrowLeft, Save, Send, Loader2 } from "lucide-react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useBlogApi } from "../../../features/blog/useBlogApi";
+import { useToast } from "../../../contexts/ToastContext";
+import "./Editor.scss";
 
-export default function CreatePostPage() {
+export default function PostEditorPage() {
+  const { id } = useParams();
+  const isEditing = Boolean(id);
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("<p>Start writing your new article...</p>");
+  const [saving, setSaving] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+  const [loadingPost, setLoadingPost] = useState(isEditing);
 
-  const handleSave = () => {
-    // API logic will go here
-    console.log("Saving post:", { title, content });
+  const { createPost, updatePost, getPost } = useBlogApi();
+  const navigate = useNavigate();
+  const toast = useToast();
+
+  useEffect(() => {
+    if (!isEditing) return;
+    (async () => {
+      try {
+        const post = await getPost(id);
+        setTitle(post.title);
+        setContent(post.content);
+      } catch {
+        toast.error("No se encontró el post.");
+        navigate("/dashboard/posts");
+      } finally {
+        setLoadingPost(false);
+      }
+    })();
+  }, [id]);
+
+  const handleSave = async (publish = false) => {
+    if (!title.trim()) {
+      toast.error("El título no puede estar vacío.");
+      return;
+    }
+    const setStatus = publish ? setPublishing : setSaving;
+    try {
+      setStatus(true);
+      if (isEditing) {
+        await updatePost(id, {
+          title,
+          content,
+          ...(publish && { is_published: true }),
+        });
+        toast.success(publish ? "Post publicado correctamente." : "Cambios guardados.");
+      } else {
+        await createPost({ title, content, is_published: publish });
+        toast.success(publish ? "Post publicado correctamente." : "Borrador guardado.");
+      }
+      navigate("/dashboard/posts");
+    } catch (err) {
+      toast.error(err.message || "Error al guardar el post.");
+    } finally {
+      setStatus(false);
+    }
   };
 
+  if (loadingPost) {
+    return (
+      <div className="editor-page editor-page--loading">
+        <Loader2 className="icon spinning" />
+        <span>Cargando post...</span>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-4xl mx-auto space-y-6 text-left">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link to="/dashboard/posts" className="p-2 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-md transition-colors">
-            <ArrowLeft className="w-5 h-5" />
+    <div className="editor-page">
+      <div className="editor-page__header">
+        <div className="editor-page__title-area">
+          <Link to="/dashboard/posts" className="back-btn">
+            <ArrowLeft className="icon" />
           </Link>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Create New Post</h1>
+          <h1>{isEditing ? "Edit Post" : "Create New Post"}</h1>
         </div>
-        <button
-          onClick={handleSave}
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md transition-colors font-medium text-sm shadow-sm"
-        >
-          <Save className="w-4 h-4" />
-          Publish Post
-        </button>
+        <div className="editor-page__actions">
+          <button
+            onClick={() => handleSave(false)}
+            disabled={saving || publishing}
+            className="editor-page__save-btn"
+          >
+            {saving ? <Loader2 className="icon spinning" /> : <Save className="icon" />}
+            {isEditing ? "Save Changes" : "Save Draft"}
+          </button>
+          <button
+            onClick={() => handleSave(true)}
+            disabled={saving || publishing}
+            className="editor-page__publish-btn"
+          >
+            {publishing ? <Loader2 className="icon spinning" /> : <Send className="icon" />}
+            {isEditing ? "Publish" : "Publish Post"}
+          </button>
+        </div>
       </div>
 
-      <div className="bg-white dark:bg-zinc-900 shadow-sm border border-gray-200 dark:border-zinc-800 rounded-lg p-6 space-y-6">
-        <div className="space-y-2">
-          <label htmlFor="title" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-            Post Title
-          </label>
+      <div className="editor-page__container">
+        <div className="editor-page__field">
+          <label htmlFor="title">Post Title</label>
           <input
             id="title"
             type="text"
             placeholder="e.g., My Journey as a Developer"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-zinc-700 bg-transparent text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400"
+            className="editor-page__title-input"
           />
         </div>
 
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-            Content
-          </label>
+        <div className="editor-page__field">
+          <label>Content</label>
           <TiptapEditor content={content} onChange={setContent} />
         </div>
       </div>

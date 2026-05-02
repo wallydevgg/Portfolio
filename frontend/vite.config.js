@@ -16,6 +16,18 @@ export default defineConfig({
     lingui(),
     dynamicImport(),
   ],
+  server: {
+    host: true,
+    watch: {
+      usePolling: true,
+    },
+    proxy: {
+      "/api": {
+        target: "http://backend:8000",
+        changeOrigin: true,
+      },
+    },
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Search, Calendar, Tag, ArrowRight, BookOpen, PenLine, X } from "lucide-react";
 import "./BlogPage.scss";
 import { t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import { Helmet } from "react-helmet-async";
 
 const PostSkeleton = () => (
@@ -40,6 +41,7 @@ const NoResults = ({ onClear }) => (
 );
 
 const BlogPage = () => {
+  useLingui();
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);

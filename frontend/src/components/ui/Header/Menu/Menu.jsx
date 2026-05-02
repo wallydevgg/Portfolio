@@ -4,17 +4,14 @@ import { Switch } from "@/barrell";
 import "./Menu.scss";
 import LangSwitch from "../../Buttons/Switch/LangSwitch";
 import { t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 
 const Menu = ({ handleLinkClick }) => {
+  useLingui();
   return (
     <nav className="menu-header">
       <ul>
-        <li>
-          <Link to="/" onClick={() => handleLinkClick("hero")}>
-            <span className="hashTag">#</span>
-            {t`menu.home`}
-          </Link>
-        </li>
+
         <li>
           <Link to="/" onClick={() => handleLinkClick("experience")}>
             <span className="hashTag">#</span>
@@ -27,12 +24,7 @@ const Menu = ({ handleLinkClick }) => {
             {t`menu.projects`}
           </Link>
         </li>
-        <li>
-          <Link to="/blog" onClick={() => handleLinkClick("")}>
-            <span className="hashTag">#</span>
-            {t`menu.blog`}
-          </Link>
-        </li>
+
         <li>
           <Link to="/" onClick={() => handleLinkClick("about")}>
             <span className="hashTag">#</span>
@@ -43,6 +35,11 @@ const Menu = ({ handleLinkClick }) => {
           <Link to="/" onClick={() => handleLinkClick("contact")}>
             <span className="hashTag">#</span>
             {t`menu.contact`}
+          </Link>
+        </li>        <li>
+          <Link to="/blog" onClick={() => handleLinkClick("")}>
+            <span className="hashTag">#</span>
+            {t`menu.blog`}
           </Link>
         </li>
         <li>

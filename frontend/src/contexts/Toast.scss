@@ -1,0 +1,83 @@
+@use "@/styles/abstracts" as *;
+
+// ── Keyframe ──────────────────────────────────────────────────────────────────
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(110%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// ── Container (bottom-right stack) ────────────────────────────────────────────
+.toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  pointer-events: none;
+}
+
+// ── Individual toast ──────────────────────────────────────────────────────────
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 280px;
+  max-width: 420px;
+  padding: 0.875rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: $fw-medium;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  pointer-events: all;
+  animation: toastSlideIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+  border-left: 4px solid transparent;
+
+  &--success {
+    @include theme-color(background-color, #052e16, #f0fdf4);
+    @include theme-color(color, #4ade80, #166534);
+    border-left-color: #22c55e;
+  }
+
+  &--error {
+    @include theme-color(background-color, #1c0a0a, #fff1f2);
+    @include theme-color(color, #f87171, #991b1b);
+    border-left-color: #ef4444;
+  }
+
+  &--info {
+    @include theme-color(background-color, #0c1a2e, #eff6ff);
+    @include theme-color(color, #93c5fd, #1d4ed8);
+    border-left-color: #3b82f6;
+  }
+
+  &__message {
+    flex: 1;
+    line-height: 1.4;
+  }
+
+  &__close {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 0.75rem;
+    opacity: 0.6;
+    color: inherit;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    @include transition(opacity);
+    flex-shrink: 0;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

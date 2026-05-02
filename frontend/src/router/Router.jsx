@@ -6,7 +6,7 @@ import ErrorPage from "@/pages/error/errorPage";
 import NotFoundPage from "@/pages/error/errorPage";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import PostsPage from "@/pages/Dashboard/Posts/index";
-import CreatePostPage from "@/pages/Dashboard/Posts/Editor";
+import PostEditorPage from "@/pages/Dashboard/Posts/Editor";
 import BlogPage from "@/pages/Blog/BlogPage";
 import { AuthProvider } from "@/contexts/AuthContext";
 import LoginPage from "@/pages/Login/Login";
@@ -43,7 +43,8 @@ const router = createBrowserRouter(
       ),
       children: [
         { path: "posts", element: <PostsPage /> },
-        { path: "posts/new", element: <CreatePostPage /> },
+        { path: "posts/new", element: <PostEditorPage /> },
+        { path: "posts/:id/edit", element: <PostEditorPage /> },
       ],
     },
   ],

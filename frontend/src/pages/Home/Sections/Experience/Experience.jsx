@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import "./Experience.scss";
 import ListExperience from "./listExperience";
+import { t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 
 const Experience = () => {
+  useLingui();
   const [showMore, setShowMore] = useState(false);
 
   const toggleShowMore = () => {
@@ -13,7 +16,8 @@ const Experience = () => {
     <div className="experience" id="experience">
       <div className="title-container">
         <h2>
-          <span className="hashTag">#</span>experiencia
+          <span className="hashTag">#</span>
+          {t({ id: "experience.title", message: "experience" })}
         </h2>
         <div className="space-line"></div>
       </div>

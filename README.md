@@ -117,6 +117,8 @@ docker-compose up -d
 # API Docs: http://localhost:8003/docs
 ```
 
+El entorno Docker de desarrollo reutiliza una base de datos PostgreSQL externa ya existente en la red Docker compartida. Desde el contenedor `backend` debes usar `POSTGRES_SERVER=shared-db`; desde el host, una conexión externa usaría `localhost:5432`.
+
 ### Opción 2: Manual
 
 **Frontend:**
@@ -151,7 +153,7 @@ FRONTEND_PORT=3030
 BACKEND_PORT=8003
 
 # Base de datos
-POSTGRES_SERVER=localhost
+POSTGRES_SERVER=shared-db
 POSTGRES_USER=portfolio_user
 POSTGRES_PASSWORD=tu_password_segura
 POSTGRES_DB=portfolio
@@ -163,17 +165,57 @@ ALGORITHM=HS256
 
 # Admin dashboard
 ADMIN_USERNAME=admin
-ADMIN_PASSWORD_HASH=<hash bcrypt — ver abajo>
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=tu_password_segura
 
 # CORS
 BACKEND_CORS_ORIGINS=["http://localhost:3030","https://wallydev.dev"]
 ```
+
+Si prefieres no guardar el password en texto plano en el entorno, también puedes usar `ADMIN_PASSWORD_HASH` en lugar de `ADMIN_PASSWORD`.
 
 **Generar hash de password admin:**
 ```bash
 cd backend
 python -c "from core.security import get_password_hash; print(get_password_hash('tu_password'))"
 ```
+
+**Seed del admin en DB:**
+```bash
+docker compose exec -T backend python -m scripts.seed_admin
+```
+
+---
+
+## 🌍 Internacionalización (i18n)
+
+El proyecto utiliza **LinguiJS v5** para la internacionalización. Para evitar problemas con el extractor dinámico y garantizar una correspondencia exacta en los catálogos compilados, utilizamos **IDs explícitos** para la mayoría de textos.
+
+### Flujo de trabajo para agregar/editar textos:
+
+1. **Uso de macros:** En el código (ej. en componentes o hooks), utiliza la macro `t` con un `id` explícito y el `message` por defecto (en inglés):
+   ```jsx
+   import { t } from "@lingui/macro";
+   
+   // Correcto
+   const text = t({ id: "section.title", message: "Section Title" });
+   
+   // En JSX
+   <h1>{t({ id: "section.title", message: "Section Title" })}</h1>
+   ```
+
+2. **Extracción:** Ejecuta el comando de extracción para generar/actualizar los archivos `.po` localizados en `src/locales/en/messages.po` y `es/messages.po`.
+   ```bash
+   npm run messages:extract
+   ```
+   *(Este comando utiliza la bandera `--clean` para eliminar IDs obsoletos).*
+
+3. **Traducción:** Rellena los campos `msgstr ""` vacíos en los archivos `messages.po` recién generados.
+
+4. **Compilación:** Es **obligatorio** compilar los archivos `.po` a `.ts` para que Vite pueda consumirlos:
+   ```bash
+   npm run compile
+   ```
 
 ---
 
@@ -219,9 +261,11 @@ docker-compose logs -f
 | `DB_PASSWORD` | Password PostgreSQL de prod | Base de datos existente |
 | `SECRET_KEY` | Clave secreta JWT (mín. 32 chars) | `python -c "import secrets; print(secrets.token_hex(32))"` |
 | `ADMIN_USERNAME` | Usuario del dashboard admin | Elegir libremente |
-| `ADMIN_PASSWORD_HASH` | Hash bcrypt del password admin | `cd backend && python -c "from core.security import get_password_hash; print(get_password_hash('tu_password'))"` |
+| `ADMIN_EMAIL` | Email del admin | Elegir libremente |
+| `ADMIN_PASSWORD` | Password del admin para seed inicial | Elegir libremente |
+| `ADMIN_PASSWORD_HASH` | Alternativa al password plano | `cd backend && python -c "from core.security import get_password_hash; print(get_password_hash('tu_password'))"` |
 
-> **Nota:** `SECRET_KEY`, `ADMIN_USERNAME` y `ADMIN_PASSWORD_HASH` nunca se commitean. Se generan localmente y se pegan directo en GitHub Secrets — el workflow los inyecta en el `.env` del VPS en cada deploy.
+> **Nota:** `SECRET_KEY`, `ADMIN_USERNAME`, `ADMIN_PASSWORD` y `ADMIN_PASSWORD_HASH` nunca se commitean. Se generan localmente y se pegan directo en GitHub Secrets o en el `.env` del VPS.
 
 ---
 

@@ -10,8 +10,10 @@ import {
 import { faLinkedin, faGithub } from "@fortawesome/free-brands-svg-icons";
 import "./Hero.scss";
 import { Trans, t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 
 const Hero = () => {
+  useLingui();
   const handleDownloadCV = () => {
     const link = document.createElement("a");
     link.href = "/cv/Waldir_Apaza_CV.pdf";
@@ -37,22 +39,16 @@ const Hero = () => {
         </h1>
         <p>
           <Trans>
-            +3 Years of experience{" "}
+            +5 Years of experience{" "}
             <span className="hashTag">Fullstack Web Developer</span> with a
             solid background in{" "}
             <span className="hashTag">software development</span>
           </Trans>
         </p>
         <div className="social-buttons">
-          <button
-            className="social-btn"
-            onClick={() => scrollToSection("projects")}
-          >
-            <Icon css="icon" icon={faArrowRight} /> {t`hero.viewProjects`}
-          </button>
-          <Link to="/blog" className="social-btn">
+          {/* <Link to="/blog" className="social-btn">
             <Icon css="icon" icon={faArrowRight} /> {t`hero.readBlog`}
-          </Link>
+          </Link> */}
           <Link
             to="https://github.com/wallydevgg"
             className="social-btn"
@@ -72,12 +68,12 @@ const Hero = () => {
           <Link to="mailto:contact@wallydev.dev" className="social-btn">
             <Icon css="icon" icon={faEnvelope} /> {t`hero.contactButton`}
           </Link>
-          <button
+          {/* <button
             className="social-btn social-btn--cv"
             onClick={handleDownloadCV}
           >
             <Icon css="icon" icon={faDownload} /> {t`hero.downloadCV`}
-          </button>
+          </button> */}
         </div>
       </div>
       <div className="hero-right">

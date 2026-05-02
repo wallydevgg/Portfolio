@@ -6,6 +6,7 @@ from typing import List
 from core.database import get_db
 from core.security import get_current_user
 from domains.blog import models, schemas
+from domains.users.models import User
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 
@@ -21,7 +22,7 @@ def list_posts(
 @router.get("/all", response_model=List[schemas.PostSchema])
 def list_all_posts(
     db: Session = Depends(get_db),
-    current_user: str = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ):
     return db.query(models.Post).order_by(models.Post.created_at.desc()).all()
 
@@ -62,7 +63,7 @@ def get_rss(db: Session = Depends(get_db)):
 def create_post(
     post: schemas.PostCreate,
     db: Session = Depends(get_db),
-    current_user: str = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ):
     db_post = models.Post(
         title=post.title,
@@ -90,7 +91,7 @@ def update_post(
     post_id: int,
     post_update: schemas.PostUpdate,
     db: Session = Depends(get_db),
-    current_user: str = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ):
     db_post = db.query(models.Post).filter(models.Post.id == post_id).first()
     if not db_post:
@@ -106,7 +107,7 @@ def update_post(
 def delete_post(
     post_id: int,
     db: Session = Depends(get_db),
-    current_user: str = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ):
     db_post = db.query(models.Post).filter(models.Post.id == post_id).first()
     if not db_post:

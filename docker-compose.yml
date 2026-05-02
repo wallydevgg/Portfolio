@@ -1,13 +1,15 @@
 services:
   frontend:
     container_name: portfolio_frontend
-    image: portfolio_frontend:latest
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run messages:extract && npm run compile && npm run dev -- --host 0.0.0.0 --port 5173"
     restart: always
     ports:
-      - "${FRONTEND_PORT:-3030}:80"
+      - "${FRONTEND_PORT:-3030}:5173"
     networks:
       - proxy-network
     depends_on:
@@ -24,18 +26,24 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     restart: always
     ports:
       - "127.0.0.1:8003:8000"
     environment:
-      - POSTGRES_SERVER=${POSTGRES_SERVER:-vps-postgres}
+      - POSTGRES_SERVER=${POSTGRES_SERVER:-shared-db}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB:-portfolio}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
       - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS}
       - SECRET_KEY=${SECRET_KEY}
       - ADMIN_USERNAME=${ADMIN_USERNAME}
-      - ADMIN_PASSWORD_HASH=${ADMIN_PASSWORD_HASH}
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-}
+      - ADMIN_PASSWORD_HASH=${ADMIN_PASSWORD_HASH:-}
     networks:
       - data-network
       - proxy-network
@@ -45,8 +53,32 @@ services:
           cpus: "0.50"
           memory: 512M
 
+  minio:
+    container_name: portfolio_minio
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-minioadmin}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-minioadmin}
+    volumes:
+      - minio_data:/data
+    networks:
+      - proxy-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 256M
+
 networks:
   proxy-network:
     external: true
   data-network:
     external: true
+
+volumes:
+  minio_data:
