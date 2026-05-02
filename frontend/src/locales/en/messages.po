@@ -11,6 +11,41 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. js-lingui-explicit-id
+#: src/pages/Home/Sections/Experience/listExperience.jsx:27
+#~ msgid "experience.2.resp.1"
+#~ msgstr "Design UX/UI and web development. I've made and developed engaging and functional websites using technologies like CMS, Next.js, Payload, React and PostgreSQL."
+
+#. js-lingui-explicit-id
+#: src/pages/Home/Sections/Experience/listExperience.jsx:17
+#~ msgid "experience.1.resp.2"
+#~ msgstr "Developed a dynamic travel agency website using Next.js and Postgres, implementing e-commerce functionalities and an advanced booking system. Managed and optimized cloud, web and mail services on AWS, Google Cloud and private VPS, ensuring 99.9% uptime and improving data security"
+
+#. js-lingui-explicit-id
+#: src/pages/Home/Sections/Experience/listExperience.jsx:28
+#~ msgid "experience.2.resp.2"
+#~ msgstr "Development of WordPress sites and custom plugins. Design UX/UI and web development. I've made and developed engaging and functional websites using technologies like CMS, Next.js, Payload, React and PostgreSQL. Development of WordPress sites and custom plugins."
+
+#. js-lingui-explicit-id
+#: src/pages/Home/Sections/Experience/listExperience.jsx:14
+#~ msgid "experience.1.title"
+#~ msgstr "Full Stack Developer"
+
+#. js-lingui-explicit-id
+#: src/pages/Home/Sections/Experience/listExperience.jsx:25
+#~ msgid "experience.2.title"
+#~ msgstr "Full Stack Developer"
+
+#. js-lingui-explicit-id
+#: src/pages/Home/Sections/Experience/listExperience.jsx:18
+#~ msgid "experience.1.resp.3"
+#~ msgstr "Performed extensive diagnostic, quality and feature validation testing, optimizing code and generating detailed reports to ensure software quality."
+
+#. js-lingui-explicit-id
+#: src/pages/Home/Sections/Experience/listExperience.jsx:16
+#~ msgid "experience.1.resp.1"
+#~ msgstr "Redesigned the UX/UI of a travel agency website, resulting in a 30% increase in user satisfaction and a 15% increase in conversions"
+
 #: src/pages/Home/Sections/Hero/Hero.jsx:41
 msgid "+5 Years of experience <0>Fullstack Web Developer</0> with a solid background in <1>software development</1>"
 msgstr "+5 Years of experience <0>Fullstack Web Developer</0> with a solid background in <1>software development</1>"
@@ -87,28 +122,13 @@ msgstr "Message sent! I'll get back to you soon."
 msgid "contact.title"
 msgstr "contact"
 
-#. js-lingui-explicit-id
-#: src/pages/Home/Sections/Experience/listExperience.jsx:27
-msgid "experience.2.resp.1"
-msgstr "Design UX/UI and web development. I've made and developed engaging and functional websites using technologies like CMS, Next.js, Payload, React and PostgreSQL."
-
 #: src/hooks/useExperience.jsx:30
 msgid "Design UX/UI and web development. I've made and developed engaging and functional websites using technologies like CMS, Next.js, Payload, React and PostgreSQL."
 msgstr "Design UX/UI and web development. I've made and developed engaging and functional websites using technologies like CMS, Next.js, Payload, React and PostgreSQL."
 
-#. js-lingui-explicit-id
-#: src/pages/Home/Sections/Experience/listExperience.jsx:17
-msgid "experience.1.resp.2"
-msgstr "Developed a dynamic travel agency website using Next.js and Postgres, implementing e-commerce functionalities and an advanced booking system. Managed and optimized cloud, web and mail services on AWS, Google Cloud and private VPS, ensuring 99.9% uptime and improving data security"
-
 #: src/hooks/useExperience.jsx:20
 msgid "Developed a dynamic travel agency website using Next.js and Postgres, implementing e-commerce functionalities and an advanced booking system. Managed and optimized cloud, web and mail services on AWS, Google Cloud and private VPS, ensuring 99.9% uptime and improving data security"
 msgstr "Developed a dynamic travel agency website using Next.js and Postgres, implementing e-commerce functionalities and an advanced booking system. Managed and optimized cloud, web and mail services on AWS, Google Cloud and private VPS, ensuring 99.9% uptime and improving data security"
-
-#. js-lingui-explicit-id
-#: src/pages/Home/Sections/Experience/listExperience.jsx:28
-msgid "experience.2.resp.2"
-msgstr "Development of WordPress sites and custom plugins. Design UX/UI and web development. I've made and developed engaging and functional websites using technologies like CMS, Next.js, Payload, React and PostgreSQL. Development of WordPress sites and custom plugins."
 
 #: src/hooks/useExperience.jsx:31
 msgid "Development of WordPress sites and custom plugins. Design UX/UI and web development. I've made and developed engaging and functional websites using technologies like CMS, Next.js, Payload, React and PostgreSQL. Development of WordPress sites and custom plugins."
@@ -118,16 +138,6 @@ msgstr "Development of WordPress sites and custom plugins. Design UX/UI and web 
 #: src/pages/Home/Sections/Experience/Experience.jsx:20
 msgid "experience.title"
 msgstr "experience"
-
-#. js-lingui-explicit-id
-#: src/pages/Home/Sections/Experience/listExperience.jsx:14
-msgid "experience.1.title"
-msgstr "Full Stack Developer"
-
-#. js-lingui-explicit-id
-#: src/pages/Home/Sections/Experience/listExperience.jsx:25
-msgid "experience.2.title"
-msgstr "Full Stack Developer"
 
 #: src/hooks/useExperience.jsx:17
 #: src/hooks/useExperience.jsx:28
@@ -166,46 +176,37 @@ msgstr "experience"
 msgid "menu.projects"
 msgstr "projects"
 
-#. js-lingui-explicit-id
-#: src/pages/Home/Sections/Experience/listExperience.jsx:18
-msgid "experience.1.resp.3"
-msgstr "Performed extensive diagnostic, quality and feature validation testing, optimizing code and generating detailed reports to ensure software quality."
-
 #: src/hooks/useExperience.jsx:21
 msgid "Performed extensive diagnostic, quality and feature validation testing, optimizing code and generating detailed reports to ensure software quality."
 msgstr "Performed extensive diagnostic, quality and feature validation testing, optimizing code and generating detailed reports to ensure software quality."
-
-#. js-lingui-explicit-id
-#: src/pages/Home/Sections/Experience/listExperience.jsx:16
-msgid "experience.1.resp.1"
-msgstr "Redesigned the UX/UI of a travel agency website, resulting in a 30% increase in user satisfaction and a 15% increase in conversions"
 
 #: src/hooks/useExperience.jsx:19
 msgid "Redesigned the UX/UI of a travel agency website, resulting in a 30% increase in user satisfaction and a 15% increase in conversions"
 msgstr "Redesigned the UX/UI of a travel agency website, resulting in a 30% increase in user satisfaction and a 15% increase in conversions"
 
 #. js-lingui-explicit-id
-#: src/pages/Home/Sections/Experience/listExperience.jsx:62
+#: src/pages/Home/Sections/Experience/listExperience.jsx:55
 msgid "experience.seeLess"
 msgstr "See less"
 
 #. js-lingui-explicit-id
-#: src/pages/Home/Sections/Experience/listExperience.jsx:62
+#: src/pages/Home/Sections/Experience/listExperience.jsx:55
 msgid "experience.seeMore"
 msgstr "See More"
 
 #: src/pages/Home/Sections/Skills/Skills.jsx:66
-msgid "skills.backend"
-msgstr "Backend"
+#~ msgid "skills.backend"
+#~ msgstr "Backend"
 
 #: src/pages/Home/Sections/Skills/Skills.jsx:72
-msgid "skills.devops"
-msgstr "DevOps & Tools"
+#~ msgid "skills.devops"
+#~ msgstr "DevOps & Tools"
 
 #: src/pages/Home/Sections/Skills/Skills.jsx:60
-msgid "skills.frontend"
-msgstr "Frontend"
+#~ msgid "skills.frontend"
+#~ msgstr "Frontend"
 
-#: src/pages/Home/Sections/Skills/Skills.jsx:53
+#: src/pages/Home/Sections/Skills/Skills.jsx:41
+#: src/pages/Home/Sections/Skills/Skills.jsx:55
 msgid "skills.title"
 msgstr "skills"

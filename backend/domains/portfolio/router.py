@@ -7,7 +7,7 @@ from domains.portfolio import models, schemas
 from domains.users.models import User
 import uuid
 
-router = APIRouter(prefix="/portfolio", tags=["portfolio"])
+router = APIRouter(tags=["portfolio"])
 
 # === EXPERIENCE ENDPOINTS ===
 
