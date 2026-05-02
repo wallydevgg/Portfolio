@@ -1,20 +1,15 @@
 import { Link, Outlet } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { BookOpen, LayoutDashboard, LogOut, Settings, Menu, Briefcase, Code2, FolderOpen } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react";
 import { ToastProvider } from "../contexts/ToastContext";
 import "./DashboardLayout.scss";
+import { Switch, ThemeContext } from "@/barrell";
 
 export default function DashboardLayout() {
   const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  
-  // Retrieve theme from localStorage to apply correct wrapper class
-  const [theme] = useState(localStorage.getItem("theme") || "light");
-  
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
+  const { theme } = useContext(ThemeContext);
 
   return (
     <ToastProvider>
@@ -67,6 +62,7 @@ export default function DashboardLayout() {
       <main className="dashboard__main">
         <header className="dashboard__header">
           <div className="flex items-center gap-3">
+            <Switch />
             <div className="dashboard__user-avatar">
               {user?.sub?.charAt(0).toUpperCase() || "A"}
             </div>

@@ -1,5 +1,4 @@
-// ✅ GENERADO POR CLAUDE - Archivo: frontend/src/router/Router.jsx
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import { Home } from "@/barrell";
 import Layout from "@/components/ui/Layout/Layout";
 import ErrorPage from "@/pages/error/errorPage";
@@ -19,41 +18,44 @@ import ProtectedRoute from "@/components/auth/ProtectedRoute";
 const router = createBrowserRouter(
   [
     {
-      path: "/",
-      element: <Layout />,
-      errorElement: <ErrorPage />,
-      children: [
-        { path: "/", element: <Home /> },
-        { path: "/blog", element: <BlogPage /> },
-        { path: "*", element: <NotFoundPage /> },
-      ],
-    },
-    {
-      path: "/login",
       element: (
         <AuthProvider>
-          <LoginPage />
-        </AuthProvider>
-      ),
-    },
-    {
-      path: "/dashboard",
-      element: (
-        <AuthProvider>
-          <ProtectedRoute>
-            <DashboardLayout />
-          </ProtectedRoute>
+          <Outlet />
         </AuthProvider>
       ),
       children: [
-        { path: "", element: <PostsPage /> },
-        { path: "posts", element: <PostsPage /> },
-        { path: "posts/new", element: <PostEditorPage /> },
-        { path: "posts/:id/edit", element: <PostEditorPage /> },
-        { path: "experience", element: <ExperiencePage /> },
-        { path: "skills", element: <SkillsPage /> },
-        { path: "projects", element: <ProjectsPage /> },
-        { path: "settings", element: <SettingsPage /> },
+        {
+          path: "/",
+          element: <Layout />,
+          errorElement: <ErrorPage />,
+          children: [
+            { path: "/", element: <Home /> },
+            { path: "/blog", element: <BlogPage /> },
+            { path: "*", element: <NotFoundPage /> },
+          ],
+        },
+        {
+          path: "/login",
+          element: <LoginPage />,
+        },
+        {
+          path: "/dashboard",
+          element: (
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          ),
+          children: [
+            { path: "", element: <PostsPage /> },
+            { path: "posts", element: <PostsPage /> },
+            { path: "posts/new", element: <PostEditorPage /> },
+            { path: "posts/:id/edit", element: <PostEditorPage /> },
+            { path: "experience", element: <ExperiencePage /> },
+            { path: "skills", element: <SkillsPage /> },
+            { path: "projects", element: <ProjectsPage /> },
+            { path: "settings", element: <SettingsPage /> },
+          ],
+        },
       ],
     },
   ],

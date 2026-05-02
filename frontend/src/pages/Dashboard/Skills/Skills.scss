@@ -1,3 +1,5 @@
+@use "@/styles/abstracts" as *;
+
 .skills-page {
   padding: 2rem;
   max-width: 1200px;
@@ -24,8 +26,8 @@
 
   .btn-secondary {
     padding: 0.5rem 1rem;
-    background: #ccc;
-    color: #333;
+    @include theme-color(background-color, #3f3f46, #ccc);
+    @include theme-color(color, #f4f4f5, #333);
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -59,8 +61,9 @@
   }
 
   .category-form {
-    background: #f5f5f5;
+    @include theme-color(background-color, #27272a, #f5f5f5);
     padding: 1.5rem;
+    @include theme-color(color, #d4d4d8, #333);
     border-radius: 4px;
     margin-bottom: 2rem;
 
@@ -79,8 +82,12 @@
 
       input {
         width: 100%;
+        @include theme-color(background-color, #18181b, #ffffff);
+        @include theme-color(color, #f4f4f5, #18181b);
         padding: 0.5rem;
-        border: 1px solid #ddd;
+        @include theme-color(border-color, #3f3f46, #ddd);
+        border-width: 1px;
+        border-style: solid;
         border-radius: 4px;
 
         &:focus {
@@ -104,7 +111,9 @@
     gap: 1rem;
 
     .category-item {
-      border: 1px solid #ddd;
+      @include theme-color(border-color, #3f3f46, #ddd);
+        border-width: 1px;
+        border-style: solid;
       border-radius: 4px;
       overflow: hidden;
 
@@ -112,7 +121,7 @@
         display: flex;
         align-items: center;
         gap: 1rem;
-        background: #f5f5f5;
+        @include theme-color(background-color, #27272a, #f5f5f5);
         padding: 1rem;
         font-weight: 600;
         cursor: pointer;
@@ -139,10 +148,10 @@
 
       .category-content {
         padding: 1.5rem;
-        background: white;
+        @include theme-color(background-color, #18181b, #ffffff);
 
         .skill-form {
-          background: #f9f9f9;
+          @include theme-color(background-color, #18181b, #f9f9f9);
           padding: 1rem;
           border-radius: 4px;
           margin-bottom: 1.5rem;
@@ -159,7 +168,9 @@
             input {
               width: 100%;
               padding: 0.5rem;
-              border: 1px solid #ddd;
+              @include theme-color(border-color, #3f3f46, #ddd);
+        border-width: 1px;
+        border-style: solid;
               border-radius: 4px;
 
               &[type="range"] {
@@ -190,7 +201,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 0.8rem;
-            background: #f9f9f9;
+            @include theme-color(background-color, #18181b, #f9f9f9);
             border-radius: 3px;
             border-left: 3px solid #009688;
 

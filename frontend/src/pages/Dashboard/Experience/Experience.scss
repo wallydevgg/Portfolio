@@ -1,3 +1,5 @@
+@use "@/styles/abstracts" as *;
+
 .experience-page {
   padding: 2rem;
   max-width: 1200px;
@@ -24,8 +26,8 @@
 
   .btn-secondary {
     padding: 0.5rem 1rem;
-    background: #ccc;
-    color: #333;
+    @include theme-color(background-color, #3f3f46, #ccc);
+    @include theme-color(color, #f4f4f5, #333);
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -37,8 +39,9 @@
   }
 
   .experience-form {
-    background: #f5f5f5;
+    @include theme-color(background-color, #27272a, #f5f5f5);
     padding: 1.5rem;
+    @include theme-color(color, #d4d4d8, #333);
     border-radius: 4px;
     margin-bottom: 2rem;
 
@@ -58,8 +61,12 @@
       input,
       textarea {
         width: 100%;
+        @include theme-color(background-color, #18181b, #ffffff);
+        @include theme-color(color, #f4f4f5, #18181b);
         padding: 0.5rem;
-        border: 1px solid #ddd;
+        @include theme-color(border-color, #3f3f46, #ddd);
+        border-width: 1px;
+        border-style: solid;
         border-radius: 4px;
         font-family: inherit;
 
@@ -87,19 +94,23 @@
     border-collapse: collapse;
 
     thead {
-      background: #f5f5f5;
+      @include theme-color(background-color, #27272a, #f5f5f5);
     }
 
     th {
       padding: 1rem;
       text-align: left;
       font-weight: 600;
-      border-bottom: 2px solid #ddd;
+      @include theme-color(border-bottom-color, #3f3f46, #ddd);
+      border-bottom-width: 2px;
+      border-bottom-style: solid;
     }
 
     td {
       padding: 1rem;
-      border-bottom: 1px solid #ddd;
+      @include theme-color(border-bottom-color, #3f3f46, #ddd);
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
     }
 
     .actions {
