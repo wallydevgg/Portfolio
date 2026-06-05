@@ -18,6 +18,7 @@ from core.config import settings
 import domains.blog.models
 import domains.users.models
 import domains.portfolio.models
+import domains.settings.models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
