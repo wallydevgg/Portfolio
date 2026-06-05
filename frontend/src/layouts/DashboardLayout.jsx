@@ -1,6 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { BookOpen, LayoutDashboard, LogOut, Settings, Menu, Briefcase, Code2, FolderOpen } from "lucide-react";
+import { BookOpen, LayoutDashboard, LogOut, Settings, Menu, Briefcase, Code2, FolderOpen, Search } from "lucide-react";
 import { useState, useContext } from "react";
 import { ToastProvider } from "../contexts/ToastContext";
 import "./DashboardLayout.scss";
@@ -48,6 +48,10 @@ export default function DashboardLayout() {
             <Settings className="icon" />
             {sidebarOpen && <span>Settings</span>}
           </Link>
+          <Link to="/dashboard/settings/seo" className="dashboard__nav-link">
+            <Search className="icon" />
+            {sidebarOpen && <span>SEO</span>}
+          </Link>
         </nav>
 
         <div className="dashboard__sidebar-footer">
@@ -61,7 +65,7 @@ export default function DashboardLayout() {
       {/* Main Content */}
       <main className="dashboard__main">
         <header className="dashboard__header">
-          <div className="flex items-center gap-3">
+          <div className="dashboard__header-controls">
             <Switch />
             <div className="dashboard__user-avatar">
               {user?.sub?.charAt(0).toUpperCase() || "A"}

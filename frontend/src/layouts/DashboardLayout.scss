@@ -141,6 +141,12 @@
     border-bottom-style: solid;
   }
 
+  &__header-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
   &__user-avatar {
     width: 2rem;
     height: 2rem;

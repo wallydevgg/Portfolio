@@ -1,7 +1,7 @@
 services:
   frontend:
     container_name: portfolio_frontend
-    image: node:20-alpine
+    image: node:22-alpine
     working_dir: /app
     volumes:
       - ./frontend:/app
@@ -44,6 +44,11 @@ services:
       - ADMIN_EMAIL=${ADMIN_EMAIL:-}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-}
       - ADMIN_PASSWORD_HASH=${ADMIN_PASSWORD_HASH:-}
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT:-shared-minio:9000}
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-minioadmin}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-minioadmin}
+      - MINIO_PUBLIC_URL=${MINIO_PUBLIC_URL:-http://localhost:9000}
+      - MINIO_BUCKET=${MINIO_BUCKET:-portfolio}
     networks:
       - data-network
       - proxy-network
@@ -53,32 +58,8 @@ services:
           cpus: "0.50"
           memory: 512M
 
-  minio:
-    container_name: portfolio_minio
-    image: minio/minio:latest
-    command: server /data --console-address ":9001"
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    environment:
-      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-minioadmin}
-      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-minioadmin}
-    volumes:
-      - minio_data:/data
-    networks:
-      - proxy-network
-    restart: always
-    deploy:
-      resources:
-        limits:
-          cpus: "0.25"
-          memory: 256M
-
 networks:
   proxy-network:
     external: true
   data-network:
     external: true
-
-volumes:
-  minio_data:

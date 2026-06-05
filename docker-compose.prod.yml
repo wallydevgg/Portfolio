@@ -22,14 +22,20 @@ services:
     ports:
       - "127.0.0.1:8003:8000" # Internal access only (via Nginx or localhost)
     environment:
-      - POSTGRES_SERVER=${POSTGRES_SERVER:-vps-postgres}
+      - POSTGRES_SERVER=${POSTGRES_SERVER:-shared-db}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB:-portfolio}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
       - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS:-[]}
       - SECRET_KEY=${SECRET_KEY}
       - ADMIN_USERNAME=${ADMIN_USERNAME}
       - ADMIN_PASSWORD_HASH=${ADMIN_PASSWORD_HASH}
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT:-vps-minio:9000}
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-minioadmin}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-minioadmin}
+      - MINIO_PUBLIC_URL=${MINIO_PUBLIC_URL:-http://localhost:9000}
+      - MINIO_BUCKET=${MINIO_BUCKET:-portfolio}
     networks:
       - data-network
       - proxy-network
