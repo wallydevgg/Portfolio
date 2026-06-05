@@ -1,0 +1,245 @@
+@use "@/styles/abstracts" as *;
+
+.seo-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 56rem;
+  margin: 0 auto;
+  text-align: left;
+
+  &--loading {
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+    gap: 1rem;
+    font-size: 0.875rem;
+    @include theme-color(color, #a1a1aa, #71717a);
+  }
+
+  &__spinner {
+    width: 1.5rem;
+    height: 1.5rem;
+    animation: spin 1s linear infinite;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  &__header-text {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: $fw-bold;
+      letter-spacing: -0.025em;
+      margin: 0 0 0.25rem;
+      @include theme-color(color, #f4f4f5, #18181b);
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.875rem;
+      @include theme-color(color, #a1a1aa, #71717a);
+    }
+  }
+
+  &__icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    margin-top: 0.25rem;
+    flex-shrink: 0;
+    color: #6366f1; // indigo-500
+  }
+
+  &__saved-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8125rem;
+    font-weight: $fw-medium;
+    color: #34d399; // emerald-400
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    background-color: rgba(52, 211, 153, 0.1);
+    white-space: nowrap;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &__error {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    font-size: 0.875rem;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+
+    svg { width: 1rem; height: 1rem; flex-shrink: 0; }
+  }
+}
+
+.seo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  &__fieldset {
+    border: 1px solid;
+    @include theme-color(border-color, #27272a, #e5e7eb);
+    border-radius: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    margin: 0;
+    @include theme-color(background-color, #18181b, #ffffff);
+  }
+
+  &__legend {
+    font-size: 0.9375rem;
+    font-weight: $fw-semibold;
+    padding: 0 0.5rem;
+    @include theme-color(color, #f4f4f5, #18181b);
+  }
+
+  &__hint {
+    font-size: 0.8125rem;
+    margin: 0.25rem 0 1rem;
+    @include theme-color(color, #71717a, #a1a1aa);
+  }
+
+  &__lang-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__lang-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: $fw-medium;
+    @include theme-color(color, #a1a1aa, #71717a);
+  }
+
+  &__lang-badge {
+    font-size: 0.6875rem;
+    font-weight: $fw-bold;
+    letter-spacing: 0.05em;
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.25rem;
+    @include theme-color(background-color, #27272a, #e5e7eb);
+    @include theme-color(color, #f4f4f5, #3f3f46);
+  }
+
+  &__input,
+  &__textarea {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    border: 1px solid;
+    @include theme-color(border-color, #3f3f46, #d4d4d8);
+    @include theme-color(background-color, #09090b, #f9fafb);
+    @include theme-color(color, #f4f4f5, #18181b);
+    @include transition(border-color, box-shadow);
+    box-sizing: border-box;
+    font-family: inherit;
+
+    &::placeholder {
+      @include theme-color(color, #52525b, #a1a1aa);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 4.5rem;
+  }
+
+  &__single-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 0.5rem;
+  }
+
+  &__save-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #4f46e5;
+    color: #ffffff;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: $fw-medium;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    @include transition(background-color, opacity);
+
+    &:hover {
+      background-color: #4338ca;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__btn-icon {
+    width: 1rem;
+    height: 1rem;
+
+    &.spinning {
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

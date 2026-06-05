@@ -10,6 +10,7 @@ import ExperiencePage from "@/pages/Dashboard/Experience/index";
 import SkillsPage from "@/pages/Dashboard/Skills/index";
 import ProjectsPage from "@/pages/Dashboard/Projects/index";
 import SettingsPage from "@/pages/Dashboard/Settings/index";
+import SeoSettingsPage from "@/pages/Dashboard/Settings/SEO";
 import BlogPage from "@/pages/Blog/BlogPage";
 import { AuthProvider } from "@/contexts/AuthContext";
 import LoginPage from "@/pages/Login/Login";
@@ -54,6 +55,7 @@ const router = createBrowserRouter(
             { path: "skills", element: <SkillsPage /> },
             { path: "projects", element: <ProjectsPage /> },
             { path: "settings", element: <SettingsPage /> },
+            { path: "settings/seo", element: <SeoSettingsPage /> },
           ],
         },
       ],

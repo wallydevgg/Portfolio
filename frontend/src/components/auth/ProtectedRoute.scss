@@ -1,0 +1,24 @@
+@use "@/styles/abstracts" as *;
+
+.protected-route-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  @include theme-color(background-color, #09090b, #f9fafb);
+}
+
+.pulse-text {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  font-weight: $fw-semibold;
+  @include theme-color(color, #f4f4f5, #18181b);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
