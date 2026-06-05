@@ -1,23 +1,15 @@
+// ─── App Layout + Theme Wrappers ──────────────────────────────────────────────
+
 .App {
   transition: background-color 0.3s ease;
 }
 
 .light-theme {
-  background-color: white;
-  color: black;
+  background-color: var(--BgLight);
+  color: var(--LM-Title);
 }
 
 .dark-theme {
-  background-color: black;
-  color: white;
-}
-
-[data-theme="light"] {
-  background-color: white;
-  color: black;
-}
-
-[data-theme="dark"] {
-  background-color: black;
-  color: white;
+  background-color: var(--BgDark);
+  color: var(--DM-Title);
 }

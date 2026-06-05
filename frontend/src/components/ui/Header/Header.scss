@@ -1,15 +1,7 @@
-@use "../../../index.scss" as *;
+// ─── Header ───────────────────────────────────────────────────────────────────
 
-.hashTag {
-  color: $primary-color;
-  margin-right: 0.3rem;
-}
+@use "@/styles/abstracts" as *;
 
-.link-to {
-  text-decoration: none;
-}
-
-// Header.scss
 .header-container {
   display: flex;
   justify-content: center;
@@ -19,58 +11,40 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 0.25rem 2rem 0.25rem 2rem;
+    padding: 0.25rem 2rem;
     position: fixed;
     width: 80%;
     text-align: center;
     transition: top 0.3s ease-in-out;
     border-radius: 1.25rem;
     margin-top: 2px;
-    z-index: 1000;
+    z-index: $z-nav;
 
-      .dark-theme & {
-        background-color: var(--BgDark);
-      }
-    
-
-
-      .light-theme & {
-        background-color: var(--BgLight);
-        border-bottom: 2px solid $primary-color;
-      }
-    
-
-
-    @media (max-width: 599px) {
-      width: 95%;
+    .dark-theme & { background-color: $bg-dark; }
+    .light-theme & {
+      background-color: $bg-light;
+      border-bottom: 2px solid $color-primary;
     }
+
+    @include respond-to(mobile) { width: 95%; }
 
     .logo-container {
       display: flex;
       flex-direction: row;
       align-items: center;
-      align-content: center;
       justify-content: space-between;
-      padding: 0.75rem 0.25rem 0.75rem 0.25rem;
+      padding: 0.75rem 0.25rem;
 
       .logo-icon {
         margin-right: 0.75rem;
-        color: $primary-color;
+        color: $color-primary;
         font-size: 1.5em;
       }
 
       .logo-text {
         font-size: 1.5rem;
-        font-weight: 600;
-
-          .dark-theme & {
-            color: $DM-Title;
-          }
-        
-
-          .light-theme & {
-            color: $LM-Title;
-          }
+        font-weight: $fw-semibold;
+        @include theme-color(color, $DM-Title, $LM-Title);
       }
     }
 

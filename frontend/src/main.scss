@@ -1,0 +1,13 @@
+// ─── Global Entry Point ───────────────────────────────────────────────────────
+// Import order matters: themes → base → animations.
+// Component styles are loaded by their own files via @use "@/styles/abstracts".
+
+// 1. CSS custom properties (runtime tokens)
+@use "styles/themes/themes";
+
+// 2. Reset + typography
+@use "styles/base/reset";
+@use "styles/base/typography";
+
+// 3. Global keyframe animations (must be at root scope)
+@use "styles/abstracts/animations";

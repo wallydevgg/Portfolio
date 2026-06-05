@@ -1,6 +1,10 @@
-@use "../../../../index.scss" as *;
+// ─── Navigation Menu (desktop) ────────────────────────────────────────────────
+
+@use "@/styles/abstracts" as *;
 
 .menu-header {
+  @include respond-to(tablet) { display: none; }
+
   ul {
     display: flex;
     flex-direction: row;
@@ -16,41 +20,24 @@
       a {
         text-decoration: none;
         border-radius: 20px;
-        font-weight: 600;
+        font-weight: $fw-semibold;
         display: inline-block;
         position: relative;
+        @include transition(color, 0.2s);
+        @include theme-color(color, $DM-Title, $LM-Title);
 
-        &:hover {
-          text-decoration: none;
-          color: $primary-color;
+        &:hover { color: $color-primary; }
 
-          .hashTag {
-            color: #fff;
-
-            .light-theme & {
-              color: $primary-color;
-            }
-          }
-        }
-
-        /* comprobart para migrar */
-        .dark-theme & {
-          color: $DM-Title;
-        }
-
-        .light-theme & {
-          color: $LM-Title;
-        }
-
+        // Underline animation
         &::after {
           content: "";
           position: absolute;
           width: 100%;
-          transform: scaleX(0);
           height: 2px;
           bottom: -2px;
           left: 0;
-          background-color: $primary-color;
+          background-color: $color-primary;
+          transform: scaleX(0);
           transform-origin: bottom right;
           transition: transform 0.25s ease-out;
         }
@@ -60,29 +47,6 @@
           transform-origin: bottom left;
         }
       }
-
-      &:hover .es {
-        display: inline-block;
-        opacity: 1; // Add opacity transition for smooth appearance
-      }
     }
-  }
-
-  // Media queries
-  @media (max-width: 599px) {
-    display: none; // ocultar el menú en pantallas pequeñas
-  }
-
-  @media (min-width: 600px) and (max-width: 991px) {
-    //width: 20%;
-    display: none; // establecer un ancho en pantallas medianas
-  }
-
-  @media (min-width: 992px) and (max-width: 1199px) {
-    display: block; // ocultar el menú en pantallas grandes
-  }
-
-  @media (min-width: 1200px) {
-    display: block; // ocultar el menú en pantallas extra grandes
   }
 }

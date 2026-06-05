@@ -1,5 +1,6 @@
-// ✅ GENERADO POR CLAUDE - Archivo: frontend/src/pages/Home/Sections/Contact/Contact.scss
-@use "../../../../index.scss" as *;
+// ─── Contact Section ──────────────────────────────────────────────────────────
+
+@use "@/styles/abstracts" as *;
 
 .contact {
   width: 100%;
@@ -7,35 +8,32 @@
   margin: 2rem auto;
   padding: 2rem;
 
-  @media (max-width: 599px) {
-    padding: 1rem;
-  }
+  @include respond-to(mobile) { padding: 1rem; }
 
+  // Overrides global .title-container specifically for this context
   .title-container {
-    display: flex;
-    align-items: center;
+    @include flex-center;
+    justify-content: flex-start;
     gap: 1rem;
     margin-bottom: 2.5rem;
 
     h2 {
       font-size: 2rem;
-      font-weight: var(--fw-4);
+      font-weight: $fw-semibold;
       white-space: nowrap;
-
-      .dark-theme & { color: $DM-Title; }
-      .light-theme & { color: $LM-Title; }
+      @include theme-color(color, $DM-Title, $LM-Title);
     }
 
     .space-line {
       flex: 1;
       height: 1px;
-      background: linear-gradient(90deg, var(--color-primary), transparent);
+      background: linear-gradient(90deg, $color-primary, transparent);
+      margin: 0; // Reset mixin margin
     }
   }
 
   &__success {
-    display: flex;
-    flex-direction: column;
+    @include flex-column;
     align-items: center;
     gap: 1rem;
     padding: 3rem;
@@ -46,7 +44,7 @@
 
     p {
       font-size: 1.1rem;
-      font-weight: var(--fw-4);
+      font-weight: $fw-semibold;
     }
   }
 
@@ -61,8 +59,7 @@
   }
 
   &__form {
-    display: flex;
-    flex-direction: column;
+    @include flex-column;
     gap: 1.25rem;
   }
 
@@ -71,19 +68,16 @@
     grid-template-columns: 1fr 1fr;
     gap: 1.25rem;
 
-    @media (max-width: 599px) {
-      grid-template-columns: 1fr;
-    }
+    @include respond-to(mobile) { grid-template-columns: 1fr; }
   }
 
   &__field {
-    display: flex;
-    flex-direction: column;
+    @include flex-column;
     gap: 0.4rem;
 
     label {
       font-size: 0.85rem;
-      font-weight: var(--fw-4);
+      font-weight: $fw-semibold;
       color: var(--parrafos);
     }
 
@@ -98,17 +92,10 @@
       outline: none;
       transition: border-color 0.2s;
       resize: vertical;
+      @include theme-color(color, $DM-Title, $LM-Title);
 
-      .dark-theme & { color: $DM-Title; }
-      .light-theme & { color: $LM-Title; }
-
-      &:focus {
-        border-color: var(--color-primary);
-      }
-
-      &::placeholder {
-        color: rgba(167, 169, 190, 0.5);
-      }
+      &:focus { border-color: $color-primary; }
+      &::placeholder { color: rgba(167, 169, 190, 0.5); }
     }
   }
 
@@ -119,18 +106,18 @@
     gap: 0.5rem;
     padding: 0.7rem 2rem;
     background: transparent;
-    border: 1px solid var(--color-primary);
+    border: 1px solid $color-primary;
     border-radius: 20px;
-    color: var(--color-primary);
+    color: $color-primary;
     font-family: var(--font-1);
     font-size: 0.9rem;
-    font-weight: var(--fw-4);
+    font-weight: $fw-semibold;
     cursor: pointer;
     transition: background 0.2s, color 0.2s;
     align-self: flex-start;
 
     &:hover:not(:disabled) {
-      background: var(--color-primary);
+      background: $color-primary;
       color: #fff;
     }
 

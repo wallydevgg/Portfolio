@@ -1,24 +1,15 @@
-@use "../../../../index.scss" as *;
+// ─── About Section ────────────────────────────────────────────────────────────
+
+@use "@/styles/abstracts" as *;
 
 .sector {
   padding: 3rem 0;
-  display: flex;
-  flex-direction: column;
+  @include flex-column;
 
-  // Media queries
-  @media (max-width: 599px) {}
-
-  @media (min-width: 600px) and (max-width: 991px) {
-    width: 100%;
-  }
-
-  @media (min-width: 992px) and (max-width: 1199px) {}
-
-  @media (min-width: 1200px) {}
+  @include respond-between(mobile, tablet) { width: 100%; }
 
   .aboutme {
-    display: flex;
-    flex-direction: column;
+    @include flex-column;
     justify-content: center;
 
     p {
@@ -27,19 +18,11 @@
       text-align: left;
     }
 
-    // Media queries
-    @media (max-width: 599px) {}
-
-    @media (min-width: 600px) and (max-width: 991px) {
-      flex-direction: column;
+    @include respond-between(mobile, tablet) {
       display: flex;
       width: 100%;
     }
 
-    @media (min-width: 992px) and (max-width: 1199px) {}
-
-    @media (min-width: 1200px) {
-      width: 100%;
-    }
+    @media (min-width: 1200px) { width: 100%; }
   }
 }

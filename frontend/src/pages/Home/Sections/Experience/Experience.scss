@@ -1,16 +1,15 @@
-@use "../../../../index.scss" as *;
+// ─── Experience Section ───────────────────────────────────────────────────────
+
+@use "@/styles/abstracts" as *;
 
 .experience {
-  display: flex;
-  flex-direction: column;
+  @include flex-column;
 
   .experience-container {
     display: flex;
     padding: 3rem 0;
 
-    @media (max-width: 599px) {
-      padding: 2.5rem 0;
-    }
+    @include respond-to(mobile) { padding: 2.5rem 0; }
 
     .timeline-container {
       position: relative;
@@ -21,11 +20,9 @@
         position: relative;
         margin-left: 3rem;
 
-        @media (max-width: 599px) {
-          margin-left: 2.5rem;
-        }
+        @include respond-to(mobile) { margin-left: 2.5rem; }
 
-        ::before.timeline-title {
+        .timeline-title::before {
           border-color: #ffffff26;
           left: -35px;
           position: absolute;
@@ -47,7 +44,7 @@
             grid-template-columns: repeat(3, 1fr);
             grid-gap: 5rem;
 
-            @media (max-width: 599px) {
+            @include respond-to(mobile) {
               grid-gap: 1rem;
               grid-template-columns: 1fr;
             }
@@ -56,7 +53,7 @@
               grid-column: 1/1;
               grid-row: 1;
 
-              @media (max-width: 599px) {
+              @include respond-to(mobile) {
                 grid-column: 1;
                 grid-row: 1;
               }
@@ -66,7 +63,7 @@
               grid-column: 2 / 4;
               grid-row: 1/ 1;
 
-              @media (max-width: 599px) {
+              @include respond-to(mobile) {
                 grid-column: 1;
                 grid-row: 2;
               }
@@ -75,7 +72,7 @@
             .timeline-title-dot {
               font-size: 3rem;
               line-height: 1;
-              color: var(--color-primary);
+              color: $color-primary;
               left: -42px;
               position: absolute;
               border-radius: 100%;
@@ -88,20 +85,18 @@
             }
 
             .h3 {
-              font-weight: 700;
-              color: var(--color-primary);
+              font-weight: $fw-bold;
+              color: $color-primary;
             }
 
-            .h4 {
-              font-weight: 600;
-            }
+            .h4 { font-weight: $fw-semibold; }
 
             .time {
               padding: 0;
               margin: 0;
               font-size: 0.875rem;
               line-height: 1.25rem;
-              color: #fffc;
+              color: rgba(255, 255, 255, 0.8);
             }
           }
         }
@@ -109,32 +104,30 @@
         .timeline-description {
           font-size: 1rem;
           line-height: 1.25rem;
-          display: flex;
-          flex-direction: column;
+          @include flex-column;
 
           li::before {
             content: "•";
-            color: $primary-color;
+            color: $color-primary;
             margin-left: -1.25rem;
             padding-right: 0.35rem;
             font-size: 1.25rem;
-            font-weight: 700;
+            font-weight: $fw-bold;
           }
+
           li {
             padding-left: 1.25rem;
             list-style-type: none;
-            @media (max-width: 599px) {
-            }
           }
 
           button {
             margin-top: 1rem;
             background: transparent;
-            color: $primary-color;
+            color: $color-primary;
             width: auto;
             padding: 0;
             text-align: left;
-            font-weight: 700;
+            font-weight: $fw-bold;
             border: none;
           }
         }
@@ -146,14 +139,12 @@
         width: 1rem;
         height: 1rem;
         left: -36px;
-        background-color: $primary-color;
+        background-color: $color-primary;
         top: 15px;
         border-radius: 50%;
         z-index: 2;
 
-        @media (max-width: 599px) {
-          left: -28px;
-        }
+        @include respond-to(mobile) { left: -28px; }
       }
     }
 
@@ -169,17 +160,4 @@
       opacity: 0.5;
     }
   }
-}
-
-// Media queries
-/* @media (max-width: 599px) {}
- */
-
-@media (min-width: 600px) and (max-width: 991px) {
-}
-
-@media (min-width: 992px) and (max-width: 1199px) {
-}
-
-@media (min-width: 1200px) {
 }

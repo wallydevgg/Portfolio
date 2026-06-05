@@ -1,70 +1,136 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Plus, Edit3, Trash2 } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Plus, Edit3, Trash2, Loader2, AlertCircle } from "lucide-react";
+import { useBlogApi } from "../../../features/blog/useBlogApi";
+import { useToast } from "../../../contexts/ToastContext";
+import "./Posts.scss";
 
 export default function PostsPage() {
-  const [posts, setPosts] = useState([
-    { id: 1, title: "Welcome to my new Blog", status: "Published", date: "2026-04-19" },
-    { id: 2, title: "Building a SaaS Platform", status: "Draft", date: "2026-04-20" },
-  ]);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
+  const { getAllPosts, deletePost } = useBlogApi();
+  const navigate = useNavigate();
+  const toast = useToast();
+
+  const fetchPosts = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await getAllPosts();
+      setPosts(data);
+    } catch (err) {
+      toast.error("No se pudieron cargar los posts. ¿Está el backend corriendo?");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
+
+  const handleDelete = async (post) => {
+    if (!window.confirm(`¿Seguro que quieres eliminar "${post.title}"?`)) return;
+    try {
+      setDeletingId(post.id);
+      await deletePost(post.id);
+      setPosts((prev) => prev.filter((p) => p.id !== post.id));
+    } catch (err) {
+      toast.error("Error al eliminar el post.");
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const formatDate = (dateStr) =>
+    new Date(dateStr).toLocaleDateString("es-MX", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto text-left">
-      <div className="flex items-center justify-between">
+    <div className="posts-page">
+      <div className="posts-page__header">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Blog Posts</h1>
-          <p className="text-zinc-500 dark:text-zinc-400">Manage your portfolio articles here.</p>
+          <h1>Blog Posts</h1>
+          <p>Manage your portfolio articles here.</p>
         </div>
-        <Link
-          to="/dashboard/posts/new"
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md transition-colors font-medium text-sm shadow-sm"
-        >
-          <Plus className="w-4 h-4" />
+        <Link to="/dashboard/posts/new" className="posts-page__create-btn">
+          <Plus className="icon" />
           Create Post
         </Link>
       </div>
 
-      <div className="bg-white dark:bg-zinc-900 shadow-sm border border-gray-200 dark:border-zinc-800 rounded-lg overflow-hidden">
-        <table className="w-full text-sm text-left">
-          <thead className="bg-gray-50 dark:bg-zinc-950 text-zinc-500 dark:text-zinc-400 font-medium border-b border-gray-200 dark:border-zinc-800">
-            <tr>
-              <th className="px-6 py-4">Title</th>
-              <th className="px-6 py-4">Status</th>
-              <th className="px-6 py-4">Date</th>
-              <th className="px-6 py-4 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-zinc-800">
-            {posts.map((post) => (
-              <tr key={post.id} className="hover:bg-gray-50/50 dark:hover:bg-zinc-800/50 transition-colors">
-                <td className="px-6 py-4 font-medium text-zinc-900 dark:text-zinc-100">{post.title}</td>
-                <td className="px-6 py-4">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${post.status === "Published" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400" : "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400"}`}>
-                    {post.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-zinc-500 dark:text-zinc-400">{post.date}</td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex items-center justify-end gap-2">
-                    <button className="p-2 text-zinc-400 hover:text-indigo-600 transition-colors">
-                      <Edit3 className="w-4 h-4" />
-                    </button>
-                    <button className="p-2 text-zinc-400 hover:text-red-600 transition-colors">
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-            {posts.length === 0 && (
+      {error && (
+        <div className="posts-page__error">
+          <AlertCircle className="icon" />
+          {error}
+        </div>
+      )}
+
+      <div className="posts-page__table-container">
+        {loading ? (
+          <div className="posts-page__loading">
+            <Loader2 className="icon spinning" />
+            <span>Cargando posts...</span>
+          </div>
+        ) : (
+          <table className="posts-table">
+            <thead className="posts-table__head">
               <tr>
-                <td colSpan="4" className="px-6 py-8 text-center text-zinc-500">
-                  No posts created yet.
-                </td>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th className="text-right">Actions</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="posts-table__body">
+              {posts.map((post) => (
+                <tr key={post.id}>
+                  <td className="posts-table__title-col">{post.title}</td>
+                  <td>
+                    <span className={`posts-table__status posts-table__status--${post.is_published ? "published" : "draft"}`}>
+                      {post.is_published ? "Published" : "Draft"}
+                    </span>
+                  </td>
+                  <td>{formatDate(post.created_at)}</td>
+                  <td>
+                    <div className="posts-table__actions">
+                      <button
+                        className="action-edit"
+                        title="Editar post"
+                        onClick={() => navigate(`/dashboard/posts/${post.id}/edit`)}
+                      >
+                        <Edit3 className="icon" />
+                      </button>
+                      <button
+                        className="action-delete"
+                        title="Eliminar post"
+                        disabled={deletingId === post.id}
+                        onClick={() => handleDelete(post)}
+                      >
+                        {deletingId === post.id
+                          ? <Loader2 className="icon spinning" />
+                          : <Trash2 className="icon" />
+                        }
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {posts.length === 0 && !loading && (
+                <tr>
+                  <td colSpan="4" className="posts-table__empty">
+                    No posts created yet.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

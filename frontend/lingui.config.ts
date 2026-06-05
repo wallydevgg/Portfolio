@@ -4,12 +4,11 @@ const config: LinguiConfig = {
   locales: ["en", "es"],
   catalogs: [
     {
-      path: "src/locales/{locale}/messages.po",
-      include: ["src/components", "src/pages"],
+      path: "src/locales/{locale}/messages",
+      include: ["src/"],
     },
   ],
   compileNamespace: "ts",
-  sourceLocale: "en",
   fallbackLocales: {
     default: "en"
   }

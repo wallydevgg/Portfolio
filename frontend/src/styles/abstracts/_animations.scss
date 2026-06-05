@@ -1,0 +1,63 @@
+// ─── Global Keyframe Animations ───────────────────────────────────────────────
+// Centralised animations used across multiple components/pages.
+// Component-specific animations stay in their own files.
+
+// ── Utility: fade + slide up ──────────────────────────────────────────────────
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ── Shimmer (skeleton loaders) ────────────────────────────────────────────────
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+// ── Scroll indicator ──────────────────────────────────────────────────────────
+@keyframes scrollDown {
+  0%   { transform: translateY(0);    opacity: 1;    }
+  25%  { transform: translateY(1rem); opacity: 0.75; }
+  50%  { transform: translateY(1rem); opacity: 0.5;  }
+  75%  { transform: translateY(1rem); opacity: 0.25; }
+  100% { transform: translateY(0);    opacity: 0.5;  }
+}
+
+// ── Login / card entrance ─────────────────────────────────────────────────────
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(30px, -40px) scale(1.05); }
+  66%       { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+@keyframes cardEntrance {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes badgePulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+@keyframes loginShake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+
+@keyframes btnSpin {
+  to { transform: rotate(360deg); }
+}
+
+// ── Spinning utility (for Loader2 icons) ──────────────────────────────────────
+.spinning {
+  animation: btnSpin 0.8s linear infinite;
+}

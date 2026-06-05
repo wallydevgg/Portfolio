@@ -1,25 +1,22 @@
-// ✅ GENERADO POR CLAUDE - Archivo: frontend/src/pages/Blog/BlogPage.scss
-@use "../../index.scss" as *;
+// ─── Blog Page ────────────────────────────────────────────────────────────────
+
+@use "@/styles/abstracts" as *;
 
 .blog-page {
   max-width: 960px;
   margin: 0 auto;
   padding: 3rem 2rem 5rem;
 
-  @media (max-width: 599px) {
-    padding: 2rem 1rem 4rem;
-  }
+  @include respond-to(mobile) { padding: 2rem 1rem 4rem; }
 
   .blog-header {
     margin-bottom: 2.5rem;
 
     h1 {
       font-size: 2.25rem;
-      font-weight: var(--fw-4);
+      font-weight: $fw-semibold;
       margin-bottom: 0.5rem;
-
-      .dark-theme & { color: $DM-Title; }
-      .light-theme & { color: $LM-Title; }
+      @include theme-color(color, $DM-Title, $LM-Title);
     }
 
     p {
@@ -29,8 +26,8 @@
   }
 
   .blog-search {
-    display: flex;
-    align-items: center;
+    @include flex-center;
+    justify-content: flex-start;
     gap: 0.6rem;
     padding: 0.65rem 1rem;
     border: 1px solid rgba(167, 169, 190, 0.3);
@@ -38,14 +35,9 @@
     margin-bottom: 2.5rem;
     transition: border-color 0.2s;
 
-    &:focus-within {
-      border-color: var(--color-primary);
-    }
+    &:focus-within { border-color: $color-primary; }
 
-    svg {
-      color: var(--parrafos);
-      flex-shrink: 0;
-    }
+    svg { color: var(--parrafos); flex-shrink: 0; }
 
     input {
       flex: 1;
@@ -54,11 +46,21 @@
       outline: none;
       font-family: var(--font-1);
       font-size: 0.9rem;
-
-      .dark-theme & { color: $DM-Title; }
-      .light-theme & { color: $LM-Title; }
+      @include theme-color(color, $DM-Title, $LM-Title);
 
       &::placeholder { color: var(--parrafos); }
+    }
+
+    &__clear {
+      @include flex-center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--parrafos);
+      padding: 2px;
+      transition: color 0.2s;
+
+      &:hover { color: $color-primary; }
     }
   }
 
@@ -67,18 +69,12 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
 
-    @media (max-width: 991px) {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    @media (max-width: 599px) {
-      grid-template-columns: 1fr;
-    }
+    @include respond-to(tablet) { grid-template-columns: repeat(2, 1fr); }
+    @include respond-to(mobile) { grid-template-columns: 1fr; }
   }
 
   .blog-card {
-    display: flex;
-    flex-direction: column;
+    @include flex-column;
     justify-content: space-between;
     border: 1px solid rgba(167, 169, 190, 0.2);
     border-radius: 10px;
@@ -86,8 +82,20 @@
     transition: border-color 0.25s, transform 0.25s;
 
     &:hover {
-      border-color: var(--color-primary);
+      border-color: $color-primary;
       transform: translateY(-3px);
+    }
+
+    &__category {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.72rem;
+      color: $color-primary;
+      font-weight: $fw-semibold;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.6rem;
     }
 
     &__body {
@@ -95,12 +103,10 @@
 
       h2 {
         font-size: 1.05rem;
-        font-weight: var(--fw-4);
-        margin-bottom: 0.6rem;
+        font-weight: $fw-semibold;
+        margin-bottom: 0.5rem;
         line-height: 1.4;
-
-        .dark-theme & { color: $DM-Title; }
-        .light-theme & { color: $LM-Title; }
+        @include theme-color(color, $DM-Title, $LM-Title);
       }
     }
 
@@ -129,10 +135,10 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      color: var(--color-primary);
+      color: $color-primary;
       text-decoration: none;
       font-size: 0.85rem;
-      font-weight: var(--fw-4);
+      font-weight: $fw-semibold;
       transition: gap 0.2s;
 
       &:hover { gap: 0.7rem; }
@@ -140,36 +146,114 @@
 
     &--skeleton {
       pointer-events: none;
+      min-height: 200px;
 
       .skeleton-line {
-        height: 14px;
+        height: 13px;
         border-radius: 4px;
         margin-bottom: 0.75rem;
-        background: linear-gradient(90deg, rgba(167,169,190,0.1) 25%, rgba(167,169,190,0.2) 50%, rgba(167,169,190,0.1) 75%);
+        background: linear-gradient(
+          90deg,
+          rgba(167, 169, 190, 0.08) 25%,
+          rgba(167, 169, 190, 0.18) 50%,
+          rgba(167, 169, 190, 0.08) 75%
+        );
         background-size: 200% 100%;
         animation: shimmer 1.4s infinite;
 
-        &--title { height: 18px; width: 80%; }
-        &--meta { width: 55%; }
-        &--short { width: 40%; }
+        &--title { height: 17px; width: 80%; }
+        &--meta  { width: 50%; }
+        &--short { width: 35%; }
+        &--link  { width: 28%; height: 12px; margin-top: 1rem; }
       }
     }
   }
 
+  // Common styles for both empty states
   .blog-empty {
-    display: flex;
-    flex-direction: column;
+    @include flex-column;
     align-items: center;
     gap: 1rem;
-    padding: 4rem 2rem;
+    padding: 3rem 2rem;
     color: var(--parrafos);
     text-align: center;
 
-    svg { opacity: 0.4; }
+    svg { opacity: 0.35; }
+
+    &__subtitle {
+      max-width: 480px;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    &__clear {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: none;
+      border: 1px solid rgba(167, 169, 190, 0.3);
+      border-radius: 6px;
+      padding: 0.4rem 0.9rem;
+      font-family: var(--font-1);
+      font-size: 0.82rem;
+      cursor: pointer;
+      color: var(--parrafos);
+      transition: border-color 0.2s, color 0.2s;
+
+      &:hover {
+        border-color: $color-primary;
+        color: $color-primary;
+      }
+    }
+
+    // Styles for the global empty block (no posts at all)
+    &--hero {
+      padding: 5rem 2rem;
+      gap: 1.25rem;
+    }
+
+    &__icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      @include flex-center;
+      border: 1px solid rgba(255, 137, 6, 0.25);
+      background: rgba(255, 137, 6, 0.06);
+      margin-bottom: 0.5rem;
+
+      svg {
+        opacity: 1;
+        color: $color-primary;
+      }
+    }
+
+    &__title {
+      font-size: 1.5rem;
+      font-weight: $fw-semibold;
+      @include theme-color(color, $DM-Title, $LM-Title);
+    }
+
+    &__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+      padding: 0.65rem 1.5rem;
+      background: $color-primary;
+      color: $bg-dark; // explicitly dark text on orange btn
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: var(--font-1);
+      font-size: 0.88rem;
+      font-weight: $fw-semibold;
+      transition: opacity 0.2s, transform 0.2s;
+
+      &:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+      }
+    }
   }
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
+// Note: @keyframes shimmer was moved to abstracts/_animations.scss

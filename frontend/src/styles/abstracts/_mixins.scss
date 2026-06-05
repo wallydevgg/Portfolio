@@ -1,0 +1,102 @@
+// ─── Mixins ───────────────────────────────────────────────────────────────────
+// Usage: @use "@/styles/abstracts" as *;
+
+@use "sass:map";
+@use "variables" as *;
+
+// ── Responsive (mobile-first) ─────────────────────────────────────────────────
+// Usage:
+//   @include respond-to(mobile)  { ... }   → max-width: 599px
+//   @include respond-to(tablet)  { ... }   → max-width: 991px
+//   @include respond-to(desktop) { ... }   → max-width: 1199px
+@mixin respond-to($bp) {
+  $value: map.get($breakpoints, $bp);
+  @if $value {
+    @media (max-width: $value) { @content; }
+  } @else {
+    @warn "Breakpoint `#{$bp}` not found in $breakpoints.";
+  }
+}
+
+// ── Respond between two breakpoints ──────────────────────────────────────────
+// Usage: @include respond-between(tablet, desktop) { ... }
+@mixin respond-between($lower, $upper) {
+  $min: map.get($breakpoints, $lower);
+  $max: map.get($breakpoints, $upper);
+  @if $min and $max {
+    @media (min-width: #{$min + 1}) and (max-width: $max) { @content; }
+  }
+}
+
+// ── Flexbox shortcuts ─────────────────────────────────────────────────────────
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// ── Theme color helper ────────────────────────────────────────────────────────
+// Applies a color for dark and light themes via class selectors.
+// Usage:
+//   @include theme-color(color, $DM-Title, $LM-Title);
+@mixin theme-color($property, $dark-value, $light-value) {
+  .dark-theme & { #{$property}: $dark-value; }
+  .light-theme & { #{$property}: $light-value; }
+}
+
+// ── Section title ─────────────────────────────────────────────────────────────
+// Shared style for the .title-container pattern used across sections.
+@mixin section-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-weight: $fw-semibold;
+  font-size: 1.4rem;
+  width: 100%;
+  justify-content: space-between;
+
+  @include theme-color(color, $DM-Title, $LM-Title);
+
+  .space-line {
+    height: 0.1em;
+    background-color: var(--color-primary);
+    margin: 0.6em;
+    flex: 1;
+
+    @include respond-to(mobile)  { width: 40%; }
+    @include respond-to(tablet)  { width: 50%; }
+    @include respond-between(tablet, desktop) { width: 50%; }
+  }
+}
+
+// ── Absolute fill ─────────────────────────────────────────────────────────────
+@mixin absolute-fill {
+  position: absolute;
+  inset: 0;
+}
+
+// ── Visually hidden (accessible) ──────────────────────────────────────────────
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+// ── Transition shorthand ──────────────────────────────────────────────────────
+@mixin transition($props: all, $duration: 0.3s, $easing: ease-in-out) {
+  transition: $props $duration $easing;
+}
