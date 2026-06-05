@@ -46,153 +46,153 @@ msgstr ""
 #~ msgid "experience.1.resp.1"
 #~ msgstr "Rediseñé la UX/UI del sitio web de una agencia de viajes, logrando un aumento del 30% en la satisfacción del usuario y un 15% en conversiones."
 
-#: src/pages/Home/Sections/Hero/Hero.jsx:41
-msgid "+5 Years of experience <0>Fullstack Web Developer</0> with a solid background in <1>software development</1>"
-msgstr "+5 Años de experiencia <0>Fullstack Web Developer</0> con sólidos conocimientos en <1>desarrollo de software</1>"
-
-#: src/pages/Blog/BlogPage.jsx:28
-msgid "blog.empty.cta"
-msgstr "Crear primer post"
-
-#: src/pages/Blog/BlogPage.jsx:26
-msgid "blog.empty.subtitle"
-msgstr "Estoy escribiendo artículos sobre React, Python, DevOps y más. ¡Vuelve pronto!"
-
-#: src/pages/Blog/BlogPage.jsx:25
-msgid "blog.empty.title"
-msgstr "Próximamente"
-
-#: src/pages/Blog/BlogPage.jsx:124
-msgid "blog.error"
-msgstr "No se pudieron cargar los posts. Intenta de nuevo."
-
-#: src/pages/Blog/BlogPage.jsx:36
-msgid "blog.noResults"
-msgstr "Ningún post coincide con tu búsqueda"
-
-#: src/pages/Blog/BlogPage.jsx:38
-msgid "blog.noResults.clear"
-msgstr "Limpiar búsqueda"
-
-#: src/pages/Blog/BlogPage.jsx:161
-msgid "blog.readMore"
-msgstr "Leer más"
-
-#: src/pages/Blog/BlogPage.jsx:97
-msgid "blog.searchPlaceholder"
-msgstr "Buscar artículos..."
-
-#: src/pages/Blog/BlogPage.jsx:89
-msgid "blog.subtitle"
-msgstr "Artículos sobre desarrollo fullstack, React, Python, DevOps y arquitectura de software."
-
-#: src/pages/Home/Sections/Contact/Contact.jsx:73
-msgid "contact.email"
-msgstr "Correo"
-
-#: src/pages/Home/Sections/Contact/Contact.jsx:34
-msgid "contact.error"
-msgstr "Algo salió mal. Por favor intenta de nuevo."
-
-#: src/pages/Home/Sections/Contact/Contact.jsx:99
-msgid "contact.message"
-msgstr "Mensaje"
-
-#: src/pages/Home/Sections/Contact/Contact.jsx:61
-msgid "contact.name"
-msgstr "Nombre"
-
-#: src/pages/Home/Sections/Contact/Contact.jsx:112
-msgid "contact.send"
-msgstr "Enviar mensaje"
-
-#: src/pages/Home/Sections/Contact/Contact.jsx:112
-msgid "contact.sending"
-msgstr "Enviando..."
-
-#: src/pages/Home/Sections/Contact/Contact.jsx:87
-msgid "contact.subject"
-msgstr "Asunto"
-
-#: src/pages/Home/Sections/Contact/Contact.jsx:53
-msgid "contact.success"
-msgstr "¡Mensaje enviado! Te responderé pronto."
-
-#: src/pages/Home/Sections/Contact/Contact.jsx:45
-msgid "contact.title"
-msgstr "contacto"
-
-#: src/hooks/useExperience.jsx:30
-msgid "Design UX/UI and web development. I've made and developed engaging and functional websites using technologies like CMS, Next.js, Payload, React and PostgreSQL."
-msgstr "Diseño UX/UI y desarrollo web. He creado y desarrollado sitios web funcionales y atractivos utilizando tecnologías como CMS, Next.js, Payload, React y PostgreSQL."
-
-#: src/hooks/useExperience.jsx:20
-msgid "Developed a dynamic travel agency website using Next.js and Postgres, implementing e-commerce functionalities and an advanced booking system. Managed and optimized cloud, web and mail services on AWS, Google Cloud and private VPS, ensuring 99.9% uptime and improving data security"
-msgstr "Desarrollé un sitio dinámico para una agencia de viajes con Next.js y PostgreSQL, implementando e-commerce y un sistema de reservas avanzado. Administré servicios en la nube (AWS, Google Cloud y VPS privado), garantizando 99.9% de uptime y mejorando la seguridad de los datos."
-
-#: src/hooks/useExperience.jsx:31
-msgid "Development of WordPress sites and custom plugins. Design UX/UI and web development. I've made and developed engaging and functional websites using technologies like CMS, Next.js, Payload, React and PostgreSQL. Development of WordPress sites and custom plugins."
-msgstr "Desarrollo de sitios WordPress y plugins personalizados. Diseño UX/UI y desarrollo web con CMS, Next.js, Payload, React y PostgreSQL."
-
 #. js-lingui-explicit-id
 #: src/pages/Home/Sections/Experience/Experience.jsx:20
-msgid "experience.title"
-msgstr "experiencia"
+#~ msgid "experience.title"
+#~ msgstr "experiencia"
+
+#. js-lingui-explicit-id
+#: src/pages/Home/Sections/Experience/listExperience.jsx:55
+#~ msgid "experience.seeLess"
+#~ msgstr "Ver menos"
+
+#. js-lingui-explicit-id
+#: src/pages/Home/Sections/Experience/listExperience.jsx:55
+#~ msgid "experience.seeMore"
+#~ msgstr "Ver más >"
+
+#: src/pages/Home/Sections/Hero/Hero.jsx:41
+#~ msgid "+5 Years of experience <0>Fullstack Web Developer</0> with a solid background in <1>software development</1>"
+#~ msgstr "+5 Años de experiencia <0>Fullstack Web Developer</0> con sólidos conocimientos en <1>desarrollo de software</1>"
+
+#: src/pages/Blog/BlogPage.jsx:28
+#~ msgid "blog.empty.cta"
+#~ msgstr "Crear primer post"
+
+#: src/pages/Blog/BlogPage.jsx:26
+#~ msgid "blog.empty.subtitle"
+#~ msgstr "Estoy escribiendo artículos sobre React, Python, DevOps y más. ¡Vuelve pronto!"
+
+#: src/pages/Blog/BlogPage.jsx:25
+#~ msgid "blog.empty.title"
+#~ msgstr "Próximamente"
+
+#: src/pages/Blog/BlogPage.jsx:124
+#~ msgid "blog.error"
+#~ msgstr "No se pudieron cargar los posts. Intenta de nuevo."
+
+#: src/pages/Blog/BlogPage.jsx:36
+#~ msgid "blog.noResults"
+#~ msgstr "Ningún post coincide con tu búsqueda"
+
+#: src/pages/Blog/BlogPage.jsx:38
+#~ msgid "blog.noResults.clear"
+#~ msgstr "Limpiar búsqueda"
+
+#: src/pages/Blog/BlogPage.jsx:161
+#~ msgid "blog.readMore"
+#~ msgstr "Leer más"
+
+#: src/pages/Blog/BlogPage.jsx:97
+#~ msgid "blog.searchPlaceholder"
+#~ msgstr "Buscar artículos..."
+
+#: src/pages/Blog/BlogPage.jsx:89
+#~ msgid "blog.subtitle"
+#~ msgstr "Artículos sobre desarrollo fullstack, React, Python, DevOps y arquitectura de software."
+
+#: src/pages/Home/Sections/Contact/Contact.jsx:73
+#~ msgid "contact.email"
+#~ msgstr "Correo"
+
+#: src/pages/Home/Sections/Contact/Contact.jsx:34
+#~ msgid "contact.error"
+#~ msgstr "Algo salió mal. Por favor intenta de nuevo."
+
+#: src/pages/Home/Sections/Contact/Contact.jsx:99
+#~ msgid "contact.message"
+#~ msgstr "Mensaje"
+
+#: src/pages/Home/Sections/Contact/Contact.jsx:61
+#~ msgid "contact.name"
+#~ msgstr "Nombre"
+
+#: src/pages/Home/Sections/Contact/Contact.jsx:112
+#~ msgid "contact.send"
+#~ msgstr "Enviar mensaje"
+
+#: src/pages/Home/Sections/Contact/Contact.jsx:112
+#~ msgid "contact.sending"
+#~ msgstr "Enviando..."
+
+#: src/pages/Home/Sections/Contact/Contact.jsx:87
+#~ msgid "contact.subject"
+#~ msgstr "Asunto"
+
+#: src/pages/Home/Sections/Contact/Contact.jsx:53
+#~ msgid "contact.success"
+#~ msgstr "¡Mensaje enviado! Te responderé pronto."
+
+#: src/pages/Home/Sections/Contact/Contact.jsx:45
+#~ msgid "contact.title"
+#~ msgstr "contacto"
+
+#: src/hooks/useExperience.jsx:30
+#~ msgid "Design UX/UI and web development. I've made and developed engaging and functional websites using technologies like CMS, Next.js, Payload, React and PostgreSQL."
+#~ msgstr "Diseño UX/UI y desarrollo web. He creado y desarrollado sitios web funcionales y atractivos utilizando tecnologías como CMS, Next.js, Payload, React y PostgreSQL."
+
+#: src/hooks/useExperience.jsx:20
+#~ msgid "Developed a dynamic travel agency website using Next.js and Postgres, implementing e-commerce functionalities and an advanced booking system. Managed and optimized cloud, web and mail services on AWS, Google Cloud and private VPS, ensuring 99.9% uptime and improving data security"
+#~ msgstr "Desarrollé un sitio dinámico para una agencia de viajes con Next.js y PostgreSQL, implementando e-commerce y un sistema de reservas avanzado. Administré servicios en la nube (AWS, Google Cloud y VPS privado), garantizando 99.9% de uptime y mejorando la seguridad de los datos."
+
+#: src/hooks/useExperience.jsx:31
+#~ msgid "Development of WordPress sites and custom plugins. Design UX/UI and web development. I've made and developed engaging and functional websites using technologies like CMS, Next.js, Payload, React and PostgreSQL. Development of WordPress sites and custom plugins."
+#~ msgstr "Desarrollo de sitios WordPress y plugins personalizados. Diseño UX/UI y desarrollo web con CMS, Next.js, Payload, React y PostgreSQL."
 
 #: src/hooks/useExperience.jsx:17
 #: src/hooks/useExperience.jsx:28
-msgid "Full Stack Developer"
-msgstr "Desarrollador Full Stack"
+#~ msgid "Full Stack Developer"
+#~ msgstr "Desarrollador Full Stack"
 
 #: src/pages/Home/Sections/Hero/Hero.jsx:69
-msgid "hero.contactButton"
-msgstr "Email"
+#~ msgid "hero.contactButton"
+#~ msgstr "Email"
 
 #: src/pages/Home/Sections/Hero/Hero.jsx:81
-msgid "hero.status"
-msgstr "Disponible para trabajar"
+#~ msgid "hero.status"
+#~ msgstr "Disponible para trabajar"
 
 #: src/pages/Home/Sections/Hero/Hero.jsx:36
-msgid "Hi! I'm <0>Waldir Apaza</0>"
-msgstr "¡Hola! Soy <0>Waldir Apaza</0>"
+#~ msgid "Hi! I'm <0>Waldir Apaza</0>"
+#~ msgstr "¡Hola! Soy <0>Waldir Apaza</0>"
 
 #: src/components/ui/Header/Menu/Menu.jsx:31
-msgid "menu.about"
-msgstr "sobre-mí"
+#~ msgid "menu.about"
+#~ msgstr "sobre-mí"
 
 #: src/components/ui/Header/Menu/Menu.jsx:42
-msgid "menu.blog"
-msgstr "blog"
+#~ msgid "menu.blog"
+#~ msgstr "blog"
 
 #: src/components/ui/Header/Menu/Menu.jsx:37
-msgid "menu.contact"
-msgstr "contacto"
+#~ msgid "menu.contact"
+#~ msgstr "contacto"
 
 #: src/components/ui/Header/Menu/Menu.jsx:18
-msgid "menu.experience"
-msgstr "experiencia"
+#~ msgid "menu.experience"
+#~ msgstr "experiencia"
 
 #: src/components/ui/Header/Menu/Menu.jsx:24
-msgid "menu.projects"
-msgstr "proyectos"
+#~ msgid "menu.projects"
+#~ msgstr "proyectos"
 
 #: src/hooks/useExperience.jsx:21
-msgid "Performed extensive diagnostic, quality and feature validation testing, optimizing code and generating detailed reports to ensure software quality."
-msgstr "Realicé pruebas exhaustivas de diagnóstico, calidad y validación de funcionalidades, optimizando el código y generando reportes detallados para asegurar la calidad del software."
+#~ msgid "Performed extensive diagnostic, quality and feature validation testing, optimizing code and generating detailed reports to ensure software quality."
+#~ msgstr "Realicé pruebas exhaustivas de diagnóstico, calidad y validación de funcionalidades, optimizando el código y generando reportes detallados para asegurar la calidad del software."
 
 #: src/hooks/useExperience.jsx:19
-msgid "Redesigned the UX/UI of a travel agency website, resulting in a 30% increase in user satisfaction and a 15% increase in conversions"
-msgstr "Rediseñé la UX/UI del sitio web de una agencia de viajes, logrando un aumento del 30% en la satisfacción del usuario y un 15% en conversiones."
-
-#. js-lingui-explicit-id
-#: src/pages/Home/Sections/Experience/listExperience.jsx:55
-msgid "experience.seeLess"
-msgstr "Ver menos"
-
-#. js-lingui-explicit-id
-#: src/pages/Home/Sections/Experience/listExperience.jsx:55
-msgid "experience.seeMore"
-msgstr "Ver más >"
+#~ msgid "Redesigned the UX/UI of a travel agency website, resulting in a 30% increase in user satisfaction and a 15% increase in conversions"
+#~ msgstr "Rediseñé la UX/UI del sitio web de una agencia de viajes, logrando un aumento del 30% en la satisfacción del usuario y un 15% en conversiones."
 
 #: src/pages/Home/Sections/Skills/Skills.jsx:66
 #~ msgid "skills.backend"
@@ -208,5 +208,5 @@ msgstr "Ver más >"
 
 #: src/pages/Home/Sections/Skills/Skills.jsx:41
 #: src/pages/Home/Sections/Skills/Skills.jsx:55
-msgid "skills.title"
-msgstr "habilidades"
+#~ msgid "skills.title"
+#~ msgstr "habilidades"

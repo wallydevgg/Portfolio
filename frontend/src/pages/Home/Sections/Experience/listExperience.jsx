@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { usePortfolioApi } from "@/features/portfolio/usePortfolioApi";
+import { getTranslation } from "@/helpers/i18nContent";
 
 export default function ListExperience() {
   useLingui();
@@ -32,25 +33,26 @@ export default function ListExperience() {
   const listItems = experience.map((work) => {
     const isExpanded = showMore[work.id];
     const maxVisibleItems = 2;
+    const responsibilities = work.responsibilities || [];
     const visible = isExpanded
-      ? work.responsibilities
-      : work.responsibilities.slice(0, maxVisibleItems);
+      ? responsibilities
+      : responsibilities.slice(0, maxVisibleItems);
 
     return (
       <li key={work.id} className="timeline-content">
         <div className="timeline-title">
           <div className="timeline-title-content">
             <div className="one">
-              <h3>{work.title}</h3>
+              <h3>{getTranslation(work.title)}</h3>
               <h4>{work.company}</h4>
               <time>{work.date}</time>
             </div>
             <div className="two">
               <ul className="timeline-description">
                 {visible.map((resp, idx) => (
-                  <li key={idx}>{resp}</li>
+                  <li key={idx}>{getTranslation(resp)}</li>
                 ))}
-                {work.responsibilities.length > maxVisibleItems && (
+                {responsibilities.length > maxVisibleItems && (
                   <button onClick={() => toggleShowMore(work.id)}>
                     {isExpanded ? t({ id: "experience.seeLess", message: "See less" }) : t({ id: "experience.seeMore", message: "See more >" })}
                   </button>

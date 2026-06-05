@@ -22,7 +22,7 @@
 
         @include respond-to(mobile) { margin-left: 2.5rem; }
 
-        ::before.timeline-title {
+        .timeline-title::before {
           border-color: #ffffff26;
           left: -35px;
           position: absolute;

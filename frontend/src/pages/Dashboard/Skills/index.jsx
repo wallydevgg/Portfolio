@@ -10,7 +10,7 @@ export default function SkillsPage() {
   const [expanded, setExpanded] = useState({});
   const [showCategoryForm, setShowCategoryForm] = useState(false);
   const [showSkillForm, setShowSkillForm] = useState(null);
-  const [categoryForm, setCategoryForm] = useState({ name: "", order: 0 });
+  const [categoryForm, setCategoryForm] = useState({ name_en: "", name_es: "", order: 0 });
   const [skillForm, setSkillForm] = useState({
     name: "",
     level: 50,
@@ -43,9 +43,12 @@ export default function SkillsPage() {
   const handleAddCategory = async (e) => {
     e.preventDefault();
     try {
-      await api.createSkillCategory(categoryForm);
+      await api.createSkillCategory({
+        name: { en: categoryForm.name_en, es: categoryForm.name_es },
+        order: parseInt(categoryForm.order),
+      });
       await loadSkills();
-      setCategoryForm({ name: "", order: 0 });
+      setCategoryForm({ name_en: "", name_es: "", order: 0 });
       setShowCategoryForm(false);
     } catch (err) {
       alert("Error adding category: " + err.message);
@@ -111,16 +114,29 @@ export default function SkillsPage() {
       {showCategoryForm && (
         <form onSubmit={handleAddCategory} className="category-form">
           <h2>New Category</h2>
-          <div className="form-group">
-            <label>Category Name</label>
-            <input
-              type="text"
-              value={categoryForm.name}
-              onChange={(e) =>
-                setCategoryForm({ ...categoryForm, name: e.target.value })
-              }
-              required
-            />
+          <div className="form-row">
+            <div className="form-group">
+              <label>Name (English)</label>
+              <input
+                type="text"
+                value={categoryForm.name_en}
+                onChange={(e) =>
+                  setCategoryForm({ ...categoryForm, name_en: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Name (Español)</label>
+              <input
+                type="text"
+                value={categoryForm.name_es}
+                onChange={(e) =>
+                  setCategoryForm({ ...categoryForm, name_es: e.target.value })
+                }
+                required
+              />
+            </div>
           </div>
           <div className="form-group">
             <label>Order</label>
@@ -157,7 +173,7 @@ export default function SkillsPage() {
               >
                 {expanded[category.id] ? <ChevronUp /> : <ChevronDown />}
               </button>
-              <h3>{category.name}</h3>
+              <h3>{category.name?.en || ""}</h3>
               <button
                 className="btn-small btn-danger"
                 onClick={() => handleDeleteCategory(category.id)}

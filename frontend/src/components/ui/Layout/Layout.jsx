@@ -5,7 +5,7 @@ import "./Layout.scss";
 import { Outlet } from "react-router-dom";
 import { GoogleFontsOptimizer } from "../../Context/FontsOptimizer";
 //import SEO from "../../../pages/meta/HelmetSEO";
-import { Helmet } from "react-helmet-async";
+
 //import MetaTags from "../../../pages/meta/MetaTagsTS";
 
 const Layout = () => {

@@ -4,7 +4,7 @@ import { Search, Calendar, Tag, ArrowRight, BookOpen, PenLine, X } from "lucide-
 import "./BlogPage.scss";
 import { t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
-import { Helmet } from "react-helmet-async";
+
 
 const PostSkeleton = () => (
   <div className="blog-card blog-card--skeleton">
@@ -74,12 +74,12 @@ const BlogPage = () => {
 
   return (
     <>
-      <Helmet>
+      <>
         <title>Blog | wallydev</title>
         <meta name="description" content="Artículos sobre desarrollo fullstack, React, Python, DevOps y arquitectura de software." />
         <meta property="og:title" content="Blog - wallydev" />
         <meta property="og:url" content="https://wallydev.dev/blog" />
-      </Helmet>
+      </>
 
       <div className="blog-page">
         <div className="blog-header">

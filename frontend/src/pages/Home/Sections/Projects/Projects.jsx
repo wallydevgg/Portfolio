@@ -4,6 +4,7 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
 import { Icon } from "@/barrell";
 import { usePortfolioApi } from "@/features/portfolio/usePortfolioApi";
+import { getTranslation } from "@/helpers/i18nContent";
 import "./Projects.scss";
 
 const Projects = () => {
@@ -51,13 +52,13 @@ const Projects = () => {
         {projects.map((project) => (
           <div key={project.id} className="project">
             {project.image_url ? (
-              <img src={project.image_url} alt={project.title} />
+              <img src={project.image_url} alt={getTranslation(project.title)} />
             ) : (
               <div className="image-placeholder">No image</div>
             )}
             <div className="content">
-              <h2>{project.title}</h2>
-              <p>{project.description}</p>
+              <h2>{getTranslation(project.title)}</h2>
+              <p>{getTranslation(project.description)}</p>
               <ul>
                 {project.tech_stack.map((skill) => (
                   <li key={skill}>{skill}</li>

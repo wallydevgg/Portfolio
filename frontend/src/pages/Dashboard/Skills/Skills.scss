@@ -98,6 +98,15 @@
       }
     }
 
+    .form-row {
+      display: flex;
+      gap: 1rem;
+
+      .form-group {
+        flex: 1;
+      }
+    }
+
     .form-actions {
       display: flex;
       gap: 0.5rem;

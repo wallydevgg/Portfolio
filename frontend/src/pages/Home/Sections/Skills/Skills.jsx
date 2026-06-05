@@ -3,6 +3,7 @@ import "./Skills.scss";
 import { t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { usePortfolioApi } from "@/features/portfolio/usePortfolioApi";
+import { getTranslation } from "@/helpers/i18nContent";
 
 const SkillBar = ({ name, level }) => (
   <div className="skill-item">
@@ -60,7 +61,7 @@ const Skills = () => {
       <div className="skills-grid">
         {categories.map((category) => (
           <div key={category.id} className="skill-category">
-            <h3>{category.name}</h3>
+            <h3>{getTranslation(category.name)}</h3>
             {category.skills.map((s) => (
               <SkillBar key={s.id} name={s.name} level={s.level} />
             ))}

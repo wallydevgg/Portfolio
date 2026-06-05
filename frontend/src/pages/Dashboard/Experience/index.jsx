@@ -11,8 +11,10 @@ export default function ExperiencePage() {
   const [formData, setFormData] = useState({
     company: "",
     date: "",
-    title: "",
-    responsibilities: "",
+    title_en: "",
+    title_es: "",
+    responsibilities_en: "",
+    responsibilities_es: "",
     order: 0,
   });
 
@@ -34,13 +36,22 @@ export default function ExperiencePage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const enLines = formData.responsibilities_en.split("\n").filter((r) => r.trim());
+    const esLines = formData.responsibilities_es.split("\n").filter((r) => r.trim());
+    const maxLen = Math.max(enLines.length, esLines.length);
+    const responsibilities = [];
+    for (let i = 0; i < maxLen; i++) {
+      responsibilities.push({
+        en: enLines[i] || esLines[i] || "",
+        es: esLines[i] || enLines[i] || "",
+      });
+    }
+
     const payload = {
       company: formData.company,
       date: formData.date,
-      title: formData.title,
-      responsibilities: formData.responsibilities
-        .split("\n")
-        .filter((r) => r.trim()),
+      title: { en: formData.title_en, es: formData.title_es },
+      responsibilities,
       order: parseInt(formData.order),
     };
 
@@ -62,8 +73,10 @@ export default function ExperiencePage() {
     setFormData({
       company: exp.company,
       date: exp.date,
-      title: exp.title,
-      responsibilities: exp.responsibilities.join("\n"),
+      title_en: exp.title?.en || "",
+      title_es: exp.title?.es || "",
+      responsibilities_en: (exp.responsibilities || []).map((r) => r.en).join("\n"),
+      responsibilities_es: (exp.responsibilities || []).map((r) => r.es).join("\n"),
       order: exp.order,
     });
     setShowForm(true);
@@ -84,8 +97,10 @@ export default function ExperiencePage() {
     setFormData({
       company: "",
       date: "",
-      title: "",
-      responsibilities: "",
+      title_en: "",
+      title_es: "",
+      responsibilities_en: "",
+      responsibilities_es: "",
       order: 0,
     });
     setEditingId(null);
@@ -132,28 +147,54 @@ export default function ExperiencePage() {
             />
           </div>
 
-          <div className="form-group">
-            <label>Title</label>
-            <input
-              type="text"
-              value={formData.title}
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
-              }
-              required
-            />
+          <div className="form-row">
+            <div className="form-group">
+              <label>Title (English)</label>
+              <input
+                type="text"
+                value={formData.title_en}
+                onChange={(e) =>
+                  setFormData({ ...formData, title_en: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Title (Español)</label>
+              <input
+                type="text"
+                value={formData.title_es}
+                onChange={(e) =>
+                  setFormData({ ...formData, title_es: e.target.value })
+                }
+                required
+              />
+            </div>
           </div>
 
-          <div className="form-group">
-            <label>Responsibilities (one per line)</label>
-            <textarea
-              value={formData.responsibilities}
-              onChange={(e) =>
-                setFormData({ ...formData, responsibilities: e.target.value })
-              }
-              rows={6}
-              required
-            />
+          <div className="form-row">
+            <div className="form-group">
+              <label>Responsibilities EN (one per line)</label>
+              <textarea
+                value={formData.responsibilities_en}
+                onChange={(e) =>
+                  setFormData({ ...formData, responsibilities_en: e.target.value })
+                }
+                rows={6}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Responsibilities ES (one per line)</label>
+              <textarea
+                value={formData.responsibilities_es}
+                onChange={(e) =>
+                  setFormData({ ...formData, responsibilities_es: e.target.value })
+                }
+                rows={6}
+                required
+              />
+            </div>
           </div>
 
           <div className="form-group">
@@ -182,7 +223,7 @@ export default function ExperiencePage() {
         <thead>
           <tr>
             <th>Company</th>
-            <th>Title</th>
+            <th>Title (EN)</th>
             <th>Date</th>
             <th>Actions</th>
           </tr>
@@ -191,7 +232,7 @@ export default function ExperiencePage() {
           {experiences.map((exp) => (
             <tr key={exp.id}>
               <td>{exp.company}</td>
-              <td>{exp.title}</td>
+              <td>{exp.title?.en || ""}</td>
               <td>{exp.date}</td>
               <td className="actions">
                 <button

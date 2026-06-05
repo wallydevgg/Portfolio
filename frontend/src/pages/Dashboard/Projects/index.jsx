@@ -10,8 +10,10 @@ export default function ProjectsPage() {
   const [editingId, setEditingId] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
+    title_en: "",
+    title_es: "",
+    description_en: "",
+    description_es: "",
     image_url: "",
     tech_stack: "",
     website_link: "",
@@ -66,8 +68,8 @@ export default function ProjectsPage() {
     }
 
     const payload = {
-      title: formData.title,
-      description: formData.description,
+      title: { en: formData.title_en, es: formData.title_es },
+      description: { en: formData.description_en, es: formData.description_es },
       image_url: imageUrl,
       tech_stack: formData.tech_stack.split(",").map((t) => t.trim()),
       website_link: formData.website_link || null,
@@ -91,8 +93,10 @@ export default function ProjectsPage() {
   const handleEdit = (proj) => {
     setEditingId(proj.id);
     setFormData({
-      title: proj.title,
-      description: proj.description,
+      title_en: proj.title?.en || "",
+      title_es: proj.title?.es || "",
+      description_en: proj.description?.en || "",
+      description_es: proj.description?.es || "",
       image_url: proj.image_url || "",
       tech_stack: proj.tech_stack.join(", "),
       website_link: proj.website_link || "",
@@ -116,8 +120,10 @@ export default function ProjectsPage() {
 
   const resetForm = () => {
     setFormData({
-      title: "",
-      description: "",
+      title_en: "",
+      title_es: "",
+      description_en: "",
+      description_es: "",
       image_url: "",
       tech_stack: "",
       website_link: "",
@@ -146,28 +152,54 @@ export default function ProjectsPage() {
         <form onSubmit={handleSubmit} className="project-form">
           <h2>{editingId ? "Edit Project" : "New Project"}</h2>
 
-          <div className="form-group">
-            <label>Title</label>
-            <input
-              type="text"
-              value={formData.title}
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
-              }
-              required
-            />
+          <div className="form-row">
+            <div className="form-group">
+              <label>Title (English)</label>
+              <input
+                type="text"
+                value={formData.title_en}
+                onChange={(e) =>
+                  setFormData({ ...formData, title_en: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Title (Español)</label>
+              <input
+                type="text"
+                value={formData.title_es}
+                onChange={(e) =>
+                  setFormData({ ...formData, title_es: e.target.value })
+                }
+                required
+              />
+            </div>
           </div>
 
-          <div className="form-group">
-            <label>Description</label>
-            <textarea
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              rows={4}
-              required
-            />
+          <div className="form-row">
+            <div className="form-group">
+              <label>Description (English)</label>
+              <textarea
+                value={formData.description_en}
+                onChange={(e) =>
+                  setFormData({ ...formData, description_en: e.target.value })
+                }
+                rows={4}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Description (Español)</label>
+              <textarea
+                value={formData.description_es}
+                onChange={(e) =>
+                  setFormData({ ...formData, description_es: e.target.value })
+                }
+                rows={4}
+                required
+              />
+            </div>
           </div>
 
           <div className="form-group">
@@ -246,9 +278,9 @@ export default function ProjectsPage() {
       <div className="projects-grid">
         {projects.map((proj) => (
           <div key={proj.id} className="project-card">
-            {proj.image_url && <img src={proj.image_url} alt={proj.title} />}
-            <h3>{proj.title}</h3>
-            <p>{proj.description.substring(0, 100)}...</p>
+            {proj.image_url && <img src={proj.image_url} alt={proj.title?.en || ""} />}
+            <h3>{proj.title?.en || ""}</h3>
+            <p>{(proj.description?.en || "").substring(0, 100)}...</p>
             <div className="tech-tags">
               {proj.tech_stack.slice(0, 3).map((tech) => (
                 <span key={tech} className="tag">
