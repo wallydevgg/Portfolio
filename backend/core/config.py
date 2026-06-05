@@ -1,5 +1,5 @@
 
-from typing import List, Union
+from typing import List, Union, Optional
 from pydantic import AnyHttpUrl, validator
 from pydantic_settings import BaseSettings
 
@@ -31,12 +31,12 @@ class Settings(BaseSettings):
     POSTGRES_PORT: str = "5432"
 
     ADMIN_USERNAME: str
-    ADMIN_EMAIL: str | None = None
-    ADMIN_PASSWORD: str | None = None
-    ADMIN_PASSWORD_HASH: str | None = None
+    ADMIN_EMAIL: Optional[str] = None
+    ADMIN_PASSWORD: Optional[str] = None
+    ADMIN_PASSWORD_HASH: Optional[str] = None
 
     # MinIO S3-compatible storage
-    MINIO_ENDPOINT: str = "minio:9000"
+    MINIO_ENDPOINT: str = "shared-minio:9000"
     MINIO_ROOT_USER: str = "minioadmin"
     MINIO_ROOT_PASSWORD: str = "minioadmin"
     MINIO_PUBLIC_URL: str = "http://localhost:9000"
