@@ -34,15 +34,15 @@ const Hero = () => {
       <div className="hero-left">
         <h1>
           <Trans>
-            Hi! I'm <span className="hashTag">Waldir Apaza</span>
+            Hi! I'm <span className="highlight">Waldir Apaza</span>
           </Trans>
         </h1>
         <p>
           <Trans>
             +5 Years of experience{" "}
-            <span className="hashTag">Fullstack Web Developer</span> with a
+            <span className="highlight">Fullstack Web Developer</span> with a
             solid background in{" "}
-            <span className="hashTag">software development</span>
+            <span className="highlight">software development</span>
           </Trans>
         </p>
         <div className="social-buttons">

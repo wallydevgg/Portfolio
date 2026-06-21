@@ -42,6 +42,18 @@
   }
 }
 
+// Normalize section widths so their titles line up
+.home-container > .experience,
+.home-container > .skills,
+.home-container > .projects,
+.home-container > .aboutme-home,
+.home-container > .contact {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 // Shared section title component (uses mixin)
 .title-container {
   @include section-title;
