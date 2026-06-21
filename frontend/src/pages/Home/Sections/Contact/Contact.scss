@@ -94,6 +94,9 @@
       resize: vertical;
       @include theme-color(color, $DM-Title, $LM-Title);
 
+      .dark-theme & { background: rgba($bg-dark, 0.65); }
+      .light-theme & { background: rgba($bg-light, 0.85); }
+
       &:focus { border-color: $color-primary; }
       &::placeholder { color: rgba(167, 169, 190, 0.5); }
     }
