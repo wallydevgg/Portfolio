@@ -38,9 +38,10 @@
     "vite-plugin-ejs": "^1.7.0"
   },
   "devDependencies": {
+    "@lingui/babel-plugin-lingui-macro": "^5.9.5",
     "@lingui/cli": "^6.0.1",
     "@lingui/vite-plugin": "^6.0.1",
-    "@rolldown/plugin-babel": "^0.2.3",
+    "@rollup/plugin-babel": "^7.1.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-legacy": "^8.0.1",

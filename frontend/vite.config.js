@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { lingui, linguiTransformerBabelPreset } from "@lingui/vite-plugin";
-import babel from "@rolldown/plugin-babel";
+import { lingui } from "@lingui/vite-plugin";
+import babel from "@rollup/plugin-babel";
 import path from "path";
 import dynamicImport from "vite-plugin-dynamic-import";
 import sass from "sass";
@@ -9,11 +9,15 @@ import sass from "sass";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    babel({
+      include: [/src/],
+      exclude: [/node_modules/],
+      extensions: [".js", ".jsx", ".ts", ".tsx"],
+      plugins: ["babel-plugin-macros"],
+      babelHelpers: "bundled",
+    }),
     react(),
     lingui(),
-    babel({
-      presets: [linguiTransformerBabelPreset()],
-    }),
     dynamicImport(),
   ],
   server: {
