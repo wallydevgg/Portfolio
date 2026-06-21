@@ -84,6 +84,9 @@ jobs:
             SECRET_KEY=${{ secrets.SECRET_KEY }}
             ADMIN_USERNAME=${{ secrets.ADMIN_USERNAME }}
             ADMIN_PASSWORD_HASH=${{ secrets.ADMIN_PASSWORD_HASH }}
+            MINIO_ROOT_USER=${{ secrets.MINIO_ROOT_USER }}
+            MINIO_ROOT_PASSWORD=${{ secrets.MINIO_ROOT_PASSWORD }}
+            MINIO_PUBLIC_URL=${{ secrets.MINIO_PUBLIC_URL }}
             EOF
 
             # Load Images
