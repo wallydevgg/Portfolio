@@ -31,6 +31,8 @@ jobs:
           push: false
           tags: portfolio_frontend:latest
           outputs: type=docker,dest=/tmp/portfolio_frontend.tar
+          build-args: |
+            VITE_TURNSTILE_SITE_KEY=${{ secrets.VITE_TURNSTILE_SITE_KEY }}
 
       - name: Build Backend Image
         uses: docker/build-push-action@v5
@@ -87,6 +89,13 @@ jobs:
             MINIO_ROOT_USER=${{ secrets.MINIO_ROOT_USER }}
             MINIO_ROOT_PASSWORD=${{ secrets.MINIO_ROOT_PASSWORD }}
             MINIO_PUBLIC_URL=${{ secrets.MINIO_PUBLIC_URL }}
+            SMTP_HOST=${{ secrets.SMTP_HOST }}
+            SMTP_PORT=${{ secrets.SMTP_PORT }}
+            SMTP_USER=${{ secrets.SMTP_USER }}
+            SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
+            SMTP_FROM=${{ secrets.SMTP_FROM }}
+            CONTACT_TO_EMAIL=${{ secrets.CONTACT_TO_EMAIL }}
+            TURNSTILE_SECRET_KEY=${{ secrets.TURNSTILE_SECRET_KEY }}
             EOF
 
             # Load Images
