@@ -1,0 +1,66 @@
+@use "@/styles/abstracts" as *;
+
+.privacy-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 8rem 2rem 4rem;
+  @include theme-color(background-color, $bg-dark, $bg-light);
+  @include theme-color(color, $DM-Title, $LM-Title);
+
+  .privacy-container {
+    max-width: 800px;
+    margin: 0 auto;
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: $color-primary;
+    }
+
+    .last-updated {
+      font-size: 0.9rem;
+      color: var(--parrafos);
+      margin-bottom: 3rem;
+    }
+
+    section {
+      margin-bottom: 2.5rem;
+
+      h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        font-weight: $fw-semibold;
+      }
+
+      p {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+        color: var(--parrafos);
+      }
+
+      ul {
+        margin-bottom: 1rem;
+        padding-left: 1.5rem;
+        
+        li {
+          margin-bottom: 0.5rem;
+          line-height: 1.6;
+          color: var(--parrafos);
+
+          strong {
+            @include theme-color(color, $DM-Title, $LM-Title);
+          }
+        }
+      }
+
+      a {
+        color: $color-primary;
+        text-decoration: none;
+        
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

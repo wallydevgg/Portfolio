@@ -42,7 +42,12 @@ const Footer = () => {
           </span>
         </div>
       </div>
-      <span className="footer-derechos">Developed by Waldir Apaza</span>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
+        <span className="footer-derechos">Developed by Waldir Apaza</span>
+        <Link to="/privacy" style={{ fontSize: "0.8rem", color: "var(--parrafos)", textDecoration: "none" }}>
+          Privacy Policy
+        </Link>
+      </div>
     </div>
   );
 };

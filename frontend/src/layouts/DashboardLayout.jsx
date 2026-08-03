@@ -1,7 +1,7 @@
 import { Link, Outlet } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { BookOpen, LayoutDashboard, LogOut, Settings, Menu, Briefcase, Code2, FolderOpen, Search } from "lucide-react";
-import { useState, useContext } from "react";
+import { BookOpen, LayoutDashboard, LogOut, Settings, Menu, Briefcase, Code2, FolderOpen, Search, Mail, Bell } from "lucide-react";
+import { useState, useContext, useEffect } from "react";
 import { ToastProvider } from "../contexts/ToastContext";
 import "./DashboardLayout.scss";
 import { Switch, ThemeContext } from "@/barrell";
@@ -10,6 +10,29 @@ export default function DashboardLayout() {
   const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const { theme } = useContext(ThemeContext);
+  const [newMessagesCount, setNewMessagesCount] = useState(0);
+
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const url = `${import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1"}/contact?status_filter=new&page_size=1`;
+        const res = await fetch(url, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setNewMessagesCount(data.new_count || 0);
+        }
+      } catch (err) {
+        console.error("Failed to fetch unread messages count", err);
+      }
+    };
+    fetchUnreadCount();
+    // Poll every 2 minutes
+    const interval = setInterval(fetchUnreadCount, 120000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <ToastProvider>
@@ -27,6 +50,20 @@ export default function DashboardLayout() {
           <Link to="/dashboard" className="dashboard__nav-link">
             <LayoutDashboard className="icon" />
             {sidebarOpen && <span>Overview</span>}
+          </Link>
+          <Link to="/dashboard/messages" className="dashboard__nav-link">
+            <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+              <Mail className="icon" />
+              {newMessagesCount > 0 && !sidebarOpen && (
+                <span className="dashboard__badge-dot"></span>
+              )}
+            </div>
+            {sidebarOpen && (
+              <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
+                <span>Messages</span>
+                {newMessagesCount > 0 && <span className="dashboard__badge">{newMessagesCount}</span>}
+              </div>
+            )}
           </Link>
           <Link to="/dashboard/posts" className="dashboard__nav-link">
             <BookOpen className="icon" />
@@ -51,6 +88,10 @@ export default function DashboardLayout() {
           <Link to="/dashboard/settings/seo" className="dashboard__nav-link">
             <Search className="icon" />
             {sidebarOpen && <span>SEO</span>}
+          </Link>
+          <Link to="/dashboard/settings/notifications" className="dashboard__nav-link">
+            <Bell className="icon" />
+            {sidebarOpen && <span>Notifications</span>}
           </Link>
         </nav>
 

@@ -12,6 +12,7 @@ import ProjectsPage from "@/pages/Dashboard/Projects/index";
 import SettingsPage from "@/pages/Dashboard/Settings/index";
 import SeoSettingsPage from "@/pages/Dashboard/Settings/SEO";
 import BlogPage from "@/pages/Blog/BlogPage";
+import PrivacyPage from "@/pages/Privacy/Privacy";
 import { AuthProvider } from "@/contexts/AuthContext";
 import LoginPage from "@/pages/Login/Login";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
@@ -32,6 +33,7 @@ const router = createBrowserRouter(
           children: [
             { path: "/", element: <Home /> },
             { path: "/blog", element: <BlogPage /> },
+            { path: "/privacy", element: <PrivacyPage /> },
             { path: "*", element: <NotFoundPage /> },
           ],
         },
