@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import { Home } from "@/barrell";
 import Layout from "@/components/ui/Layout/Layout";
 import ErrorPage from "@/pages/error/errorPage";
-import NotFoundPage from "@/pages/error/errorPage";
+import NotFoundPage from "@/pages/error/NotFoundPage";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import PostsPage from "@/pages/Dashboard/Posts/index";
 import PostEditorPage from "@/pages/Dashboard/Posts/Editor";
@@ -11,6 +11,9 @@ import SkillsPage from "@/pages/Dashboard/Skills/index";
 import ProjectsPage from "@/pages/Dashboard/Projects/index";
 import SettingsPage from "@/pages/Dashboard/Settings/index";
 import SeoSettingsPage from "@/pages/Dashboard/Settings/SEO";
+import MessagesPage from "@/pages/Dashboard/Messages/index";
+import MessageDetailPage from "@/pages/Dashboard/Messages/Detail";
+import NotificationsSettings from "@/pages/Dashboard/Settings/Notifications";
 import BlogPage from "@/pages/Blog/BlogPage";
 import PrivacyPage from "@/pages/Privacy/Privacy";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -56,8 +59,11 @@ const router = createBrowserRouter(
             { path: "experience", element: <ExperiencePage /> },
             { path: "skills", element: <SkillsPage /> },
             { path: "projects", element: <ProjectsPage /> },
+            { path: "messages", element: <MessagesPage /> },
+            { path: "messages/:id", element: <MessageDetailPage /> },
             { path: "settings", element: <SettingsPage /> },
             { path: "settings/seo", element: <SeoSettingsPage /> },
+            { path: "settings/notifications", element: <NotificationsSettings /> },
           ],
         },
       ],

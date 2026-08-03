@@ -15,7 +15,7 @@ export default function DashboardLayout() {
   useEffect(() => {
     const fetchUnreadCount = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("admin_token");
         const url = `${import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1"}/contact?status_filter=new&page_size=1`;
         const res = await fetch(url, {
           headers: { Authorization: `Bearer ${token}` }
