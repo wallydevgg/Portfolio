@@ -146,7 +146,8 @@ def send_admin_notification(db: Session, submission) -> None:
         <hr>
         <p style="font-size: 0.9em; color: #666;">
           IP: {submission.ip_address} | Country: {submission.country or 'Unknown'}<br>
-          <em>You can reply directly to this email to answer the sender.</em>
+          <em>You can reply directly to this email to answer the sender, or just take it as a notification.</em><br>
+          Prefer to manage the conversation from your dashboard? <a href="https://wallydev.dev/dashboard/messages">Open Messages</a>
         </p>
       </body>
     </html>
