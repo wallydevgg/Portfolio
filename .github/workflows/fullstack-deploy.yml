@@ -33,6 +33,7 @@ jobs:
           outputs: type=docker,dest=/tmp/portfolio_frontend.tar
           build-args: |
             VITE_TURNSTILE_SITE_KEY=${{ secrets.VITE_TURNSTILE_SITE_KEY }}
+            VITE_API_URL=https://wallydev.dev/api/v1
 
       - name: Build Backend Image
         uses: docker/build-push-action@v5

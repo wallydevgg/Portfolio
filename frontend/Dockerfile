@@ -6,6 +6,8 @@ RUN npm ci --ignore-scripts
 COPY . .
 ARG VITE_TURNSTILE_SITE_KEY
 ENV VITE_TURNSTILE_SITE_KEY=$VITE_TURNSTILE_SITE_KEY
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
 RUN npm run messages:extract && npm run compile
 RUN npm run build
 
