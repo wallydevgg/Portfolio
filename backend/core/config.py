@@ -42,6 +42,26 @@ class Settings(BaseSettings):
     MINIO_PUBLIC_URL: str = "http://localhost:9000"
     MINIO_BUCKET: str = "portfolio"
 
+    # SMTP (HestiaCP / Exim on the same VPS)
+    SMTP_HOST: str = "mail.wallydev.dev"
+    SMTP_PORT: int = 587
+    SMTP_USER: str = ""
+    SMTP_PASSWORD: str = ""
+    SMTP_FROM: str = ""
+
+    # Fallback recipient for contact notifications. The effective recipient
+    # can be overridden at runtime from the dashboard (notification_settings table).
+    CONTACT_TO_EMAIL: str = "contact@wallydev.dev"
+
+    # Cloudflare Turnstile (empty secret = captcha verification skipped)
+    TURNSTILE_SECRET_KEY: str = ""
+
+    # IP geolocation via ipapi.co (HTTPS, free tier). Failures are non-fatal.
+    GEOLOCATION_ENABLED: bool = True
+
+    # Contact form anti-spam
+    CONTACT_RATE_LIMIT_PER_HOUR: int = 3
+
     class Config:
         case_sensitive = True
         env_file = ".env"

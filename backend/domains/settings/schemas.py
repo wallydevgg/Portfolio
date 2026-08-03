@@ -20,3 +20,22 @@ class SeoSettingsResponse(SeoSettingsBase):
 
     class Config:
         from_attributes = True
+
+
+class NotificationSettingsBase(BaseModel):
+    master_enabled: bool
+    comms_hub_url: Optional[str] = ""
+    comms_hub_token: Optional[str] = ""
+    contact_to_email: Optional[str] = ""
+    events: Dict[str, bool]
+
+class NotificationSettingsUpdate(NotificationSettingsBase):
+    pass
+
+class NotificationSettingsResponse(NotificationSettingsBase):
+    id: int
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
