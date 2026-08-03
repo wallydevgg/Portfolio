@@ -27,6 +27,7 @@ class NotificationSettingsBase(BaseModel):
     comms_hub_url: Optional[str] = ""
     comms_hub_token: Optional[str] = ""
     contact_to_email: Optional[str] = ""
+    contact_email_subject: Optional[str] = "Contact form from wallydev.dev"
     events: Dict[str, bool]
 
 class NotificationSettingsUpdate(NotificationSettingsBase):

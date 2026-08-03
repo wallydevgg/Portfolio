@@ -56,6 +56,7 @@ def get_notification_settings(
             comms_hub_url="",
             comms_hub_token="",
             contact_to_email="",
+            contact_email_subject="Contact form from wallydev.dev",
             events={
                 "new_contact_message": True,
                 "new_comment": False,

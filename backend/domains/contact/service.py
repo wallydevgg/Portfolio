@@ -119,9 +119,15 @@ def _send_smtp_email(msg: EmailMessage) -> None:
 def send_admin_notification(db: Session, submission) -> None:
     """Sends notification to the admin about a new contact message."""
     to_email = get_notification_recipient(db)
-    
+
+    # Configurable subject from dashboard settings (falls back to a default)
+    notif = db.query(NotificationSettings).first()
+    subject = getattr(notif, "contact_email_subject", "") if notif else ""
+    if not subject:
+        subject = f"New Contact: {submission.subject}"
+
     msg = EmailMessage()
-    msg["Subject"] = f"New Contact: {submission.subject}"
+    msg["Subject"] = subject
     msg["From"] = settings.SMTP_FROM
     msg["To"] = to_email
     msg["Reply-To"] = submission.email

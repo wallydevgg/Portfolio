@@ -8,6 +8,7 @@ const NotificationsSettings = () => {
     comms_hub_url: "",
     comms_hub_token: "",
     contact_to_email: "",
+    contact_email_subject: "Contact form from wallydev.dev",
     events: {
       new_contact_message: true,
       new_comment: false,
@@ -135,6 +136,16 @@ const NotificationsSettings = () => {
               placeholder="e.g. contact@wallydev.dev (leave empty to use env default)"
             />
             <small>New contact messages will be sent to this address.</small>
+          </div>
+          <div className="form-group">
+            <label>Email Subject</label>
+            <input
+              type="text"
+              value={settings.contact_email_subject || ""}
+              onChange={(e) => setSettings({...settings, contact_email_subject: e.target.value})}
+              placeholder="e.g. Contact form from wallydev.dev"
+            />
+            <small>Subject line used for new contact message notifications.</small>
           </div>
         </div>
 

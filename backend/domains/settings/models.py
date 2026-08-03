@@ -24,6 +24,7 @@ class NotificationSettings(Base):
     comms_hub_url = Column(String, nullable=True, server_default="")
     comms_hub_token = Column(String, nullable=True, server_default="")
     contact_to_email = Column(String, nullable=True, server_default="")
+    contact_email_subject = Column(String, nullable=True, server_default="Contact form from wallydev.dev")
     
     events = Column(JSON, nullable=False, server_default=text("""'{
         "new_contact_message": true,
