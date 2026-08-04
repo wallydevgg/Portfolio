@@ -32,3 +32,11 @@ __pycache__/
 backend/venv/
 *.env
 .env
+
+# AI agent context / memory (not for the repo)
+docs/superpowers/
+INTEGRATION_MYDEVMEMORY.md
+.claude/
+CLAUDE.md
+AGENTS.md
+GEMINI.md

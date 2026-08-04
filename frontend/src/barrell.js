@@ -11,7 +11,6 @@ export * from "./components/Icons";
 
 /* SECCIONES */
 export { default as About } from "./pages/Home/Sections/About/About";
-export { default as Caruousel } from "./pages/Home/Sections/About/Caruousel";
 export { default as Projects } from "./pages/Home/Sections/Projects/Projects";
 export { default as Skills } from "./pages/Home/Sections/Skills/Skills";
 export { default as Contact } from "./pages/Home/Sections/Contact/Contact";

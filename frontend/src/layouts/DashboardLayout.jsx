@@ -1,6 +1,6 @@
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { BookOpen, LayoutDashboard, LogOut, Settings, Menu, Briefcase, Code2, FolderOpen, Search, Mail, Bell, ChevronDown } from "lucide-react";
+import { BookOpen, LayoutDashboard, LogOut, Settings, Menu, Briefcase, Code2, FolderOpen, Search, Mail, Bell, ChevronDown, UserRound } from "lucide-react";
 import { useState, useContext, useEffect } from "react";
 import { ToastProvider } from "../contexts/ToastContext";
 import "./DashboardLayout.scss";
@@ -75,6 +75,10 @@ export default function DashboardLayout() {
           <Link to="/dashboard/experience" className="dashboard__nav-link">
             <Briefcase className="icon" />
             {sidebarOpen && <span>Experience</span>}
+          </Link>
+          <Link to="/dashboard/about" className="dashboard__nav-link">
+            <UserRound className="icon" />
+            {sidebarOpen && <span>About</span>}
           </Link>
           <Link to="/dashboard/skills" className="dashboard__nav-link">
             <Code2 className="icon" />

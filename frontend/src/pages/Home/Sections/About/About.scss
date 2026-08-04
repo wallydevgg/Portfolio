@@ -1,28 +1,88 @@
-// ─── About Section ────────────────────────────────────────────────────────────
-
 @use "@/styles/abstracts" as *;
 
-.sector {
-  padding: 3rem 0;
-  @include flex-column;
+.aboutme-home {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
 
-  @include respond-between(mobile, tablet) { width: 100%; }
+  .title-container {
+    @include section-title;
+  }
+}
+
+.sector {
+  display: flex;
+  width: 100%;
+  gap: 3rem;
+  margin-top: 2rem;
+  align-items: center;
+
+  // Layout variants (desktop)
+  &.about--text-left {
+    flex-direction: row;
+  }
+  
+  &.about--text-right {
+    flex-direction: row-reverse;
+  }
+  
+  &.about--text-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  &.about--text-bottom {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  }
+
+  // Mobile: always stack, text first
+  @include respond-to(tablet) {
+    flex-direction: column !important;
+    gap: 2rem;
+  }
 
   .aboutme {
-    @include flex-column;
-    justify-content: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
 
     p {
-      padding: 0.5em;
-      width: 100%;
-      text-align: left;
+      @include theme-color(color, var(--parrafos), var(--parrafos));
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin: 0;
     }
+  }
 
-    @include respond-between(mobile, tablet) {
-      display: flex;
-      width: 100%;
+  .about-image-wrapper {
+    flex: 0.8;
+    max-width: 500px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    
+    @include respond-to(tablet) {
+      max-width: 100%;
     }
+  }
 
-    @media (min-width: 1200px) { width: 100%; }
+  .about-image {
+    width: 100%;
+    height: auto;
+    border-radius: 16px;
+    object-fit: cover;
+    border: 2px solid var(--color-primary);
+    box-shadow: 0 10px 30px -10px rgba(255, 137, 6, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px -10px rgba(255, 137, 6, 0.5);
+    }
   }
 }

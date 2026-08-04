@@ -26,6 +26,7 @@ from domains.blog.router import router as blog_router
 from domains.settings.router import router as settings_router
 from domains.contact.router import router as contact_router
 from domains.dashboard.router import router as dashboard_router
+from domains.about.router import router as about_router
 
 @app.on_event("startup")
 def on_startup():
@@ -37,6 +38,7 @@ app.include_router(blog_router, prefix=f"{settings.API_V1_STR}", tags=["blogs"])
 app.include_router(settings_router, prefix=f"{settings.API_V1_STR}/settings", tags=["settings"])
 app.include_router(contact_router, prefix=f"{settings.API_V1_STR}/contact", tags=["contact"])
 app.include_router(dashboard_router, prefix=f"{settings.API_V1_STR}/dashboard", tags=["dashboard"])
+app.include_router(about_router, prefix=f"{settings.API_V1_STR}/about", tags=["about"])
 
 @app.get("/")
 def root():

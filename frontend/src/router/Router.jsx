@@ -9,6 +9,7 @@ import PostEditorPage from "@/pages/Dashboard/Posts/Editor";
 import ExperiencePage from "@/pages/Dashboard/Experience/index";
 import SkillsPage from "@/pages/Dashboard/Skills/index";
 import ProjectsPage from "@/pages/Dashboard/Projects/index";
+import AboutDashboardPage from "@/pages/Dashboard/About/index";
 import SettingsPage from "@/pages/Dashboard/Settings/index";
 import SeoSettingsPage from "@/pages/Dashboard/Settings/SEO";
 import MessagesPage from "@/pages/Dashboard/Messages/index";
@@ -58,6 +59,7 @@ const router = createBrowserRouter(
             { path: "posts/new", element: <PostEditorPage /> },
             { path: "posts/:id/edit", element: <PostEditorPage /> },
             { path: "experience", element: <ExperiencePage /> },
+            { path: "about", element: <AboutDashboardPage /> },
             { path: "skills", element: <SkillsPage /> },
             { path: "projects", element: <ProjectsPage /> },
             { path: "messages", element: <MessagesPage /> },

@@ -155,12 +155,29 @@ export function usePortfolioApi() {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch(`${BASE_URL}/upload`, {
+    const res = await fetch(`${BASE_URL}/portfolio/upload`, {
       method: "POST",
       headers,
       body: formData,
     });
     if (!res.ok) throw new Error("Failed to upload image");
+    return res.json();
+  }
+
+  // === ABOUT ===
+  async function getAbout() {
+    const res = await fetch(`${BASE_URL}/about`);
+    if (!res.ok) throw new Error("Failed to fetch about settings");
+    return res.json();
+  }
+
+  async function updateAbout(data) {
+    const res = await fetch(`${BASE_URL}/about`, {
+      method: "PUT",
+      headers: { ...headers, "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error("Failed to update about settings");
     return res.json();
   }
 
@@ -181,5 +198,7 @@ export function usePortfolioApi() {
     updateProject,
     deleteProject,
     uploadImage,
+    getAbout,
+    updateAbout,
   };
 }

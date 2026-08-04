@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 
 from core.database import SessionLocal
 from domains.portfolio.models import Experience, Project, Skill, SkillCategory
+from domains.about.models import AboutSettings
 
 
 # === Skill categories (bilingual) ===
@@ -242,7 +243,19 @@ def seed_cv(db: Session) -> dict:
     db.query(SkillCategory).delete()
     db.query(Experience).delete()
     db.query(Project).delete()
+    db.query(AboutSettings).delete()
     db.commit()
+
+    # 1.5 About Settings
+    about_text = {
+        "en": "Software Engineer with 5+ years of experience designing and developing scalable web applications for mining, education, tourism, finance, accounting and ERP sectors. Specialized in Full Stack solutions using Python (Django, Django REST Framework, FastAPI) and JavaScript/TypeScript (React, Next.js, Angular and Node.js), with experience in legacy system modernization, process automation, multitenant SaaS architectures, enterprise system integration, ETL pipelines and cloud deployments on AWS.\n\nI have participated in every stage of the software lifecycle, from requirements gathering and architecture design to implementation, deployment, monitoring and production optimization. I focus on building maintainable software applying principles like Clean Architecture, Domain-Driven Design (DDD), SOLID and agile methodologies.",
+        "es": "Software Engineer con más de 5 años de experiencia diseñando y desarrollando aplicaciones web escalables para los sectores minería, educación, turismo, finanzas, contabilidad y ERP. Especializado en el desarrollo de soluciones Full Stack utilizando Python (Django, Django REST Framework, FastAPI) y JavaScript/TypeScript (React, Next.js, Angular y Node.js), con experiencia en modernización de sistemas legados, automatización de procesos, arquitecturas SaaS multitenant, integración de sistemas empresariales, pipelines ETL y despliegues cloud sobre AWS.\n\nHe participado en todas las etapas del ciclo de vida del software, desde el levantamiento de requerimientos y diseño de arquitectura hasta la implementación, despliegue, monitoreo y optimización en producción. Me enfoco en construir software mantenible aplicando principios como Clean Architecture, Domain-Driven Design (DDD), SOLID y metodologías ágiles."
+    }
+    db.add(AboutSettings(
+        text=about_text,
+        image_url="",
+        layout=AboutSettings.LAYOUT_TEXT_LEFT
+    ))
 
     # 2. Categories + skills
     categories = {}
