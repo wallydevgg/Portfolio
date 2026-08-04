@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, ForeignKey, Table
+from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, ForeignKey, Table, UniqueConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from core.database import Base # Wait, does core/database.py exist? I assume yes or we will need to create it
@@ -44,3 +44,41 @@ class Post(Base):
     
     category = relationship("Category", back_populates="posts")
     tags = relationship("Tag", secondary=post_tags, back_populates="posts")
+    comments = relationship("Comment", back_populates="post", cascade="all, delete-orphan")
+    likes = relationship("PostLike", back_populates="post", cascade="all, delete-orphan")
+
+    @property
+    def likes_count(self) -> int:
+        return len(self.likes)
+
+    @property
+    def comments_count(self) -> int:
+        return len(self.comments)
+
+
+class Comment(Base):
+    __tablename__ = "comments"
+
+    id = Column(Integer, primary_key=True, index=True)
+    post_id = Column(Integer, ForeignKey("posts.id", ondelete="CASCADE"), nullable=False, index=True)
+    author_name = Column(String, nullable=False)
+    content = Column(Text, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    post = relationship("Post", back_populates="comments")
+
+
+class PostLike(Base):
+    __tablename__ = "post_likes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    post_id = Column(Integer, ForeignKey("posts.id", ondelete="CASCADE"), nullable=False, index=True)
+    ip_address = Column(String, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    post = relationship("Post", back_populates="likes")
+
+    __table_args__ = (
+        # One like per IP per post (spam prevention)
+        UniqueConstraint("post_id", "ip_address", name="uq_post_like_post_ip"),
+    )

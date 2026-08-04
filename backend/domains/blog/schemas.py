@@ -15,6 +15,25 @@ class CategorySchema(CategoryBase):
     class Config:
         from_attributes = True
 
+class TagSchema(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        from_attributes = True
+
+class CommentCreate(BaseModel):
+    author_name: str
+    content: str
+
+class CommentSchema(CommentCreate):
+    id: int
+    post_id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
 class PostBase(BaseModel):
     title: str
     content: str
@@ -23,12 +42,14 @@ class PostBase(BaseModel):
 
 class PostCreate(PostBase):
     slug: str
+    tags: List[str] = []
 
 class PostUpdate(BaseModel):
     title: Optional[str] = None
     content: Optional[str] = None
     is_published: Optional[bool] = None
     category_id: Optional[int] = None
+    tags: Optional[List[str]] = None
 
 class PostSchema(PostBase):
     id: int
@@ -36,7 +57,9 @@ class PostSchema(PostBase):
     created_at: datetime
     updated_at: Optional[datetime] = None
     category: Optional[CategorySchema] = None
-    # tags will be added later
+    tags: List[TagSchema] = []
+    likes_count: int = 0
+    comments_count: int = 0
 
     class Config:
         from_attributes = True

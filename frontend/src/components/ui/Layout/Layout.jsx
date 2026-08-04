@@ -15,7 +15,9 @@ const Layout = () => {
     <div className={`App ${theme}-theme`}>
       <GoogleFontsOptimizer />
       <Header />
-      <Outlet />
+      <main className="main-content">
+        <Outlet />
+      </main>
       <Footer />
     </div>
   );

@@ -1,5 +1,5 @@
 # ✅ GENERADO POR CLAUDE - Archivo: backend/domains/blog/router.py
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status, Query, Request
 from fastapi.responses import Response
 from sqlalchemy.orm import Session
 from typing import List
@@ -9,6 +9,30 @@ from domains.blog import models, schemas
 from domains.users.models import User
 
 router = APIRouter(prefix="/posts", tags=["posts"])
+
+
+def _get_post_or_404(db: Session, post_id: int) -> models.Post:
+    post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    return post
+
+
+def _sync_tags(db: Session, post: models.Post, tag_names: List[str]) -> None:
+    """Replace post tags with the given names (creating missing tags)."""
+    if tag_names is None:
+        return
+    post.tags = []
+    for name in tag_names:
+        name = name.strip()
+        if not name:
+            continue
+        tag = db.query(models.Tag).filter(models.Tag.name == name).first()
+        if not tag:
+            tag = models.Tag(name=name)
+            db.add(tag)
+            db.flush()
+        post.tags.append(tag)
 
 
 @router.get("/", response_model=List[schemas.PostSchema])
@@ -73,17 +97,23 @@ def create_post(
         category_id=post.category_id,
     )
     db.add(db_post)
+    db.flush()
+    _sync_tags(db, db_post, post.tags)
     db.commit()
     db.refresh(db_post)
     return db_post
 
 
+# ─── Tags ─────────────────────────────────────────────────────────────────────
+
+@router.get("/tags", response_model=List[schemas.TagSchema])
+def list_tags(db: Session = Depends(get_db)):
+    return db.query(models.Tag).order_by(models.Tag.name.asc()).all()
+
+
 @router.get("/{post_id}", response_model=schemas.PostSchema)
 def get_post(post_id: int, db: Session = Depends(get_db)):
-    post = db.query(models.Post).filter(models.Post.id == post_id).first()
-    if not post:
-        raise HTTPException(status_code=404, detail="Post not found")
-    return post
+    return _get_post_or_404(db, post_id)
 
 
 @router.put("/{post_id}", response_model=schemas.PostSchema)
@@ -93,11 +123,12 @@ def update_post(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    db_post = db.query(models.Post).filter(models.Post.id == post_id).first()
-    if not db_post:
-        raise HTTPException(status_code=404, detail="Post not found")
-    for key, value in post_update.dict(exclude_unset=True).items():
+    db_post = _get_post_or_404(db, post_id)
+    update_data = post_update.dict(exclude_unset=True)
+    tags = update_data.pop("tags", None)
+    for key, value in update_data.items():
         setattr(db_post, key, value)
+    _sync_tags(db, db_post, tags)
     db.commit()
     db.refresh(db_post)
     return db_post
@@ -109,9 +140,59 @@ def delete_post(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    db_post = db.query(models.Post).filter(models.Post.id == post_id).first()
-    if not db_post:
-        raise HTTPException(status_code=404, detail="Post not found")
+    db_post = _get_post_or_404(db, post_id)
     db.delete(db_post)
     db.commit()
     return None
+
+
+# ─── Comments ─────────────────────────────────────────────────────────────────
+
+@router.get("/{post_id}/comments", response_model=List[schemas.CommentSchema])
+def list_comments(post_id: int, db: Session = Depends(get_db)):
+    _get_post_or_404(db, post_id)
+    return (
+        db.query(models.Comment)
+        .filter(models.Comment.post_id == post_id)
+        .order_by(models.Comment.created_at.asc())
+        .all()
+    )
+
+
+@router.post("/{post_id}/comments", response_model=schemas.CommentSchema, status_code=status.HTTP_201_CREATED)
+def create_comment(
+    post_id: int,
+    comment: schemas.CommentCreate,
+    db: Session = Depends(get_db),
+):
+    _get_post_or_404(db, post_id)
+    db_comment = models.Comment(
+        post_id=post_id,
+        author_name=comment.author_name.strip(),
+        content=comment.content.strip(),
+    )
+    db.add(db_comment)
+    db.commit()
+    db.refresh(db_comment)
+    return db_comment
+
+
+# ─── Likes ────────────────────────────────────────────────────────────────────
+
+@router.post("/{post_id}/like")
+def toggle_like(post_id: int, request: Request, db: Session = Depends(get_db)):
+    """Toggle a like for the given post, keyed by client IP (one like per IP)."""
+    _get_post_or_404(db, post_id)
+    ip = request.client.host if request.client else "unknown"
+    existing = (
+        db.query(models.PostLike)
+        .filter(models.PostLike.post_id == post_id, models.PostLike.ip_address == ip)
+        .first()
+    )
+    if existing:
+        db.delete(existing)
+        db.commit()
+        return {"liked": False, "likes_count": _get_post_or_404(db, post_id).likes_count}
+    db.add(models.PostLike(post_id=post_id, ip_address=ip))
+    db.commit()
+    return {"liked": True, "likes_count": _get_post_or_404(db, post_id).likes_count}

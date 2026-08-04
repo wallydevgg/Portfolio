@@ -15,18 +15,18 @@
   }
 
   .home-container {
-    max-width: 85%;
+    width: 80%; // matches navbar width for perfect alignment
     margin: 0 auto;
 
     @include respond-to(mobile) {
       padding: 0 1.25rem;
-      max-width: 100%;
+      width: 95%; // matches navbar mobile width
     }
 
-    @include respond-between(mobile, tablet)  { width: 100%; }
-    @include respond-between(tablet, desktop) { max-width: 95%; }
-    @include respond-between(desktop, wide)   { max-width: 70%; }
-    @media (min-width: 1600px)                { max-width: 75%; }
+    @include respond-between(mobile, tablet)  { width: 95%; }
+    @include respond-between(tablet, desktop) { width: 90%; }
+    @include respond-between(desktop, wide)   { width: 80%; }
+    @media (min-width: 1600px)                { width: 80%; }
 
     .section-container {
       @include flex-column;
@@ -42,14 +42,14 @@
   }
 }
 
-// Normalize section widths so their titles line up
+// Normalize section widths so their titles line up with the navbar
 .home-container > .experience,
 .home-container > .skills,
 .home-container > .projects,
 .home-container > .aboutme-home,
 .home-container > .contact {
   width: 100%;
-  max-width: 1200px;
+  max-width: none;
   margin-left: auto;
   margin-right: auto;
 }
