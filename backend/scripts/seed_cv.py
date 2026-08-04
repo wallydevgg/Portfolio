@@ -233,6 +233,17 @@ PROJECTS = [
         "tech_stack": ["React", "Next.js", "Django", "Django REST Framework", "PostgreSQL", "Redis", "Celery", "Payload CMS", "Docker", "AWS"],
         "image_url": _placeholder_image("NextLevel ERP"),
     },
+    {
+        "title": {"en": "Wallydev Portfolio", "es": "Portafolio de Wallydev"},
+        "description": {
+            "en": "This very website! A full-stack bilingual portfolio built with React, Vite and FastAPI, featuring a complete admin dashboard, i18n (EN/ES), blog, contact form with Cloudflare Turnstile, SEO and a CI/CD pipeline that deploys to a VPS via Docker and GitHub Actions.",
+            "es": "¡Este mismo sitio web! Un portafolio full-stack bilingüe construido con React, Vite y FastAPI, con dashboard de administración completo, i18n (EN/ES), blog, formulario de contacto con Cloudflare Turnstile, SEO y un pipeline de CI/CD que despliega a un VPS mediante Docker y GitHub Actions.",
+        },
+        "tech_stack": ["React", "Vite", "FastAPI", "PostgreSQL", "Docker", "Nginx", "GitHub Actions", "Lingui", "Sass", "Cloudflare"],
+        "image_url": _placeholder_image("Wallydev Portfolio"),
+        "website_link": "https://wallydev.dev",
+        "github_link": "https://github.com/wallydevgg/Portfolio",
+    },
 ]
 
 
@@ -291,6 +302,8 @@ def seed_cv(db: Session) -> dict:
             description=proj["description"],
             image_url=proj["image_url"],
             tech_stack=proj["tech_stack"],
+            website_link=proj.get("website_link"),
+            github_link=proj.get("github_link"),
             order=order,
         ))
 
