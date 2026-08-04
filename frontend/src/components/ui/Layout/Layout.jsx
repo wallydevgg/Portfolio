@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Header, Footer } from "../../../barrell";
 import { ThemeContext } from "../../../barrell";
 import "./Layout.scss";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import { GoogleFontsOptimizer } from "../../Context/FontsOptimizer";
 //import SEO from "../../../pages/meta/HelmetSEO";
 

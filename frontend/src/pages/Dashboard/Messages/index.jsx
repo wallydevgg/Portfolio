@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { Mail, MailOpen, Reply, AlertTriangle, Archive, Trash2 } from "lucide-react";
 import "./Messages.scss";
 

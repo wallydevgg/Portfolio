@@ -1,5 +1,5 @@
 // ✅ GENERADO POR CLAUDE - Archivo: frontend/src/components/ui/Header/Menu/Menu.jsx
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { Switch } from "@/barrell";
 import "./Menu.scss";
 import LangSwitch from "../../Buttons/Switch/LangSwitch";

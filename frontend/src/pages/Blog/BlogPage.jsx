@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { Search, Calendar, Tag, ArrowRight, BookOpen, PenLine, X } from "lucide-react";
 import "./BlogPage.scss";
 import { t } from "@lingui/macro";

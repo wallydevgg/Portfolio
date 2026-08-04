@@ -1,6 +1,6 @@
 // ✅ GENERADO POR CLAUDE - Archivo: frontend/src/pages/Home/Sections/Hero/Hero.jsx
 import { Icon } from "@/barrell";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import fotowaldir from "@/images/fotowaldir.webp";
 import {
   faEnvelope,

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import TiptapEditor from "../../../features/blog/components/TiptapEditor";
 import { ArrowLeft, Save, Send, Loader2 } from "lucide-react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router";
 import { useBlogApi } from "../../../features/blog/useBlogApi";
 import { useToast } from "../../../contexts/ToastContext";
 import "./Editor.scss";

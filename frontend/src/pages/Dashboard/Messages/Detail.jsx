@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router";
 import { ArrowLeft, Send, Trash2, AlertTriangle, Archive, Check } from "lucide-react";
 import "./Detail.scss";
 

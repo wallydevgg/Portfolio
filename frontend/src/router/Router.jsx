@@ -1,4 +1,5 @@
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import { createBrowserRouter, Outlet } from "react-router";
+import { RouterProvider } from "react-router/dom";
 import { Home } from "@/barrell";
 import Layout from "@/components/ui/Layout/Layout";
 import ErrorPage from "@/pages/error/errorPage";
