@@ -2,7 +2,9 @@ import logging
 import smtplib
 import time
 from email.message import EmailMessage
+from email.utils import formatdate
 from typing import Optional, Tuple
+from uuid import uuid4
 
 import requests
 from sqlalchemy.orm import Session
@@ -134,6 +136,7 @@ def send_admin_notification(db: Session, submission) -> None:
     
     # Threading ID for Mail.app
     msg["Message-ID"] = f"<contact-{submission.id}@{settings.SMTP_HOST}>"
+    msg["Date"] = formatdate(localtime=True)
 
     body = f"""
     <html>
@@ -164,11 +167,15 @@ def send_reply_email(submission, reply_message: str) -> None:
     msg["Subject"] = f"Re: {submission.subject}"
     msg["From"] = settings.SMTP_FROM
     msg["To"] = submission.email
-    
-    # Threading headers
-    ref_id = f"<contact-{submission.id}@{settings.SMTP_HOST}>"
-    msg["In-Reply-To"] = ref_id
-    msg["References"] = ref_id
+
+    # Headers RFC 5322: Message-ID y Date son obligatorios para deliverability.
+    # Sin Message-ID, los filtros (Gmail) penalizan el correo como spam.
+    msg["Message-ID"] = f"<reply-{submission.id}-{uuid4().hex}@{settings.SMTP_HOST}>"
+    msg["Date"] = formatdate(localtime=True)
+
+    # NOTA: se omiten In-Reply-To/References a propósito. El destinatario nunca
+    # recibió el correo con ese Message-ID (la notificación va al admin), así que
+    # esos headers crearían un hilo falso que Gmail trata como spam.
 
     body = f"""
     <html>

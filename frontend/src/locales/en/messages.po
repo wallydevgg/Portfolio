@@ -50,6 +50,38 @@ msgstr ""
 msgid "+5 Years of experience <0>Fullstack Web Developer</0> with a solid background in <1>software development</1>"
 msgstr "+5 Years of experience <0>Fullstack Web Developer</0> with a solid background in <1>software development</1>"
 
+#: src/pages/Privacy/Privacy.jsx:26
+msgid "<0>Message Content:</0> The subject and body of your message."
+msgstr ""
+
+#: src/pages/Privacy/Privacy.jsx:25
+msgid "<0>Personal Information:</0> Name and email address."
+msgstr ""
+
+#: src/pages/Privacy/Privacy.jsx:27
+msgid "<0>Technical Data:</0> IP address, browser user agent, and approximate location (country/region) to prevent spam and abuse."
+msgstr ""
+
+#: src/pages/Privacy/Privacy.jsx:22
+msgid "1. Information We Collect"
+msgstr ""
+
+#: src/pages/Privacy/Privacy.jsx:32
+msgid "2. How We Use Your Information"
+msgstr ""
+
+#: src/pages/Privacy/Privacy.jsx:42
+msgid "3. Data Retention"
+msgstr ""
+
+#: src/pages/Privacy/Privacy.jsx:47
+msgid "4. Your Rights (GDPR / LGPD)"
+msgstr ""
+
+#: src/pages/Privacy/Privacy.jsx:58
+msgid "5. Third-Party Services"
+msgstr ""
+
 #: src/pages/Blog/BlogPage.jsx:28
 msgid "blog.empty.cta"
 msgstr "Create first post"
@@ -86,39 +118,43 @@ msgstr "Search articles..."
 msgid "blog.subtitle"
 msgstr "Articles about fullstack development, React, Python, DevOps and software architecture."
 
-#: src/pages/Home/Sections/Contact/Contact.jsx:73
+#: src/pages/Privacy/Privacy.jsx:43
+msgid "Contact form submissions are stored securely in our database. We retain this information for up to 12 months, after which it may be permanently deleted. Spam messages are deleted periodically."
+msgstr ""
+
+#: src/pages/Home/Sections/Contact/Contact.jsx:142
 msgid "contact.email"
 msgstr "Email"
 
-#: src/pages/Home/Sections/Contact/Contact.jsx:34
+#: src/pages/Home/Sections/Contact/Contact.jsx:85
 msgid "contact.error"
 msgstr "Something went wrong. Please try again."
 
-#: src/pages/Home/Sections/Contact/Contact.jsx:99
+#: src/pages/Home/Sections/Contact/Contact.jsx:168
 msgid "contact.message"
 msgstr "Message"
 
-#: src/pages/Home/Sections/Contact/Contact.jsx:61
+#: src/pages/Home/Sections/Contact/Contact.jsx:130
 msgid "contact.name"
 msgstr "Name"
 
-#: src/pages/Home/Sections/Contact/Contact.jsx:112
+#: src/pages/Home/Sections/Contact/Contact.jsx:191
 msgid "contact.send"
 msgstr "Send message"
 
-#: src/pages/Home/Sections/Contact/Contact.jsx:112
+#: src/pages/Home/Sections/Contact/Contact.jsx:191
 msgid "contact.sending"
 msgstr "Sending..."
 
-#: src/pages/Home/Sections/Contact/Contact.jsx:87
+#: src/pages/Home/Sections/Contact/Contact.jsx:156
 msgid "contact.subject"
 msgstr "Subject"
 
-#: src/pages/Home/Sections/Contact/Contact.jsx:53
+#: src/pages/Home/Sections/Contact/Contact.jsx:108
 msgid "contact.success"
 msgstr "Message sent! I'll get back to you soon."
 
-#: src/pages/Home/Sections/Contact/Contact.jsx:45
+#: src/pages/Home/Sections/Contact/Contact.jsx:100
 msgid "contact.title"
 msgstr "contact"
 
@@ -156,6 +192,10 @@ msgstr "Available for work"
 msgid "Hi! I'm <0>Waldir Apaza</0>"
 msgstr "Hi! I'm <0>Waldir Apaza</0>"
 
+#: src/pages/Privacy/Privacy.jsx:19
+msgid "Last updated: August 2026"
+msgstr ""
+
 #: src/components/ui/Header/Menu/Menu.jsx:31
 msgid "menu.about"
 msgstr "about-me"
@@ -180,9 +220,33 @@ msgstr "projects"
 msgid "Performed extensive diagnostic, quality and feature validation testing, optimizing code and generating detailed reports to ensure software quality."
 msgstr "Performed extensive diagnostic, quality and feature validation testing, optimizing code and generating detailed reports to ensure software quality."
 
+#: src/pages/Privacy/Privacy.jsx:18
+msgid "Privacy Policy"
+msgstr ""
+
+#: src/pages/Privacy/Privacy.jsx:36
+msgid "Protecting the website against spam, bots, and abuse (via Cloudflare Turnstile and rate limiting)."
+msgstr ""
+
 #: src/hooks/useExperience.jsx:19
 msgid "Redesigned the UX/UI of a travel agency website, resulting in a 30% increase in user satisfaction and a 15% increase in conversions"
 msgstr "Redesigned the UX/UI of a travel agency website, resulting in a 30% increase in user satisfaction and a 15% increase in conversions"
+
+#: src/pages/Privacy/Privacy.jsx:50
+msgid "Request access to the personal data we hold about you."
+msgstr ""
+
+#: src/pages/Privacy/Privacy.jsx:51
+msgid "Request correction of inaccurate data."
+msgstr ""
+
+#: src/pages/Privacy/Privacy.jsx:52
+msgid "Request deletion of your data."
+msgstr ""
+
+#: src/pages/Privacy/Privacy.jsx:35
+msgid "Responding to your inquiries and messages."
+msgstr ""
 
 #. js-lingui-explicit-id
 #: src/pages/Home/Sections/Experience/listExperience.jsx:57
@@ -210,3 +274,27 @@ msgstr "See More"
 #: src/pages/Home/Sections/Skills/Skills.jsx:56
 msgid "skills.title"
 msgstr "skills"
+
+#: src/pages/Privacy/Privacy.jsx:33
+msgid "The information collected is used exclusively for:"
+msgstr ""
+
+#: src/pages/Privacy/Privacy.jsx:59
+msgid "This website uses Cloudflare Turnstile to prevent spam. Turnstile may collect technical information about your device and browser to verify that you are a human. This data is processed in accordance with Cloudflare's Privacy Policy."
+msgstr ""
+
+#: src/pages/Privacy/Privacy.jsx:54
+msgid "To exercise any of these rights, please contact us at <0>contact@wallydev.dev</0>."
+msgstr ""
+
+#: src/pages/Privacy/Privacy.jsx:38
+msgid "We do not sell, rent, or share your personal information with third parties for marketing purposes."
+msgstr ""
+
+#: src/pages/Privacy/Privacy.jsx:23
+msgid "When you use the contact form on this website, we collect the following information:"
+msgstr ""
+
+#: src/pages/Privacy/Privacy.jsx:48
+msgid "You have the right to:"
+msgstr ""
