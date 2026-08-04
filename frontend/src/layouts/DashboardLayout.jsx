@@ -1,6 +1,6 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { BookOpen, LayoutDashboard, LogOut, Settings, Menu, Briefcase, Code2, FolderOpen, Search, Mail, Bell } from "lucide-react";
+import { BookOpen, LayoutDashboard, LogOut, Settings, Menu, Briefcase, Code2, FolderOpen, Search, Mail, Bell, ChevronDown } from "lucide-react";
 import { useState, useContext, useEffect } from "react";
 import { ToastProvider } from "../contexts/ToastContext";
 import "./DashboardLayout.scss";
@@ -11,6 +11,9 @@ export default function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const { theme } = useContext(ThemeContext);
   const [newMessagesCount, setNewMessagesCount] = useState(0);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [settingsOpen, setSettingsOpen] = useState(() => location.pathname.startsWith("/dashboard/settings"));
 
   useEffect(() => {
     const fetchUnreadCount = async () => {
@@ -81,18 +84,54 @@ export default function DashboardLayout() {
             <FolderOpen className="icon" />
             {sidebarOpen && <span>Projects</span>}
           </Link>
-          <Link to="/dashboard/settings" className="dashboard__nav-link">
-            <Settings className="icon" />
-            {sidebarOpen && <span>Settings</span>}
-          </Link>
-          <Link to="/dashboard/settings/seo" className="dashboard__nav-link">
-            <Search className="icon" />
-            {sidebarOpen && <span>SEO</span>}
-          </Link>
-          <Link to="/dashboard/settings/notifications" className="dashboard__nav-link">
-            <Bell className="icon" />
-            {sidebarOpen && <span>Notifications</span>}
-          </Link>
+
+          {/* Settings group (accordion) */}
+          <div className="dashboard__nav-group">
+            <button
+              type="button"
+              className="dashboard__nav-link dashboard__nav-toggle"
+              onClick={() => {
+                if (!sidebarOpen) {
+                  navigate("/dashboard/settings");
+                } else {
+                  setSettingsOpen((prev) => !prev);
+                }
+              }}
+            >
+              <Settings className="icon" />
+              {sidebarOpen && <span>Settings</span>}
+              {sidebarOpen && (
+                <ChevronDown className={`dashboard__chevron ${settingsOpen ? "dashboard__chevron--open" : ""}`} size={16} />
+              )}
+            </button>
+
+            {sidebarOpen && settingsOpen && (
+              <div className="dashboard__nav-submenu">
+                <NavLink
+                  to="/dashboard/settings"
+                  end
+                  className={({ isActive }) => `dashboard__nav-link dashboard__nav-subitem${isActive ? " dashboard__nav-link--active" : ""}`}
+                >
+                  <Settings className="icon" size={16} />
+                  <span>Settings</span>
+                </NavLink>
+                <NavLink
+                  to="/dashboard/settings/seo"
+                  className={({ isActive }) => `dashboard__nav-link dashboard__nav-subitem${isActive ? " dashboard__nav-link--active" : ""}`}
+                >
+                  <Search className="icon" size={16} />
+                  <span>SEO</span>
+                </NavLink>
+                <NavLink
+                  to="/dashboard/settings/notifications"
+                  className={({ isActive }) => `dashboard__nav-link dashboard__nav-subitem${isActive ? " dashboard__nav-link--active" : ""}`}
+                >
+                  <Bell className="icon" size={16} />
+                  <span>Notifications</span>
+                </NavLink>
+              </div>
+            )}
+          </div>
         </nav>
 
         <div className="dashboard__sidebar-footer">

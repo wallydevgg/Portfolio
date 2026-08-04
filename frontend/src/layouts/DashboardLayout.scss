@@ -90,6 +90,56 @@
     &:hover {
       @include theme-color(background-color, #27272a, #f3f4f6);
     }
+
+    &--active {
+      background: rgba(255, 137, 6, 0.12);
+      @include theme-color(color, #ff8906, #ff8906);
+    }
+  }
+
+  &__nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__nav-toggle {
+    width: 100%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+  }
+
+  &__chevron {
+    margin-left: auto;
+    @include theme-color(color, #a1a1aa, #71717a);
+    @include transition(transform);
+
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__nav-submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-left: 0.75rem;
+    padding-left: 0.75rem;
+    @include theme-color(border-left-color, #27272a, #e5e7eb);
+    border-left-width: 1px;
+    border-left-style: solid;
+  }
+
+  &__nav-subitem {
+    padding: 0.4rem 0.75rem;
+
+    .icon {
+      width: 1rem;
+      height: 1rem;
+    }
   }
 
   &__badge {

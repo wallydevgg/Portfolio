@@ -14,6 +14,7 @@ import SeoSettingsPage from "@/pages/Dashboard/Settings/SEO";
 import MessagesPage from "@/pages/Dashboard/Messages/index";
 import MessageDetailPage from "@/pages/Dashboard/Messages/Detail";
 import NotificationsSettings from "@/pages/Dashboard/Settings/Notifications";
+import OverviewPage from "@/pages/Dashboard/Overview/index";
 import BlogPage from "@/pages/Blog/BlogPage";
 import PrivacyPage from "@/pages/Privacy/Privacy";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -52,7 +53,7 @@ const router = createBrowserRouter(
             </ProtectedRoute>
           ),
           children: [
-            { path: "", element: <PostsPage /> },
+            { path: "", element: <OverviewPage /> },
             { path: "posts", element: <PostsPage /> },
             { path: "posts/new", element: <PostEditorPage /> },
             { path: "posts/:id/edit", element: <PostEditorPage /> },

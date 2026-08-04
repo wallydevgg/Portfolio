@@ -270,8 +270,8 @@ msgstr "See More"
 #~ msgid "skills.frontend"
 #~ msgstr "Frontend"
 
-#: src/pages/Home/Sections/Skills/Skills.jsx:42
 #: src/pages/Home/Sections/Skills/Skills.jsx:56
+#: src/pages/Home/Sections/Skills/Skills.jsx:70
 msgid "skills.title"
 msgstr "skills"
 
