@@ -4,11 +4,25 @@ import { t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { usePortfolioApi } from "@/features/portfolio/usePortfolioApi";
 import { getTranslation } from "@/helpers/i18nContent";
+import { resolveSkillIcon } from "@/components/IconPicker";
 
-const SkillBar = ({ name, level }) => (
+const SkillIcon = ({ name }) => {
+  const Icon = resolveSkillIcon(name);
+  if (!Icon) return null;
+  return (
+    <span className="skill-icon" title={name}>
+      <Icon />
+    </span>
+  );
+};
+
+const SkillBar = ({ name, level, icon }) => (
   <div className="skill-item">
     <div className="skill-header">
-      <span className="skill-name">{name}</span>
+      <span className="skill-name">
+        <SkillIcon name={icon} />
+        {name}
+      </span>
       <span className="skill-level">{level}%</span>
     </div>
     <div className="skill-bar">
@@ -63,7 +77,7 @@ const Skills = () => {
           <div key={category.id} className="skill-category">
             <h3>{getTranslation(category.name)}</h3>
             {category.skills.map((s) => (
-              <SkillBar key={s.id} name={s.name} level={s.level} />
+              <SkillBar key={s.id} name={s.name} level={s.level} icon={s.icon} />
             ))}
           </div>
         ))}

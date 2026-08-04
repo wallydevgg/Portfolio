@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { usePortfolioApi } from "@/features/portfolio/usePortfolioApi";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Pencil, Trash2 } from "lucide-react";
+import IconPicker, { resolveSkillIcon } from "@/components/IconPicker";
 import "./Skills.scss";
 
 export default function SkillsPage() {
@@ -9,11 +10,13 @@ export default function SkillsPage() {
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState({});
   const [showCategoryForm, setShowCategoryForm] = useState(false);
+  const [editingCategory, setEditingCategory] = useState(null);
   const [showSkillForm, setShowSkillForm] = useState(null);
   const [categoryForm, setCategoryForm] = useState({ name_en: "", name_es: "", order: 0 });
   const [skillForm, setSkillForm] = useState({
     name: "",
     level: 50,
+    icon: "",
     category_id: null,
     order: 0,
   });
@@ -40,19 +43,37 @@ export default function SkillsPage() {
     }
   };
 
-  const handleAddCategory = async (e) => {
+  // === CATEGORY CRUD ===
+
+  const handleSaveCategory = async (e) => {
     e.preventDefault();
     try {
-      await api.createSkillCategory({
+      const payload = {
         name: { en: categoryForm.name_en, es: categoryForm.name_es },
-        order: parseInt(categoryForm.order),
-      });
+        order: parseInt(categoryForm.order) || 0,
+      };
+      if (editingCategory) {
+        await api.updateSkillCategory(editingCategory, payload);
+      } else {
+        await api.createSkillCategory(payload);
+      }
       await loadSkills();
       setCategoryForm({ name_en: "", name_es: "", order: 0 });
       setShowCategoryForm(false);
+      setEditingCategory(null);
     } catch (err) {
-      alert("Error adding category: " + err.message);
+      alert("Error saving category: " + err.message);
     }
+  };
+
+  const handleEditCategory = (cat) => {
+    setEditingCategory(cat.id);
+    setCategoryForm({
+      name_en: cat.name?.en || "",
+      name_es: cat.name?.es || "",
+      order: cat.order || 0,
+    });
+    setShowCategoryForm(true);
   };
 
   const handleDeleteCategory = async (catId) => {
@@ -66,22 +87,46 @@ export default function SkillsPage() {
     }
   };
 
-  const handleAddSkill = async (e, catId) => {
+  // === SKILL CRUD ===
+
+  const handleSaveSkill = async (e) => {
     e.preventDefault();
+    if (!skillForm.category_id) {
+      alert("Please select a category.");
+      return;
+    }
     try {
-      const payload = { ...skillForm, category_id: catId };
+      const payload = {
+        name: skillForm.name,
+        level: parseInt(skillForm.level) || 0,
+        icon: skillForm.icon || null,
+        category_id: skillForm.category_id,
+        order: parseInt(skillForm.order) || 0,
+      };
       if (editingSkill) {
         await api.updateSkill(editingSkill, payload);
-        setEditingSkill(null);
       } else {
         await api.createSkill(payload);
       }
       await loadSkills();
-      setSkillForm({ name: "", level: 50, category_id: null, order: 0 });
+      setSkillForm({ name: "", level: 50, icon: "", category_id: null, order: 0 });
       setShowSkillForm(null);
+      setEditingSkill(null);
     } catch (err) {
       alert("Error saving skill: " + err.message);
     }
+  };
+
+  const handleEditSkill = (catId, skill) => {
+    setShowSkillForm(catId);
+    setEditingSkill(skill.id);
+    setSkillForm({
+      name: skill.name,
+      level: skill.level,
+      icon: skill.icon || "",
+      category_id: skill.category_id,
+      order: skill.order,
+    });
   };
 
   const handleDeleteSkill = async (skillId) => {
@@ -112,8 +157,8 @@ export default function SkillsPage() {
       )}
 
       {showCategoryForm && (
-        <form onSubmit={handleAddCategory} className="category-form">
-          <h2>New Category</h2>
+        <form onSubmit={handleSaveCategory} className="category-form">
+          <h2>{editingCategory ? "Edit Category" : "New Category"}</h2>
           <div className="form-row">
             <div className="form-group">
               <label>Name (English)</label>
@@ -155,7 +200,11 @@ export default function SkillsPage() {
             <button
               type="button"
               className="btn-secondary"
-              onClick={() => setShowCategoryForm(false)}
+              onClick={() => {
+                setShowCategoryForm(false);
+                setEditingCategory(null);
+                setCategoryForm({ name_en: "", name_es: "", order: 0 });
+              }}
             >
               Cancel
             </button>
@@ -175,10 +224,16 @@ export default function SkillsPage() {
               </button>
               <h3>{category.name?.en || ""}</h3>
               <button
+                className="btn-small"
+                onClick={() => handleEditCategory(category)}
+              >
+                <Pencil size={14} /> Edit
+              </button>
+              <button
                 className="btn-small btn-danger"
                 onClick={() => handleDeleteCategory(category.id)}
               >
-                Delete
+                <Trash2 size={14} /> Delete
               </button>
             </div>
 
@@ -193,6 +248,7 @@ export default function SkillsPage() {
                       setSkillForm({
                         name: "",
                         level: 50,
+                        icon: "",
                         category_id: category.id,
                         order: 0,
                       });
@@ -203,10 +259,7 @@ export default function SkillsPage() {
                 )}
 
                 {showSkillForm === category.id && (
-                  <form
-                    onSubmit={(e) => handleAddSkill(e, category.id)}
-                    className="skill-form"
-                  >
+                  <form onSubmit={handleSaveSkill} className="skill-form">
                     <div className="form-group">
                       <label>Skill Name</label>
                       <input
@@ -218,6 +271,41 @@ export default function SkillsPage() {
                         required
                       />
                     </div>
+
+                    <div className="form-group">
+                      <label>Category</label>
+                      <select
+                        value={skillForm.category_id || ""}
+                        onChange={(e) =>
+                          setSkillForm({
+                            ...skillForm,
+                            category_id: parseInt(e.target.value),
+                          })
+                        }
+                        required
+                      >
+                        <option value="" disabled>
+                          Select category…
+                        </option>
+                        {categories.map((c) => (
+                          <option key={c.id} value={c.id}>
+                            {c.name?.en || c.name?.es || c.id}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="form-group">
+                      <label>Icon</label>
+                      <IconPicker
+                        value={skillForm.icon}
+                        onChange={(icon) =>
+                          setSkillForm({ ...skillForm, icon })
+                        }
+                      />
+                      <small>Choose a technology icon. Optional — shows on the public site.</small>
+                    </div>
+
                     <div className="form-group">
                       <label>Level (%): {skillForm.level}%</label>
                       <input
@@ -247,7 +335,10 @@ export default function SkillsPage() {
                       <button
                         type="button"
                         className="btn-secondary"
-                        onClick={() => setShowSkillForm(null)}
+                        onClick={() => {
+                          setShowSkillForm(null);
+                          setEditingSkill(null);
+                        }}
                       >
                         Cancel
                       </button>
@@ -261,30 +352,24 @@ export default function SkillsPage() {
                     .map((skill) => (
                       <div key={skill.id} className="skill-item">
                         <div className="skill-info">
-                          <span className="skill-name">{skill.name}</span>
+                          <span className="skill-name">
+                            {skill.icon ? <SkillIcon name={skill.icon} /> : null}
+                            {skill.name}
+                          </span>
                           <span className="skill-level">{skill.level}%</span>
                         </div>
                         <div className="skill-actions">
                           <button
                             className="btn-small"
-                            onClick={() => {
-                              setShowSkillForm(category.id);
-                              setEditingSkill(skill.id);
-                              setSkillForm({
-                                name: skill.name,
-                                level: skill.level,
-                                category_id: category.id,
-                                order: skill.order,
-                              });
-                            }}
+                            onClick={() => handleEditSkill(category.id, skill)}
                           >
-                            Edit
+                            <Pencil size={14} /> Edit
                           </button>
                           <button
                             className="btn-small btn-danger"
                             onClick={() => handleDeleteSkill(skill.id)}
                           >
-                            Delete
+                            <Trash2 size={14} /> Delete
                           </button>
                         </div>
                       </div>
@@ -296,5 +381,19 @@ export default function SkillsPage() {
         ))}
       </div>
     </div>
+  );
+}
+
+/**
+ * Resolves an icon name to its component via the IconPicker catalog.
+ * Unknown/legacy names render as null.
+ */
+function SkillIcon({ name }) {
+  const Icon = resolveSkillIcon(name);
+  if (!Icon) return null;
+  return (
+    <span className="skill-icon" title={name}>
+      <Icon size={16} />
+    </span>
   );
 }

@@ -61,6 +61,7 @@ class SkillCategorySchema(SkillCategoryBase):
 class SkillBase(BaseModel):
     name: str
     level: int
+    icon: str | None = None
     order: int = 0
 
 class SkillCreate(SkillBase):
@@ -69,6 +70,7 @@ class SkillCreate(SkillBase):
 class SkillUpdate(BaseModel):
     name: str | None = None
     level: int | None = None
+    icon: str | None = None
     category_id: int | None = None
     order: int | None = None
 

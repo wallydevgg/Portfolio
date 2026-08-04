@@ -60,8 +60,25 @@
       font-size: 0.9rem;
 
       .skill-name {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
         font-weight: $fw-regular;
         @include theme-color(color, $DM-Title, $LM-Title);
+      }
+
+      .skill-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: $color-primary;
+        font-size: 1.05rem;
+        flex-shrink: 0;
+
+        svg {
+          width: 1em;
+          height: 1em;
+        }
       }
 
       .skill-level {

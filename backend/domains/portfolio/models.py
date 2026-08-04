@@ -32,6 +32,7 @@ class Skill(Base):
     id          = Column(Integer, primary_key=True, index=True)
     name        = Column(String, nullable=False)
     level       = Column(Integer, nullable=False)
+    icon        = Column(String, nullable=True)
     category_id = Column(Integer, ForeignKey("skill_categories.id", ondelete="CASCADE"), nullable=False)
     order       = Column(Integer, default=0)
     created_at  = Column(DateTime(timezone=True), server_default=func.now())
