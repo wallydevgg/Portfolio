@@ -111,7 +111,9 @@ import {
   SiAnthropic,
   SiClaude,
   SiLangchain,
+  SiRedux,
 } from "react-icons/si";
+import { FaAws, FaDatabase, FaLayerGroup } from "react-icons/fa6";
 import "./IconPicker.scss";
 
 /**
@@ -131,6 +133,8 @@ const ICONS = [
   { name: "Sass", icon: SiSass },
   { name: "Tailwind", icon: SiTailwindcss },
   { name: "Bootstrap", icon: SiBootstrap },
+  { name: "Redux", icon: SiRedux },
+  { name: "Zustand", icon: FaLayerGroup },
   // Lenguajes
   { name: "TypeScript", icon: SiTypescript },
   { name: "JavaScript", icon: SiJavascript },
@@ -162,6 +166,7 @@ const ICONS = [
   { name: "MongoDB", icon: SiMongodb },
   { name: "Redis", icon: SiRedis },
   { name: "SQLite", icon: SiSqlite },
+  { name: "SQL", icon: FaDatabase },
   { name: "Elasticsearch", icon: SiElasticsearch },
   // DevOps / Infra
   { name: "Docker", icon: SiDocker },
@@ -186,6 +191,7 @@ const ICONS = [
   { name: "Vercel", icon: SiVercel },
   { name: "Netlify", icon: SiNetlify },
   { name: "Cloudflare", icon: SiCloudflare },
+  { name: "AWS", icon: FaAws },
   { name: "Firebase", icon: SiFirebase },
   { name: "Supabase", icon: SiSupabase },
   { name: "MinIO", icon: SiMinio },

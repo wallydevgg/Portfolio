@@ -88,17 +88,48 @@
     }
 
     .skill-bar {
-      height: 6px;
+      height: 4px;
       background: rgba(167, 169, 190, 0.2);
-      border-radius: 3px;
+      border-radius: 2px;
       overflow: hidden;
 
       .skill-progress {
         height: 100%;
         background: linear-gradient(90deg, $color-primary, $color-secondary);
-        border-radius: 3px;
+        border-radius: 2px;
         transition: width 0.8s ease;
       }
+    }
+  }
+
+  .skills-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+
+    .skills-cv-btn {
+      @include flex-center;
+      gap: 0.5rem;
+      background: transparent;
+      border: solid 0.12rem $color-primary;
+      color: $color-primary;
+      border-radius: 2rem;
+      padding: 0.65rem 1.5rem;
+      font-family: var(--font-1);
+      font-weight: $fw-semibold;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+
+      &:hover {
+        background: $color-primary;
+        color: $bg-dark;
+        transform: translateY(-2px);
+      }
+
+      svg { transition: transform 0.25s ease; }
+
+      &:hover svg { transform: translateX(4px); }
     }
   }
 }

@@ -127,43 +127,67 @@
     .social-buttons {
       margin-top: 1.5rem;
       display: flex;
-      gap: 8%;
+      gap: 0.75rem;
       font-size: 1rem;
+      flex-wrap: wrap;
 
       a { text-decoration: none; }
 
       .social-btn {
         @include flex-center;
+        gap: 0.5rem;
         border: solid 0.12rem;
-        border-radius: 1.25rem;
-        padding: 0.35rem 1rem;
+        border-radius: 2rem;
+        padding: 0.55rem 0.75rem;
         background-color: transparent;
         cursor: pointer;
-        width: 10rem;
-        gap: 5%;
         text-decoration: none;
         font-weight: $fw-semibold;
+        font-family: var(--font-1);
+        font-size: 0.9rem;
         @include theme-color(color, $DM-Title, $LM-Title);
+        transition: all 0.25s ease;
+        overflow: hidden;
+        white-space: nowrap;
 
-        button {
-          background-color: transparent;
-          border: none;
-          color: white;
-          &:hover { color: $color-primary; }
+        &__icon {
+          @include flex-center;
+          flex-shrink: 0;
+          font-size: 1.1rem;
+        }
+
+        &__label {
+          max-width: 0;
+          opacity: 0;
+          overflow: hidden;
+          transition: max-width 0.25s ease, opacity 0.25s ease, margin-left 0.25s ease;
         }
 
         &:hover {
-          @include transition;
-          cursor: pointer;
+          @include theme-color(color, $color-primary, $color-primary);
+          border-color: $color-primary;
+          padding-right: 1.1rem;
 
-          .dark-theme & { color: $color-primary; }
-          .light-theme & {
-            color: $color-primary;
-            border: $color-primary solid 0.12rem;
+          .social-btn__label {
+            max-width: 10rem;
+            opacity: 1;
+            margin-left: 0.15rem;
           }
         }
 
-        *:hover { @include transition; }
+        &--cv {
+          background: none;
+          border: solid 0.12rem;
+          @include theme-color(border-color, $DM-Title, $LM-Title);
+
+          &:hover {
+            background: $color-primary;
+            border-color: $color-primary;
+            color: $bg-dark;
+
+            .social-btn__label { color: $bg-dark; }
+          }
+        }
       }
     }
   }

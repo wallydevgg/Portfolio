@@ -5,7 +5,6 @@ import fotowaldir from "@/images/fotowaldir.webp";
 import {
   faEnvelope,
   faDownload,
-  faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { faLinkedin, faGithub } from "@fortawesome/free-brands-svg-icons";
 import "./Hero.scss";
@@ -21,14 +20,6 @@ const Hero = () => {
     link.click();
   };
 
-  const scrollToSection = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      const top = el.getBoundingClientRect().top + window.pageYOffset - 90;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
-  };
-
   return (
     <div className="hero-container" id="hero">
       <div className="hero-left">
@@ -39,23 +30,21 @@ const Hero = () => {
         </h1>
         <p>
           <Trans>
-            +5 Years of experience{" "}
-            <span className="highlight">Fullstack Web Developer</span> with a
-            solid background in{" "}
-            <span className="highlight">software development</span>
+            +5 years building scalable{" "}
+            <span className="highlight">fullstack web applications</span>
           </Trans>
         </p>
         <div className="social-buttons">
-          {/* <Link to="/blog" className="social-btn">
-            <Icon css="icon" icon={faArrowRight} /> {t`hero.readBlog`}
-          </Link> */}
           <Link
             to="https://github.com/wallydevgg"
             className="social-btn"
             target="_blank"
             rel="noreferrer"
           >
-            <Icon css="icon" icon={faGithub} /> GitHub
+            <span className="social-btn__icon">
+              <Icon css="icon" icon={faGithub} />
+            </span>
+            <span className="social-btn__label">GitHub</span>
           </Link>
           <Link
             to="https://www.linkedin.com/in/waldirxam/"
@@ -63,17 +52,26 @@ const Hero = () => {
             target="_blank"
             rel="noreferrer"
           >
-            <Icon css="icon" icon={faLinkedin} /> LinkedIn
+            <span className="social-btn__icon">
+              <Icon css="icon" icon={faLinkedin} />
+            </span>
+            <span className="social-btn__label">LinkedIn</span>
           </Link>
           <Link to="mailto:contact@wallydev.dev" className="social-btn">
-            <Icon css="icon" icon={faEnvelope} /> {t`hero.contactButton`}
+            <span className="social-btn__icon">
+              <Icon css="icon" icon={faEnvelope} />
+            </span>
+            <span className="social-btn__label">{t`hero.contactButton`}</span>
           </Link>
-          {/* <button
+          <button
             className="social-btn social-btn--cv"
             onClick={handleDownloadCV}
           >
-            <Icon css="icon" icon={faDownload} /> {t`hero.downloadCV`}
-          </button> */}
+            <span className="social-btn__icon">
+              <Icon css="icon" icon={faDownload} />
+            </span>
+            <span className="social-btn__label">{t`hero.downloadCV`}</span>
+          </button>
         </div>
       </div>
       <div className="hero-right">
