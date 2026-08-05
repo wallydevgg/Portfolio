@@ -50,7 +50,7 @@ msgstr ""
 #~ msgid "{0}"
 #~ msgstr ""
 
-#: src/pages/Home/Sections/Hero/Hero.jsx:32
+#: src/pages/Home/Sections/Hero/Hero.jsx:48
 msgid "+5 years building scalable <0>fullstack web applications</0>"
 msgstr "+5 years building scalable <0>fullstack web applications</0>"
 
@@ -188,19 +188,23 @@ msgstr "experience"
 msgid "Full Stack Developer"
 msgstr "Full Stack Developer"
 
-#: src/pages/Home/Sections/Hero/Hero.jsx:64
+#: src/pages/Home/Sections/Hero/Hero.jsx:80
 msgid "hero.contactButton"
 msgstr "Contact me"
 
-#: src/pages/Home/Sections/Hero/Hero.jsx:73
+#: src/pages/Home/Sections/Hero/Hero.jsx:86
+msgid "hero.cvNotUploaded"
+msgstr "CV not uploaded yet"
+
+#: src/pages/Home/Sections/Hero/Hero.jsx:91
 msgid "hero.downloadCV"
 msgstr "Download CV"
 
-#: src/pages/Home/Sections/Hero/Hero.jsx:79
+#: src/pages/Home/Sections/Hero/Hero.jsx:97
 msgid "hero.status"
 msgstr "Available for work"
 
-#: src/pages/Home/Sections/Hero/Hero.jsx:27
+#: src/pages/Home/Sections/Hero/Hero.jsx:43
 msgid "Hi! I'm <0>Waldir Apaza</0>"
 msgstr "Hi! I'm <0>Waldir Apaza</0>"
 
@@ -274,18 +278,18 @@ msgstr "See More"
 #~ msgid "skills.backend"
 #~ msgstr "Backend"
 
-#: src/pages/Home/Sections/Skills/Skills.jsx:81
-#: src/pages/Home/Sections/Skills/Skills.jsx:88
+#: src/pages/Home/Sections/Skills/Skills.jsx:90
+#: src/pages/Home/Sections/Skills/Skills.jsx:97
 msgid "skills.colBackend"
 msgstr "Backend + DevOps"
 
-#: src/pages/Home/Sections/Skills/Skills.jsx:80
-#: src/pages/Home/Sections/Skills/Skills.jsx:87
+#: src/pages/Home/Sections/Skills/Skills.jsx:89
+#: src/pages/Home/Sections/Skills/Skills.jsx:96
 msgid "skills.colFrontend"
 msgstr "Frontend"
 
-#: src/pages/Home/Sections/Skills/Skills.jsx:79
-#: src/pages/Home/Sections/Skills/Skills.jsx:86
+#: src/pages/Home/Sections/Skills/Skills.jsx:88
+#: src/pages/Home/Sections/Skills/Skills.jsx:95
 msgid "skills.colLanguages"
 msgstr "Languages + Databases"
 
@@ -297,12 +301,12 @@ msgstr "Languages + Databases"
 #~ msgid "skills.frontend"
 #~ msgstr "Frontend"
 
-#: src/pages/Home/Sections/Skills/Skills.jsx:170
+#: src/pages/Home/Sections/Skills/Skills.jsx:179
 msgid "skills.seeAllInCV"
 msgstr "See all my skills in the CV"
 
-#: src/pages/Home/Sections/Skills/Skills.jsx:145
-#: src/pages/Home/Sections/Skills/Skills.jsx:159
+#: src/pages/Home/Sections/Skills/Skills.jsx:154
+#: src/pages/Home/Sections/Skills/Skills.jsx:168
 msgid "skills.title"
 msgstr "skills"
 

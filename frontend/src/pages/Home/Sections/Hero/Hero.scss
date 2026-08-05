@@ -180,12 +180,22 @@
           border: solid 0.12rem;
           @include theme-color(border-color, $DM-Title, $LM-Title);
 
-          &:hover {
+          &:hover:not(:disabled) {
             background: $color-primary;
             border-color: $color-primary;
             color: $bg-dark;
 
             .social-btn__label { color: $bg-dark; }
+          }
+
+          &:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+
+            .social-btn__label {
+              max-width: 0;
+              opacity: 0;
+            }
           }
         }
       }

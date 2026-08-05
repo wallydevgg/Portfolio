@@ -1,6 +1,6 @@
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
-import { BookOpen, LayoutDashboard, LogOut, Settings, Menu, Briefcase, Code2, FolderOpen, Search, Mail, Bell, ChevronDown, UserRound } from "lucide-react";
+import { BookOpen, LayoutDashboard, LogOut, Settings, Menu, Briefcase, Code2, FolderOpen, Search, Mail, Bell, ChevronDown, UserRound, FileText } from "lucide-react";
 import { useState, useContext, useEffect } from "react";
 import { ToastProvider } from "../contexts/ToastContext";
 import "./DashboardLayout.scss";
@@ -132,6 +132,13 @@ export default function DashboardLayout() {
                 >
                   <Bell className="icon" size={16} />
                   <span>Notifications</span>
+                </NavLink>
+                <NavLink
+                  to="/dashboard/settings/cv"
+                  className={({ isActive }) => `dashboard__nav-link dashboard__nav-subitem${isActive ? " dashboard__nav-link--active" : ""}`}
+                >
+                  <FileText className="icon" size={16} />
+                  <span>CV</span>
                 </NavLink>
               </div>
             )}

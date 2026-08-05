@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import {
   Bell,
   ChevronRight,
+  FileText,
   Globe,
   Loader2,
   Mail,
@@ -29,6 +30,14 @@ const SECTIONS = [
     description:
       "Configure the contact form recipient, email subject, and external webhooks (comms-hub).",
     tag: "email + webhooks",
+  },
+  {
+    to: "/dashboard/settings/cv",
+    icon: FileText,
+    title: "Resume / CV",
+    description:
+      "Upload the PDF used by the 'Download CV' button on the homepage hero.",
+    tag: "pdf",
   },
 ];
 

@@ -16,6 +16,7 @@ import SeoSettingsPage from "@/pages/Dashboard/Settings/SEO";
 import MessagesPage from "@/pages/Dashboard/Messages/index";
 import MessageDetailPage from "@/pages/Dashboard/Messages/Detail";
 import NotificationsSettings from "@/pages/Dashboard/Settings/Notifications";
+import CVSettingsPage from "@/pages/Dashboard/Settings/CV";
 import OverviewPage from "@/pages/Dashboard/Overview/index";
 import BlogPage from "@/pages/Blog/BlogPage";
 import PrivacyPage from "@/pages/Privacy/Privacy";
@@ -68,6 +69,7 @@ const router = createBrowserRouter(
             { path: "settings", element: <SettingsPage /> },
             { path: "settings/seo", element: <SeoSettingsPage /> },
             { path: "settings/notifications", element: <NotificationsSettings /> },
+            { path: "settings/cv", element: <CVSettingsPage /> },
           ],
         },
       ],

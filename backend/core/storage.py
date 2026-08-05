@@ -36,7 +36,7 @@ def ensure_bucket():
     except Exception as e:
         print(f"Warning: Could not ensure MinIO bucket: {e}")
 
-def upload_file(file_data: bytes, file_name: str) -> str:
+def upload_file(file_data: bytes, file_name: str, content_type: str = "image/jpeg") -> str:
     """Upload file to MinIO and return public URL."""
     try:
         client = get_s3_client()
@@ -44,11 +44,20 @@ def upload_file(file_data: bytes, file_name: str) -> str:
             Bucket=settings.MINIO_BUCKET,
             Key=file_name,
             Body=file_data,
-            ContentType="image/jpeg"
+            ContentType=content_type
         )
         return f"{settings.MINIO_PUBLIC_URL}/{settings.MINIO_BUCKET}/{file_name}"
     except Exception as e:
         raise Exception(f"Failed to upload file to MinIO: {str(e)}")
+
+def file_exists(file_name: str) -> bool:
+    """Check if a file exists in MinIO."""
+    try:
+        client = get_s3_client()
+        client.head_object(Bucket=settings.MINIO_BUCKET, Key=file_name)
+        return True
+    except Exception:
+        return False
 
 def delete_file(file_name: str) -> bool:
     """Delete file from MinIO."""

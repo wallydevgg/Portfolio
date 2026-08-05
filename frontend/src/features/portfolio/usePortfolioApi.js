@@ -155,13 +155,41 @@ export function usePortfolioApi() {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch(`${BASE_URL}/portfolio/upload`, {
+    const res = await fetch(`${BASE_URL}/upload`, {
       method: "POST",
       headers,
       body: formData,
     });
     if (!res.ok) throw new Error("Failed to upload image");
     return res.json();
+  }
+
+  // === CV ===
+
+  async function uploadCV(file) {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch(`${BASE_URL}/cv`, {
+      method: "POST",
+      headers,
+      body: formData,
+    });
+    if (!res.ok) throw new Error("Failed to upload CV");
+    return res.json();
+  }
+
+  async function getCV() {
+    const res = await fetch(`${BASE_URL}/cv`);
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error("Failed to fetch CV");
+    return res.json();
+  }
+
+  async function deleteCV() {
+    const res = await fetch(`${BASE_URL}/cv`, { method: "DELETE", headers });
+    if (!res.ok) throw new Error("Failed to delete CV");
+    return true;
   }
 
   // === ABOUT ===
@@ -198,6 +226,9 @@ export function usePortfolioApi() {
     updateProject,
     deleteProject,
     uploadImage,
+    uploadCV,
+    getCV,
+    deleteCV,
     getAbout,
     updateAbout,
   };

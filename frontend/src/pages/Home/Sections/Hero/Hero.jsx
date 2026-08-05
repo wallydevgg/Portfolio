@@ -10,13 +10,29 @@ import { faLinkedin, faGithub } from "@fortawesome/free-brands-svg-icons";
 import "./Hero.scss";
 import { Trans, t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
+import { useEffect, useState } from "react";
+import { usePortfolioApi } from "@/features/portfolio/usePortfolioApi";
 
 const Hero = () => {
   useLingui();
+  const { getCV } = usePortfolioApi();
+  const [cvUrl, setCvUrl] = useState(null);
+
+  useEffect(() => {
+    getCV()
+      .then((data) => {
+        if (data) setCvUrl(data.url);
+      })
+      .catch(() => {});
+  }, []);
+
   const handleDownloadCV = () => {
+    if (!cvUrl) return;
     const link = document.createElement("a");
-    link.href = "/cv/Waldir_Apaza_CV.pdf";
+    link.href = cvUrl;
     link.download = "Waldir_Apaza_CV.pdf";
+    link.target = "_blank";
+    link.rel = "noreferrer";
     link.click();
   };
 
@@ -66,6 +82,8 @@ const Hero = () => {
           <button
             className="social-btn social-btn--cv"
             onClick={handleDownloadCV}
+            disabled={!cvUrl}
+            title={cvUrl ? undefined : t`hero.cvNotUploaded`}
           >
             <span className="social-btn__icon">
               <Icon css="icon" icon={faDownload} />

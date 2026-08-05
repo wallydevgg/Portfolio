@@ -2,12 +2,15 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
 from core.database import get_db
 from core.security import get_current_user
-from core.storage import upload_file, delete_file
+from core.storage import upload_file, delete_file, file_exists
+from core.config import settings
 from domains.portfolio import models, schemas
 from domains.users.models import User
 import uuid
 
 router = APIRouter(tags=["portfolio"])
+
+CV_FILE_NAME = "cv/Waldir_Apaza_CV.pdf"
 
 # === EXPERIENCE ENDPOINTS ===
 
@@ -172,3 +175,33 @@ async def upload_image(file: UploadFile = File(...)):
         return {"url": url}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+# === CV ENDPOINTS ===
+
+@router.post("/cv", dependencies=[Depends(get_current_user)])
+async def upload_cv(file: UploadFile = File(...)):
+    """Upload (or replace) the CV PDF. Stored at a fixed key so the public
+    URL never changes."""
+    if file.content_type != "application/pdf" and not file.filename.lower().endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Only PDF files are allowed")
+
+    try:
+        contents = await file.read()
+        url = upload_file(contents, CV_FILE_NAME, content_type="application/pdf")
+        return {"url": url}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.get("/cv")
+def get_cv():
+    """Public: return the CV public URL (or 404 if not uploaded yet)."""
+    if not file_exists(CV_FILE_NAME):
+        raise HTTPException(status_code=404, detail="CV not uploaded")
+    return {"url": f"{settings.MINIO_PUBLIC_URL}/{settings.MINIO_BUCKET}/{CV_FILE_NAME}"}
+
+@router.delete("/cv", status_code=204, dependencies=[Depends(get_current_user)])
+def delete_cv():
+    """Delete the uploaded CV."""
+    if not file_exists(CV_FILE_NAME):
+        raise HTTPException(status_code=404, detail="CV not uploaded")
+    delete_file(CV_FILE_NAME)
