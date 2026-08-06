@@ -28,7 +28,7 @@ const NotificationsSettings = () => {
   const fetchSettings = async () => {
     try {
       const token = localStorage.getItem("admin_token");
-      const url = `${import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1"}/settings/notifications`;
+      const url = `${import.meta.env.VITE_API_URL || "/api/v1"}/settings/notifications`;
       const res = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -50,7 +50,7 @@ const NotificationsSettings = () => {
     
     try {
       const token = localStorage.getItem("admin_token");
-      const url = `${import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1"}/settings/notifications`;
+      const url = `${import.meta.env.VITE_API_URL || "/api/v1"}/settings/notifications`;
       const res = await fetch(url, {
         method: "PUT",
         headers: { 
@@ -79,7 +79,7 @@ const NotificationsSettings = () => {
     
     try {
       const token = localStorage.getItem("admin_token");
-      const url = `${import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1"}/settings/notifications/test`;
+      const url = `${import.meta.env.VITE_API_URL || "/api/v1"}/settings/notifications/test`;
       const res = await fetch(url, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` }

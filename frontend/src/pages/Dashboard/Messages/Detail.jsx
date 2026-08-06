@@ -14,7 +14,7 @@ const MessageDetail = () => {
   const fetchMessage = async () => {
     try {
       const token = localStorage.getItem("admin_token");
-      const url = `${import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1"}/contact/${id}`;
+      const url = `${import.meta.env.VITE_API_URL || "/api/v1"}/contact/${id}`;
       const res = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -42,7 +42,7 @@ const MessageDetail = () => {
   const updateStatus = async (newStatus) => {
     try {
       const token = localStorage.getItem("admin_token");
-      const url = `${import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1"}/contact/${id}/status`;
+      const url = `${import.meta.env.VITE_API_URL || "/api/v1"}/contact/${id}/status`;
       await fetch(url, {
         method: "PATCH",
         headers: { 
@@ -61,7 +61,7 @@ const MessageDetail = () => {
     if (!window.confirm("Are you sure you want to delete this message?")) return;
     try {
       const token = localStorage.getItem("admin_token");
-      const url = `${import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1"}/contact/${id}`;
+      const url = `${import.meta.env.VITE_API_URL || "/api/v1"}/contact/${id}`;
       await fetch(url, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
@@ -79,7 +79,7 @@ const MessageDetail = () => {
     setReplying(true);
     try {
       const token = localStorage.getItem("admin_token");
-      const url = `${import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1"}/contact/${id}/reply`;
+      const url = `${import.meta.env.VITE_API_URL || "/api/v1"}/contact/${id}/reply`;
       const res = await fetch(url, {
         method: "POST",
         headers: { 

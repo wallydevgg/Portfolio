@@ -67,7 +67,7 @@ const Contact = () => {
         turnstile_token: token
       };
 
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1";
+      const apiUrl = import.meta.env.VITE_API_URL || "/api/v1";
       const res = await fetch(`${apiUrl}/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },

@@ -25,7 +25,7 @@ Portfolio personal + Blog + CMS admin de **Waldir Apaza** — Fullstack Web Deve
   - Skills management (categorías + items con nivel %)
   - Projects management con carga de imágenes a MinIO
   - Blog Posts CRUD (existente)
-  - Settings (placeholder para futuras opciones)
+  - Settings (SEO, Notifications, CV upload)
 - **Image Storage** — MinIO S3-compatible dockerizado
 - **Dark mode** — Por defecto, con toggle manual
 - **SEO** — Meta tags dinámicos, Open Graph, JSON-LD
@@ -70,7 +70,8 @@ Portfolio/
 │   │   │   │   ├── Experience/   # CRUD empresas/roles
 │   │   │   │   ├── Skills/       # CRUD categorías + skills
 │   │   │   │   ├── Projects/     # CRUD con upload a MinIO
-│   │   │   │   └── Settings/     # Placeholder futuro
+│   │   │   │   ├── About/        # Configurable About section
+│   │   │   │   ├── Settings/     # SEO, Notifications, CV upload
 │   │   │   └── Login/            # Auth admin
 │   │   ├── features/
 │   │   │   ├── blog/             # useBlogApi hook

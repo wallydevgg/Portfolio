@@ -20,7 +20,7 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8003/api/v1";
+      const apiUrl = import.meta.env.VITE_API_URL || "/api/v1";
       const formData = new URLSearchParams();
       formData.append("username", username);
       formData.append("password", password);

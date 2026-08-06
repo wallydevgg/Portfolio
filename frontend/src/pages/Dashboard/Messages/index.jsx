@@ -13,7 +13,7 @@ const MessagesPage = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("admin_token");
-      const url = new URL(`${import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1"}/contact`);
+      const url = new URL(`${import.meta.env.VITE_API_URL || "/api/v1"}/contact`);
       if (filter) url.searchParams.append("status_filter", filter);
       
       const res = await fetch(url, {
