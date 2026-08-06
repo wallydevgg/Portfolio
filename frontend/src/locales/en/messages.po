@@ -90,6 +90,55 @@ msgstr ""
 msgid "5. Third-Party Services"
 msgstr ""
 
+#: src/pages/Blog/BlogPostPage.jsx:193
+msgid "blog.actions.like"
+msgstr "Like"
+
+#: src/pages/Blog/BlogPostPage.jsx:200
+msgid "blog.actions.share"
+msgstr "Share"
+
+#: src/pages/Blog/BlogPostPage.jsx:126
+#: src/pages/Blog/BlogPostPage.jsx:145
+msgid "blog.backToList"
+msgstr "Back to blog"
+
+#: src/pages/Blog/BlogPostPage.jsx:252
+msgid "blog.comments.contentPlaceholder"
+msgstr "Write your comment..."
+
+#: src/pages/Blog/BlogPostPage.jsx:213
+msgid "blog.comments.empty"
+msgstr "No comments yet. Be the first to comment!"
+
+#: src/pages/Blog/BlogPostPage.jsx:107
+msgid "blog.comments.error"
+msgstr "Could not post your comment. Try again."
+
+#: src/pages/Blog/BlogPostPage.jsx:238
+msgid "blog.comments.leaveComment"
+msgstr "Leave a comment"
+
+#: src/pages/Blog/BlogPostPage.jsx:245
+msgid "blog.comments.namePlaceholder"
+msgstr "Your name"
+
+#: src/pages/Blog/BlogPostPage.jsx:86
+msgid "blog.comments.requiredFields"
+msgstr "Please fill in your name and comment."
+
+#: src/pages/Blog/BlogPostPage.jsx:264
+msgid "blog.comments.sending"
+msgstr "Posting..."
+
+#: src/pages/Blog/BlogPostPage.jsx:264
+msgid "blog.comments.submit"
+msgstr "Post comment"
+
+#: src/pages/Blog/BlogPostPage.jsx:208
+msgid "blog.comments.title"
+msgstr "Comments"
+
 #: src/pages/Blog/BlogPage.jsx:28
 msgid "blog.empty.cta"
 msgstr "Create first post"
@@ -103,6 +152,7 @@ msgid "blog.empty.title"
 msgstr "Coming soon"
 
 #: src/pages/Blog/BlogPage.jsx:221
+#: src/pages/Blog/BlogPostPage.jsx:143
 msgid "blog.error"
 msgstr "Could not load posts. Please try again later."
 

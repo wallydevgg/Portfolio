@@ -49,10 +49,18 @@ class Post(Base):
 
     @property
     def likes_count(self) -> int:
+        # Use cached value from _posts_with_counts() when available,
+        # otherwise fall back to loading the relationship.
+        cached = getattr(self, "_likes_count", None)
+        if cached is not None:
+            return cached
         return len(self.likes)
 
     @property
     def comments_count(self) -> int:
+        cached = getattr(self, "_comments_count", None)
+        if cached is not None:
+            return cached
         return len(self.comments)
 
 

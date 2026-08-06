@@ -19,6 +19,7 @@ import NotificationsSettings from "@/pages/Dashboard/Settings/Notifications";
 import CVSettingsPage from "@/pages/Dashboard/Settings/CV";
 import OverviewPage from "@/pages/Dashboard/Overview/index";
 import BlogPage from "@/pages/Blog/BlogPage";
+import BlogPostPage from "@/pages/Blog/BlogPostPage";
 import PrivacyPage from "@/pages/Privacy/Privacy";
 import { AuthProvider } from "@/contexts/AuthContext";
 import LoginPage from "@/pages/Login/Login";
@@ -40,6 +41,7 @@ const router = createBrowserRouter(
           children: [
             { path: "/", element: <Home /> },
             { path: "/blog", element: <BlogPage /> },
+            { path: "/blog/:slug", element: <BlogPostPage /> },
             { path: "/privacy", element: <PrivacyPage /> },
             { path: "*", element: <NotFoundPage /> },
           ],

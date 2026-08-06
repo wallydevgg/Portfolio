@@ -1,7 +1,8 @@
 # ✅ GENERADO POR CLAUDE - Archivo: backend/domains/blog/router.py
 from fastapi import APIRouter, Depends, HTTPException, status, Query, Request
 from fastapi.responses import Response
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
+from sqlalchemy import func
 from typing import List
 from core.database import get_db
 from core.security import get_current_user
@@ -35,12 +36,48 @@ def _sync_tags(db: Session, post: models.Post, tag_names: List[str]) -> None:
         post.tags.append(tag)
 
 
+def _posts_with_counts(db: Session, query):
+    """Eager-load relationships and attach like/comment counts as subqueries
+    (avoids N+1 from Post.likes_count / Post.comments_count properties)."""
+    counts_likes = (
+        db.query(
+            models.PostLike.post_id,
+            func.count(models.PostLike.id).label("cnt"),
+        )
+        .group_by(models.PostLike.post_id)
+        .subquery()
+    )
+    counts_comments = (
+        db.query(
+            models.Comment.post_id,
+            func.count(models.Comment.id).label("cnt"),
+        )
+        .group_by(models.Comment.post_id)
+        .subquery()
+    )
+    posts = (
+        query.options(selectinload(models.Post.tags), selectinload(models.Post.category))
+        .outerjoin(counts_likes, models.Post.id == counts_likes.c.post_id)
+        .outerjoin(counts_comments, models.Post.id == counts_comments.c.post_id)
+        .add_columns(
+            func.coalesce(counts_likes.c.cnt, 0).label("likes_count"),
+            func.coalesce(counts_comments.c.cnt, 0).label("comments_count"),
+        )
+        .all()
+    )
+    for post, likes_count, comments_count in posts:
+        post._likes_count = likes_count
+        post._comments_count = comments_count
+    return [p for p, _, _ in posts]
+
+
 @router.get("/", response_model=List[schemas.PostSchema])
 def list_posts(
     db: Session = Depends(get_db),
     admin: str = Depends(lambda: None),
 ):
-    return db.query(models.Post).filter(models.Post.is_published == True).order_by(models.Post.created_at.desc()).all()
+    query = db.query(models.Post).filter(models.Post.is_published == True).order_by(models.Post.created_at.desc())
+    return _posts_with_counts(db, query)
 
 
 @router.get("/all", response_model=List[schemas.PostSchema])
@@ -48,7 +85,8 @@ def list_all_posts(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return db.query(models.Post).order_by(models.Post.created_at.desc()).all()
+    query = db.query(models.Post).order_by(models.Post.created_at.desc())
+    return _posts_with_counts(db, query)
 
 
 @router.get("/rss.xml")
@@ -109,6 +147,18 @@ def create_post(
 @router.get("/tags", response_model=List[schemas.TagSchema])
 def list_tags(db: Session = Depends(get_db)):
     return db.query(models.Tag).order_by(models.Tag.name.asc()).all()
+
+
+@router.get("/slug/{slug}", response_model=schemas.PostSchema)
+def get_post_by_slug(slug: str, db: Session = Depends(get_db)):
+    post = (
+        db.query(models.Post)
+        .filter(models.Post.slug == slug, models.Post.is_published == True)
+        .first()
+    )
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    return post
 
 
 @router.get("/{post_id}", response_model=schemas.PostSchema)
