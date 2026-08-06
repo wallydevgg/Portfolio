@@ -20,6 +20,24 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Cleanup GitHub Actions cache (non-main branches)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # GitHub Actions cache quota is 10GB per repo. Caches from PRs and
+          # feature branches accumulate and trigger the "cache quota exceeded"
+          # banner. Delete every cache that is NOT from the main branch.
+          echo "Listing caches..."
+          gh api "repos/${{ github.repository }}/actions/caches" --paginate \
+            --jq '.actions_caches[] | [.id, .ref, .size_in_bytes] | @tsv' \
+            | while IFS=$'\t' read -r id ref size; do
+              if [[ "$ref" != "refs/heads/main" ]]; then
+                echo "Deleting cache $id (ref: $ref, size: $((size / 1024 / 1024)) MB)"
+                gh api -X DELETE "repos/${{ github.repository }}/actions/caches/$id" || true
+              fi
+            done
+          echo "Cache cleanup finished."
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
