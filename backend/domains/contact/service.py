@@ -1,6 +1,5 @@
 import logging
 import smtplib
-import time
 from email.message import EmailMessage
 from email.utils import formatdate
 from typing import Optional, Tuple
@@ -9,36 +8,19 @@ from uuid import uuid4
 import requests
 from sqlalchemy.orm import Session
 
+from core import rate_limit
 from core.config import settings
 from domains.settings.models import NotificationSettings
 
 logger = logging.getLogger(__name__)
 
-# ─── Rate Limiting (In-Memory) ────────────────────────────────────────────────
-# Simple sliding window rate limiter per IP.
-# For a single-instance portfolio, this is perfectly adequate.
-_rate_limits = {}
+# ─── Rate Limiting ────────────────────────────────────────────────────────────
 
-def check_rate_limit(ip: str) -> bool:
+def check_rate_limit(ip: Optional[str]) -> bool:
     """Returns True if allowed, False if rate limited."""
-    if not ip:
-        return True
-    
-    now = time.time()
-    window = 3600  # 1 hour
-    limit = settings.CONTACT_RATE_LIMIT_PER_HOUR
-
-    # Clean up old entries
-    history = _rate_limits.get(ip, [])
-    history = [t for t in history if now - t < window]
-    
-    if len(history) >= limit:
-        _rate_limits[ip] = history
-        return False
-        
-    history.append(now)
-    _rate_limits[ip] = history
-    return True
+    return rate_limit.check_rate_limit(
+        f"contact:{ip}" if ip else "", settings.CONTACT_RATE_LIMIT_PER_HOUR
+    )
 
 
 # ─── Captcha & Geolocation ────────────────────────────────────────────────────

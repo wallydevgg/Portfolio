@@ -90,52 +90,56 @@ msgstr ""
 msgid "5. Third-Party Services"
 msgstr ""
 
-#: src/pages/Blog/BlogPostPage.jsx:193
+#: src/pages/Blog/BlogPostPage.jsx:198
 msgid "blog.actions.like"
 msgstr "Like"
 
-#: src/pages/Blog/BlogPostPage.jsx:200
+#: src/pages/Blog/BlogPostPage.jsx:205
 msgid "blog.actions.share"
 msgstr "Share"
 
-#: src/pages/Blog/BlogPostPage.jsx:126
-#: src/pages/Blog/BlogPostPage.jsx:145
+#: src/pages/Blog/BlogPostPage.jsx:131
+#: src/pages/Blog/BlogPostPage.jsx:150
 msgid "blog.backToList"
 msgstr "Back to blog"
 
-#: src/pages/Blog/BlogPostPage.jsx:252
+#: src/pages/Blog/BlogPostPage.jsx:259
 msgid "blog.comments.contentPlaceholder"
 msgstr "Write your comment..."
 
-#: src/pages/Blog/BlogPostPage.jsx:213
+#: src/pages/Blog/BlogPostPage.jsx:220
 msgid "blog.comments.empty"
 msgstr "No comments yet. Be the first to comment!"
 
-#: src/pages/Blog/BlogPostPage.jsx:107
+#: src/pages/Blog/BlogPostPage.jsx:112
 msgid "blog.comments.error"
 msgstr "Could not post your comment. Try again."
 
-#: src/pages/Blog/BlogPostPage.jsx:238
+#: src/pages/Blog/BlogPostPage.jsx:245
 msgid "blog.comments.leaveComment"
 msgstr "Leave a comment"
 
-#: src/pages/Blog/BlogPostPage.jsx:245
+#: src/pages/Blog/BlogPostPage.jsx:252
 msgid "blog.comments.namePlaceholder"
 msgstr "Your name"
+
+#: src/pages/Blog/BlogPostPage.jsx:102
+msgid "blog.comments.rateLimited"
+msgstr "You have posted too many comments. Please try again later."
 
 #: src/pages/Blog/BlogPostPage.jsx:86
 msgid "blog.comments.requiredFields"
 msgstr "Please fill in your name and comment."
 
-#: src/pages/Blog/BlogPostPage.jsx:264
+#: src/pages/Blog/BlogPostPage.jsx:271
 msgid "blog.comments.sending"
 msgstr "Posting..."
 
-#: src/pages/Blog/BlogPostPage.jsx:264
+#: src/pages/Blog/BlogPostPage.jsx:271
 msgid "blog.comments.submit"
 msgstr "Post comment"
 
-#: src/pages/Blog/BlogPostPage.jsx:208
+#: src/pages/Blog/BlogPostPage.jsx:215
 msgid "blog.comments.title"
 msgstr "Comments"
 
@@ -152,7 +156,7 @@ msgid "blog.empty.title"
 msgstr "Coming soon"
 
 #: src/pages/Blog/BlogPage.jsx:221
-#: src/pages/Blog/BlogPostPage.jsx:143
+#: src/pages/Blog/BlogPostPage.jsx:148
 msgid "blog.error"
 msgstr "Could not load posts. Please try again later."
 

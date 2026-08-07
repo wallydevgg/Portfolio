@@ -62,6 +62,14 @@ class Settings(BaseSettings):
     # Contact form anti-spam
     CONTACT_RATE_LIMIT_PER_HOUR: int = 3
 
+    # Blog comments anti-spam
+    COMMENT_RATE_LIMIT_PER_HOUR: int = 5
+
+    # Enable only when the domain is proxied through Cloudflare. Cloudflare
+    # overwrites CF-Connecting-IP at its edge; without it in front, the header
+    # is client-supplied and trusting it would allow rate limit bypass.
+    TRUST_CF_CONNECTING_IP: bool = False
+
     class Config:
         case_sensitive = True
         env_file = ".env"

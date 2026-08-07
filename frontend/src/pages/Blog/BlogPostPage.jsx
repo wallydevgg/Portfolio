@@ -98,6 +98,11 @@ const BlogPostPage = () => {
           content: commentContent.trim(),
         }),
       });
+      if (res.status === 429) {
+        setSubmitError(t`blog.comments.rateLimited`);
+        setSubmitting(false);
+        return;
+      }
       if (!res.ok) throw new Error("comment submit failed");
       const data = await res.json();
       setComments((prev) => [...prev, data]);

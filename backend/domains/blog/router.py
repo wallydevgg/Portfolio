@@ -4,7 +4,10 @@ from fastapi.responses import Response
 from sqlalchemy.orm import Session, selectinload
 from sqlalchemy import func
 from typing import List
+from core import rate_limit
+from core.config import settings
 from core.database import get_db
+from core.net import get_client_ip
 from core.security import get_current_user
 from domains.blog import models, schemas
 from domains.users.models import User
@@ -213,13 +216,23 @@ def list_comments(post_id: int, db: Session = Depends(get_db)):
 def create_comment(
     post_id: int,
     comment: schemas.CommentCreate,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     _get_post_or_404(db, post_id)
+
+    ip = get_client_ip(request)
+    if not rate_limit.check_rate_limit(
+        f"comment:{ip}" if ip else "", settings.COMMENT_RATE_LIMIT_PER_HOUR
+    ):
+        raise HTTPException(
+            status_code=429, detail="Too many comments. Please try again later."
+        )
+
     db_comment = models.Comment(
         post_id=post_id,
-        author_name=comment.author_name.strip(),
-        content=comment.content.strip(),
+        author_name=comment.author_name,
+        content=comment.content,
     )
     db.add(db_comment)
     db.commit()
@@ -233,7 +246,7 @@ def create_comment(
 def toggle_like(post_id: int, request: Request, db: Session = Depends(get_db)):
     """Toggle a like for the given post, keyed by client IP (one like per IP)."""
     _get_post_or_404(db, post_id)
-    ip = request.client.host if request.client else "unknown"
+    ip = get_client_ip(request) or "unknown"
     existing = (
         db.query(models.PostLike)
         .filter(models.PostLike.post_id == post_id, models.PostLike.ip_address == ip)

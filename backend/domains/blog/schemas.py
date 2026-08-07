@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 from typing import List, Optional
 from datetime import datetime
 
@@ -23,12 +23,24 @@ class TagSchema(BaseModel):
         from_attributes = True
 
 class CommentCreate(BaseModel):
-    author_name: str
-    content: str
+    author_name: str = Field(min_length=1, max_length=80)
+    content: str = Field(min_length=1, max_length=2000)
 
-class CommentSchema(CommentCreate):
+    @field_validator("author_name", "content")
+    @classmethod
+    def not_blank(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("must not be blank")
+        return value
+
+# Deliberately not inheriting from CommentCreate: the length limits apply to
+# incoming submissions only, so pre-existing rows still serialize.
+class CommentSchema(BaseModel):
     id: int
     post_id: int
+    author_name: str
+    content: str
     created_at: datetime
 
     class Config:

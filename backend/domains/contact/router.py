@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from core.database import get_db
 from core.events import emit_event
+from core.net import get_client_ip
 from core.security import get_current_user
 from domains.contact import models, schemas, service
 
@@ -25,11 +26,7 @@ def submit_contact_form(
         return {"detail": "Message received"}
 
     # 2. Rate limiting
-    client_ip = request.client.host if request.client else None
-    # Trust Cloudflare/Proxy headers if present
-    forwarded = request.headers.get("X-Forwarded-For")
-    if forwarded:
-        client_ip = forwarded.split(",")[0].strip()
+    client_ip = get_client_ip(request)
 
     if not service.check_rate_limit(client_ip):
         raise HTTPException(status_code=429, detail="Too many requests. Please try again later.")
