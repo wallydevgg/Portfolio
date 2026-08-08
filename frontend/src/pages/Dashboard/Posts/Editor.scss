@@ -158,6 +158,42 @@
       box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
     }
   }
+
+  &__autosave {
+    font-size: 0.8125rem;
+    opacity: 0.7;
+    align-self: center;
+    white-space: nowrap;
+  }
+
+  &__recovery {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #f59e0b;
+    border-radius: 8px;
+    background: rgba(245, 158, 11, 0.1);
+    font-size: 0.875rem;
+  }
+
+  &__recovery-actions {
+    display: flex;
+    gap: 0.5rem;
+
+    button {
+      padding: 0.35rem 0.75rem;
+      border: 1px solid currentColor;
+      border-radius: 6px;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      font-size: 0.8125rem;
+    }
+  }
 }
 
 // ── TipTap Editor Styles ──

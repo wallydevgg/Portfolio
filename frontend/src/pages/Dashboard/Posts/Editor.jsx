@@ -4,6 +4,7 @@ import { ArrowLeft, Save, Send, Loader2, Eye } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router";
 import { useBlogApi } from "../../../features/blog/useBlogApi";
 import { useToast } from "../../../contexts/ToastContext";
+import { useAutosave } from "@/features/blog/useAutosave";
 import "./Editor.scss";
 
 export default function PostEditorPage() {
@@ -15,10 +16,22 @@ export default function PostEditorPage() {
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [loadingPost, setLoadingPost] = useState(isEditing);
+  const [isPublished, setIsPublished] = useState(false);
+  const [serverUpdatedAt, setServerUpdatedAt] = useState(null);
 
   const { createPost, updatePost, getPost } = useBlogApi();
   const navigate = useNavigate();
   const toast = useToast();
+
+  const { status: autosaveStatus, savedAt, recovered, discardRecovered, clearLocal } = useAutosave({
+    data: { title, content },
+    storageKey: `post-draft:${id ?? "new"}`,
+    // Solo borradores ya creados: un post nuevo dejaría huérfanos, y uno
+    // publicado se estaría editando en vivo.
+    enableRemote: isEditing && !isPublished,
+    onRemoteSave: ({ title, content }) => updatePost(id, { title, content }),
+    serverUpdatedAt,
+  });
 
   useEffect(() => {
     if (!isEditing) return;
@@ -27,6 +40,8 @@ export default function PostEditorPage() {
         const post = await getPost(id);
         setTitle(post.title);
         setContent(post.content);
+        setIsPublished(Boolean(post.is_published));
+        setServerUpdatedAt(post.updated_at || post.created_at);
       } catch {
         toast.error("No se encontró el post.");
         navigate("/dashboard/posts");
@@ -55,6 +70,7 @@ export default function PostEditorPage() {
         await createPost({ title, content, is_published: publish });
         toast.success(publish ? "Post publicado correctamente." : "Borrador guardado.");
       }
+      clearLocal();
       navigate("/dashboard/posts");
     } catch (err) {
       toast.error(err.message || "Error al guardar el post.");
@@ -82,6 +98,13 @@ export default function PostEditorPage() {
           <h1>{isEditing ? "Edit Post" : "Create New Post"}</h1>
         </div>
         <div className="editor-page__actions">
+          <span className="editor-page__autosave">
+            {autosaveStatus === "saving" && "Guardando..."}
+            {autosaveStatus === "saved" &&
+              savedAt &&
+              `Guardado ${savedAt.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" })}`}
+            {autosaveStatus === "error" && "Sin conexión — guardado local"}
+          </span>
           {isEditing && (
             <button
               onClick={() => navigate(`/dashboard/posts/${id}/preview`)}
@@ -112,6 +135,31 @@ export default function PostEditorPage() {
       </div>
 
       <div className="editor-page__container">
+        {recovered && (
+          <div className="editor-page__recovery">
+            <span>
+              Tenés cambios sin guardar de las{" "}
+              {new Date(recovered.savedAt).toLocaleTimeString("es-PE", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+              .
+            </span>
+            <div className="editor-page__recovery-actions">
+              <button
+                onClick={() => {
+                  setTitle(recovered.title);
+                  setContent(recovered.content);
+                  discardRecovered();
+                }}
+              >
+                Recuperar
+              </button>
+              <button onClick={discardRecovered}>Descartar</button>
+            </div>
+          </div>
+        )}
+
         <div className="editor-page__field">
           <label htmlFor="title">Post Title</label>
           <input
