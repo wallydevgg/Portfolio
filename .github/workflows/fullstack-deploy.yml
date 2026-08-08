@@ -70,33 +70,33 @@ jobs:
           cp docker-compose.prod.yml staging/docker-compose.yml
 
       - name: Copy Files to VPS
-        uses: appleboy/scp-action@v0.1.7
+        uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.INPUT_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           source: "staging/*"
-          target: "/home/wallydev-ops/apps/portfolio/"
+          target: "${{ secrets.VPS_APP_PATH }}/"
           strip_components: 1
 
       - name: Deploy on VPS
-        uses: appleboy/ssh-action@v0.1.1
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.INPUT_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
             set -e
 
             # Setup Directory
-            mkdir -p /home/wallydev-ops/apps/portfolio
-            cd /home/wallydev-ops/apps/portfolio
+            mkdir -p "${{ secrets.VPS_APP_PATH }}"
+            cd "${{ secrets.VPS_APP_PATH }}"
 
             # Create .env file for production
             echo "Creating .env file..."
-            cat > .env <<EOF
+            cat > .env <<'EOF'
             POSTGRES_SERVER=vps-postgres
             POSTGRES_USER=${{ secrets.DB_USER }}
             POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }}
@@ -115,7 +115,7 @@ jobs:
             SMTP_FROM=${{ secrets.SMTP_FROM }}
             CONTACT_TO_EMAIL=${{ secrets.CONTACT_TO_EMAIL }}
             TURNSTILE_SECRET_KEY=${{ secrets.TURNSTILE_SECRET_KEY }}
-            EOF
+            'EOF'
 
             # Load Images
             echo "Loading images..."
