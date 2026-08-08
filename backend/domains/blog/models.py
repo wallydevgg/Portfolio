@@ -39,7 +39,11 @@ class Post(Base):
     is_published = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-    
+
+    # Soft delete: NULL means the post is active. Orthogonal to is_published,
+    # so restoring returns the post to whatever state it had.
+    deleted_at = Column(DateTime(timezone=True), nullable=True, default=None)
+
     category_id = Column(Integer, ForeignKey("categories.id", ondelete="SET NULL"), nullable=True)
     
     category = relationship("Category", back_populates="posts")
