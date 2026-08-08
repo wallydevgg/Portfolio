@@ -86,6 +86,95 @@
   inset: 0;
 }
 
+// ── Glass surface ─────────────────────────────────────────────────────────────
+// Panel translúcido con desenfoque de fondo. El color cambia por tema; borde,
+// radio y sombra son comunes.
+// Usage:
+//   @include glass;
+//   @include glass($radius: 10px, $blur: 10px);
+@mixin glass($radius: $glass-radius, $blur: $glass-blur) {
+  border-radius: $radius;
+  border: 1px solid $glass-border-dark;
+  background: $glass-bg-dark;
+  box-shadow: $glass-shadow, $glass-highlight;
+
+  .light-theme & {
+    border-color: $glass-border-light;
+    background: $glass-bg-light;
+  }
+
+  // saturate() recupera el color que el desenfoque apaga: es lo que separa un
+  // panel "vidrio" de uno que solo se ve gris.
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    -webkit-backdrop-filter: blur($blur) saturate($glass-saturate);
+    backdrop-filter: blur($blur) saturate($glass-saturate);
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    background: $glass-bg-dark-solid;
+
+    .light-theme & { background: $glass-bg-light-solid; }
+  }
+}
+
+// ── Realce de hover para superficies glass ────────────────────────────────────
+// Sube el brillo del borde y del reflejo, y separa más la sombra.
+@mixin glass-hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: $glass-shadow-hover, $glass-highlight-hi;
+
+  .light-theme & { border-color: rgba(15, 14, 23, 0.16); }
+}
+
+// ── Atenuador del patrón de fondo ─────────────────────────────────────────────
+// Oscurece el patrón de circuito de forma progresiva: casi limpio arriba, donde
+// está la cabecera, y muy atenuado a partir de la zona de contenido. Se aplica
+// al wrapper de página; sus hijos directos suben de capa para quedar encima.
+//
+// Se hace con una capa aparte en vez de bajar la opacidad del SVG porque ese
+// valor viene codificado dentro del data-URI y está duplicado en varios
+// archivos: tocarlo obligaría a editar cada copia.
+@mixin content-scrim {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // Atenuación deliberadamente suave. El patrón se mantiene presente detrás de
+  // los paneles: el desenfoque necesita algo que desenfocar, o el glass se lee
+  // como una caja gris. La curva afloja al final (0.58 -> 0.5) para que el pie
+  // de página no quede más apagado que el resto.
+  .dark-theme &::before {
+    background: linear-gradient(
+      to bottom,
+      rgba(18, 18, 24, 0.09) 0,
+      rgba(18, 18, 24, 0.58) 22rem,
+      rgba(18, 18, 24, 0.5) 100%
+    );
+  }
+
+  // El tema claro necesita algo más de cobertura: el patrón es naranja pálido
+  // sobre fondo claro, así que el mismo alfa lo deja más presente que en oscuro.
+  .light-theme &::before {
+    background: linear-gradient(
+      to bottom,
+      rgba(245, 245, 245, 0.15) 0,
+      rgba(245, 245, 245, 0.68) 22rem,
+      rgba(245, 245, 245, 0.6) 100%
+    );
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
 // ── Visually hidden (accessible) ──────────────────────────────────────────────
 @mixin visually-hidden {
   position: absolute;

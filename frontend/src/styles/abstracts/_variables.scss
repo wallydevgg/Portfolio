@@ -41,6 +41,33 @@ $space-1          : 1rem;
 $space-2          : 2rem;
 $space-3          : 1.5rem;
 
+// ── Glass surfaces ────────────────────────────────────────────────────────────
+// Paneles translúcidos sobre el patrón de circuito. Consumir con @include glass.
+$glass-blur          : 16px;
+$glass-saturate      : 180%;
+$glass-radius        : 18px;
+$glass-bg-dark       : rgba(18, 18, 24, 0.55);
+$glass-bg-light      : rgba(255, 255, 255, 0.62);
+$glass-border-dark   : rgba(255, 255, 255, 0.1);
+$glass-border-light  : rgba(15, 14, 23, 0.09);
+$glass-shadow        : 0 8px 32px rgba(0, 0, 0, 0.3);
+$glass-shadow-hover  : 0 16px 44px rgba(0, 0, 0, 0.4);
+
+// El reflejo interior del borde superior es lo que hace que un panel se lea
+// como vidrio y no como una caja translúcida. Pesa más que la transparencia.
+$glass-highlight     : inset 0 1px 0 rgba(255, 255, 255, 0.09);
+$glass-highlight-hi  : inset 0 1px 0 rgba(255, 255, 255, 0.16);
+
+// Respaldo para navegadores sin backdrop-filter: sin desenfoque el circuito se
+// lee nítido a través del panel, así que ahí el fondo va casi opaco.
+$glass-bg-dark-solid : rgba(18, 18, 24, 0.93);
+$glass-bg-light-solid: rgba(255, 255, 255, 0.96);
+
+// ── Medida de lectura ─────────────────────────────────────────────────────────
+// Ancho del texto del post. El contenedor suma el padding del panel glass.
+$content-measure     : 760px;
+$content-padding     : 2.5rem;
+
 // ── Breakpoints ───────────────────────────────────────────────────────────────
 // Usage: @include respond-to(mobile) { ... }
 $breakpoints: (
