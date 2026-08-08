@@ -25,7 +25,14 @@ export function useAutosave({ data, storageKey, enableRemote, onRemoteSave, serv
   const lastLocalRef = useRef(null);
   const lastRemoteRef = useRef(null);
 
+  // El consumidor pasa `onRemoteSave` como flecha inline, así que cambia de
+  // identidad en cada render. Guardarlo en una ref lo saca de las deps del
+  // efecto: si estuviera ahí, cada tecla reiniciaría el intervalo de 2 min y
+  // el guardado remoto no dispararía nunca mientras se escribe.
+  const onRemoteSaveRef = useRef(onRemoteSave);
+
   dataRef.current = data;
+  onRemoteSaveRef.current = onRemoteSave;
 
   // Recuperación: al montar, si la copia local es más nueva que la del
   // servidor, se ofrece — nunca se aplica sola.
@@ -80,7 +87,7 @@ export function useAutosave({ data, storageKey, enableRemote, onRemoteSave, serv
       if (snapshot === lastRemoteRef.current) return;
       try {
         setStatus("saving");
-        await onRemoteSave(dataRef.current);
+        await onRemoteSaveRef.current(dataRef.current);
         lastRemoteRef.current = snapshot;
         setSavedAt(new Date());
         setStatus("saved");
@@ -89,7 +96,7 @@ export function useAutosave({ data, storageKey, enableRemote, onRemoteSave, serv
       }
     }, REMOTE_INTERVAL_MS);
     return () => clearInterval(timer);
-  }, [enableRemote, onRemoteSave]);
+  }, [enableRemote]);
 
   /** Limpia la copia local. Llamar tras un guardado manual correcto. */
   const clearLocal = () => {
