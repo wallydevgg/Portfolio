@@ -55,7 +55,7 @@
     height: 1.75rem;
     margin-top: 0.25rem;
     flex-shrink: 0;
-    color: #6366f1; // indigo-500
+    color: $color-primary;
   }
 
   &__saved-badge {
@@ -171,11 +171,8 @@
       @include theme-color(color, #52525b, #a1a1aa);
     }
 
-    &:focus {
-      outline: none;
-      border-color: #6366f1;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-    }
+    &:focus,
+    &:focus-visible { @include dash-focus-ring; }
   }
 
   &__textarea {
