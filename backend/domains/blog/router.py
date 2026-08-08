@@ -1,4 +1,6 @@
 # ✅ GENERADO POR CLAUDE - Archivo: backend/domains/blog/router.py
+from datetime import datetime, timezone
+
 from fastapi import APIRouter, Depends, HTTPException, status, Query, Request
 from fastapi.responses import Response
 from sqlalchemy.orm import Session, selectinload
@@ -173,6 +175,19 @@ def list_tags(db: Session = Depends(get_db)):
     return db.query(models.Tag).order_by(models.Tag.name.asc()).all()
 
 
+@router.get("/archived", response_model=List[schemas.PostSchema])
+def list_archived_posts(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    query = (
+        db.query(models.Post)
+        .filter(models.Post.deleted_at.is_not(None))
+        .order_by(models.Post.deleted_at.desc())
+    )
+    return _posts_with_counts(db, query)
+
+
 @router.get("/slug/{slug}", response_model=schemas.PostSchema)
 def get_post_by_slug(slug: str, db: Session = Depends(get_db)):
     post = _public_posts(db).filter(models.Post.slug == slug).first()
@@ -216,7 +231,40 @@ def delete_post(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    """Soft delete: the post moves to the archive and keeps its state."""
     db_post = _get_post_or_404(db, post_id)
+    if db_post.deleted_at is None:
+        db_post.deleted_at = datetime.now(timezone.utc)
+        db.commit()
+    return None
+
+
+@router.post("/{post_id}/restore", response_model=schemas.PostSchema)
+def restore_post(
+    post_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    db_post = _get_post_or_404(db, post_id)
+    if db_post.deleted_at is None:
+        raise HTTPException(status_code=409, detail="Post is not archived")
+    db_post.deleted_at = None
+    db.commit()
+    db.refresh(db_post)
+    return db_post
+
+
+@router.delete("/{post_id}/purge", status_code=status.HTTP_204_NO_CONTENT)
+def purge_post(
+    post_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Permanent delete. Only archived posts qualify, so destroying something
+    always takes two deliberate steps."""
+    db_post = _get_post_or_404(db, post_id)
+    if db_post.deleted_at is None:
+        raise HTTPException(status_code=409, detail="Archive the post before deleting it permanently")
     db.delete(db_post)
     db.commit()
     return None
