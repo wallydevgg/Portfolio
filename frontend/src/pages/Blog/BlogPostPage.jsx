@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router";
-import { ArrowLeft, Calendar, Tag, Heart, MessageSquare, Share2, BookOpen, Send, User } from "lucide-react";
+import { ArrowLeft, Heart, MessageSquare, Share2, BookOpen, Send, User } from "lucide-react";
 import "./BlogPostPage.scss";
 import { t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
+import PostArticle from "@/features/blog/PostArticle";
 
 const BlogPostPage = () => {
   useLingui();
@@ -153,39 +154,7 @@ const BlogPostPage = () => {
           )}
 
           {post && (
-            <article className="blog-post__article">
-              <div className="blog-post__tags">
-                {post.category && (
-                  <span className="blog-post__tag blog-post__tag--category">
-                    <Tag size={11} />
-                    {post.category.name}
-                  </span>
-                )}
-                {post.tags && post.tags.map((tag) => (
-                  <span key={tag.id || tag.name} className="blog-post__tag">
-                    #{tag.name || tag}
-                  </span>
-                ))}
-              </div>
-
-              <h1 className="blog-post__title">{post.title}</h1>
-
-              <div className="blog-post__meta">
-                <span>
-                  <Calendar size={13} />
-                  {new Date(post.created_at).toLocaleDateString("es-PE", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </span>
-              </div>
-
-              <div
-                className="blog-post__content"
-                dangerouslySetInnerHTML={{ __html: post.content || "" }}
-              />
-
+            <PostArticle post={post}>
               {/* Action bar — like + share */}
               <div className="blog-post__actions">
                 <button
@@ -205,7 +174,7 @@ const BlogPostPage = () => {
                   <Share2 size={16} /> {t`blog.actions.share`}
                 </button>
               </div>
-            </article>
+            </PostArticle>
           )}
 
           {post && (
