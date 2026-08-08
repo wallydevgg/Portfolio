@@ -51,6 +51,7 @@ class PostBase(BaseModel):
     content: str
     is_published: bool = False
     category_id: Optional[int] = None
+    cover_image: Optional[str] = None
 
 class PostCreate(PostBase):
     slug: str
@@ -61,6 +62,7 @@ class PostUpdate(BaseModel):
     content: Optional[str] = None
     is_published: Optional[bool] = None
     category_id: Optional[int] = None
+    cover_image: Optional[str] = None
     tags: Optional[List[str]] = None
 
 class PostSchema(PostBase):

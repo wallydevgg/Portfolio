@@ -36,6 +36,10 @@ class Post(Base):
     slug = Column(String, unique=True, index=True, nullable=False)
     content = Column(Text, nullable=False) # TipTap HTML str
     
+    # Portada del post. NULL significa "sin portada": el frontend pinta una
+    # imagen por defecto para que las cards del listado no se descuadren.
+    cover_image = Column(String, nullable=True)
+
     is_published = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
