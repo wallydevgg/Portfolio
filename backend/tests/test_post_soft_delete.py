@@ -71,3 +71,11 @@ def test_purge_refuses_a_post_that_is_not_archived(client, db_session, auth_head
 
     assert response.status_code == 409
     assert db_session.get(models.Post, post.id) is not None
+
+
+def test_archived_listing_exposes_the_archive_date(client, db_session, auth_headers):
+    make_post(db_session, "guardado", published=False, archived=True)
+
+    body = client.get("/api/v1/posts/archived", headers=auth_headers).json()
+
+    assert body[0]["deleted_at"] is not None

@@ -68,6 +68,7 @@ class PostSchema(PostBase):
     slug: str
     created_at: datetime
     updated_at: Optional[datetime] = None
+    deleted_at: Optional[datetime] = None
     category: Optional[CategorySchema] = None
     tags: List[TagSchema] = []
     likes_count: int = 0

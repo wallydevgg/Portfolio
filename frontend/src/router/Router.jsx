@@ -8,6 +8,7 @@ import DashboardLayout from "@/layouts/DashboardLayout";
 import PostsPage from "@/pages/Dashboard/Posts/index";
 import PostEditorPage from "@/pages/Dashboard/Posts/Editor";
 import PostPreviewPage from "@/pages/Dashboard/Posts/Preview";
+import ArchivedPostsPage from "@/pages/Dashboard/Posts/Archived";
 import ExperiencePage from "@/pages/Dashboard/Experience/index";
 import SkillsPage from "@/pages/Dashboard/Skills/index";
 import ProjectsPage from "@/pages/Dashboard/Projects/index";
@@ -63,6 +64,7 @@ const router = createBrowserRouter(
             { path: "", element: <OverviewPage /> },
             { path: "posts", element: <PostsPage /> },
             { path: "posts/new", element: <PostEditorPage /> },
+            { path: "posts/archived", element: <ArchivedPostsPage /> },
             { path: "posts/:id/edit", element: <PostEditorPage /> },
             { path: "experience", element: <ExperiencePage /> },
             { path: "about", element: <AboutDashboardPage /> },

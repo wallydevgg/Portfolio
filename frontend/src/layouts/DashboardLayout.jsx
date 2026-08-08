@@ -1,6 +1,6 @@
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
-import { BookOpen, LayoutDashboard, LogOut, Settings, Menu, Briefcase, Code2, FolderOpen, Search, Mail, Bell, ChevronDown, UserRound, FileText } from "lucide-react";
+import { BookOpen, LayoutDashboard, LogOut, Settings, Menu, Briefcase, Code2, FolderOpen, Search, Mail, Bell, ChevronDown, UserRound, FileText, Archive } from "lucide-react";
 import { useState, useContext, useEffect } from "react";
 import { ToastProvider } from "../contexts/ToastContext";
 import "./DashboardLayout.scss";
@@ -14,6 +14,7 @@ export default function DashboardLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const [settingsOpen, setSettingsOpen] = useState(() => location.pathname.startsWith("/dashboard/settings"));
+  const [postsOpen, setPostsOpen] = useState(() => location.pathname.startsWith("/dashboard/posts"));
 
   useEffect(() => {
     const fetchUnreadCount = async () => {
@@ -68,10 +69,46 @@ export default function DashboardLayout() {
               </div>
             )}
           </Link>
-          <Link to="/dashboard/posts" className="dashboard__nav-link">
-            <BookOpen className="icon" />
-            {sidebarOpen && <span>Blog Posts</span>}
-          </Link>
+          {/* Blog posts group (accordion) */}
+          <div className="dashboard__nav-group">
+            <button
+              type="button"
+              className="dashboard__nav-link dashboard__nav-toggle"
+              onClick={() => {
+                if (!sidebarOpen) {
+                  navigate("/dashboard/posts");
+                } else {
+                  setPostsOpen((prev) => !prev);
+                }
+              }}
+            >
+              <BookOpen className="icon" />
+              {sidebarOpen && <span>Blog Posts</span>}
+              {sidebarOpen && (
+                <ChevronDown className={`dashboard__chevron ${postsOpen ? "dashboard__chevron--open" : ""}`} size={16} />
+              )}
+            </button>
+
+            {sidebarOpen && postsOpen && (
+              <div className="dashboard__nav-submenu">
+                <NavLink
+                  to="/dashboard/posts"
+                  end
+                  className={({ isActive }) => `dashboard__nav-link dashboard__nav-subitem${isActive ? " dashboard__nav-link--active" : ""}`}
+                >
+                  <BookOpen className="icon" size={16} />
+                  <span>All Posts</span>
+                </NavLink>
+                <NavLink
+                  to="/dashboard/posts/archived"
+                  className={({ isActive }) => `dashboard__nav-link dashboard__nav-subitem${isActive ? " dashboard__nav-link--active" : ""}`}
+                >
+                  <Archive className="icon" size={16} />
+                  <span>Archived</span>
+                </NavLink>
+              </div>
+            )}
+          </div>
           <Link to="/dashboard/experience" className="dashboard__nav-link">
             <Briefcase className="icon" />
             {sidebarOpen && <span>Experience</span>}
