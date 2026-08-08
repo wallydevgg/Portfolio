@@ -73,9 +73,7 @@ export default function ArchivedPostsPage() {
       )}
 
       {!loading && posts.length === 0 && (
-        // posts-table__empty: el &__empty de Posts.scss cuelga de .posts-table,
-        // no de .posts-page.
-        <div className="posts-table__empty">
+        <div className="posts-page__empty-state">
           <Archive size={40} strokeWidth={1.5} />
           <p>No hay posts archivados.</p>
         </div>

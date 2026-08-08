@@ -28,27 +28,14 @@
     }
   }
 
+  // Mismo botón de acción principal que Experience, Skills y Projects: antes
+  // era el único índigo del dashboard.
   &__create-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background-color: #4f46e5;
-    color: #ffffff;
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    font-weight: $fw-medium;
-    font-size: 0.875rem;
-    text-decoration: none;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    @include transition(background-color);
+    @include dash-primary-btn;
 
     .icon {
       width: 1rem;
       height: 1rem;
-    }
-
-    &:hover {
-      background-color: #4338ca;
     }
   }
 
@@ -81,13 +68,33 @@
   }
 
   &__table-container {
-    @include theme-color(background-color, #18181b, #ffffff); // zinc-900 | white
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    @include theme-color(border-color, #27272a, #e5e7eb); // zinc-800 | gray-200
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 0.5rem;
+    @include dash-surface;
     overflow: hidden;
+  }
+
+  // Estado vacío fuera de tabla (Archivados): aquí sí es un div y puede ser flex.
+  &__empty-state {
+    @include dash-surface;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    color: var(--parrafos);
+
+    svg {
+      color: $color-primary;
+      opacity: 0.45;
+      margin-bottom: 0.3rem;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: $fw-semibold;
+      color: var(--DM-Title);
+    }
   }
 }
 
@@ -97,17 +104,18 @@
   text-align: left;
   border-collapse: collapse;
 
+  // Misma cabecera que el resto de listados del dashboard.
   &__head {
-    @include theme-color(background-color, #09090b, #f9fafb); // zinc-950 | gray-50
-    @include theme-color(color, #a1a1aa, #71717a); // zinc-400 | zinc-500
-    font-weight: $fw-medium;
-    @include theme-color(border-bottom-color, #27272a, #e5e7eb);
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
+    background: rgba(0, 0, 0, 0.22);
+    color: var(--parrafos);
+    border-bottom: 1px solid $dash-border;
 
     th {
-      padding: 1rem 1.5rem;
-      font-weight: inherit;
+      padding: 0.9rem 1.5rem;
+      font-size: 0.72rem;
+      font-weight: $fw-semibold;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
     }
     
     .text-right {
@@ -129,7 +137,7 @@
       }
 
       &:hover {
-        @include theme-color(background-color, rgba(39, 39, 42, 0.5), rgba(249, 250, 251, 0.5)); // zinc-800/50 | gray-50/50
+        background: $dash-hover-bg;
       }
     }
 
@@ -167,32 +175,50 @@
     justify-content: flex-end;
     gap: 0.5rem;
 
+    // Estos son de icono, no de texto como en Experience o Skills, pero
+    // comparten radio, área de pulsación y semántica de hover: naranja para la
+    // acción normal, rojo para la destructiva.
     button {
-      padding: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      padding: 0;
       background: transparent;
-      border: none;
+      border: 1px solid transparent;
+      border-radius: $dash-radius;
+      color: var(--parrafos);
       cursor: pointer;
-      @include theme-color(color, #a1a1aa, #a1a1aa); // zinc-400
-      @include transition(color);
+      transition: color $dash-transition, border-color $dash-transition,
+        background-color $dash-transition;
 
       .icon {
         width: 1rem;
         height: 1rem;
       }
 
+      &:focus-visible { @include dash-focus-ring; }
+
       &.action-edit:hover {
-        color: #4f46e5; // indigo-600
+        color: $color-primary;
+        border-color: rgba(255, 137, 6, 0.4);
+        background: rgba(255, 137, 6, 0.1);
       }
 
       &.action-delete:hover {
-        color: #ef4444; // red-600
+        color: #f87171;
+        border-color: rgba(248, 113, 113, 0.4);
+        background: rgba(248, 113, 113, 0.1);
       }
     }
   }
 
+  // Se aplica a un <td colSpan>, así que no puede cambiar de display: un td en
+  // flex deja de comportarse como celda y rompe la fila.
   &__empty {
-    padding: 2rem 1.5rem;
+    padding: 2.5rem 1.5rem;
     text-align: center;
-    @include theme-color(color, #71717a, #71717a); // zinc-500
+    color: var(--parrafos);
   }
 }
