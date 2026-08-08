@@ -15,6 +15,19 @@ from domains.users.models import User
 router = APIRouter(prefix="/posts", tags=["posts"])
 
 
+def _public_posts(db: Session):
+    """Posts visible to anyone: published and not archived."""
+    return db.query(models.Post).filter(
+        models.Post.deleted_at.is_(None),
+        models.Post.is_published.is_(True),
+    )
+
+
+def _active_posts(db: Session):
+    """Posts the dashboard works with: drafts included, archived excluded."""
+    return db.query(models.Post).filter(models.Post.deleted_at.is_(None))
+
+
 def _get_post_or_404(db: Session, post_id: int) -> models.Post:
     post = db.query(models.Post).filter(models.Post.id == post_id).first()
     if not post:
@@ -79,7 +92,7 @@ def list_posts(
     db: Session = Depends(get_db),
     admin: str = Depends(lambda: None),
 ):
-    query = db.query(models.Post).filter(models.Post.is_published == True).order_by(models.Post.created_at.desc())
+    query = _public_posts(db).order_by(models.Post.created_at.desc())
     return _posts_with_counts(db, query)
 
 
@@ -88,15 +101,14 @@ def list_all_posts(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    query = db.query(models.Post).order_by(models.Post.created_at.desc())
+    query = _active_posts(db).order_by(models.Post.created_at.desc())
     return _posts_with_counts(db, query)
 
 
 @router.get("/rss.xml")
 def get_rss(db: Session = Depends(get_db)):
     posts = (
-        db.query(models.Post)
-        .filter(models.Post.is_published == True)
+        _public_posts(db)
         .order_by(models.Post.created_at.desc())
         .limit(20)
         .all()
@@ -154,11 +166,7 @@ def list_tags(db: Session = Depends(get_db)):
 
 @router.get("/slug/{slug}", response_model=schemas.PostSchema)
 def get_post_by_slug(slug: str, db: Session = Depends(get_db)):
-    post = (
-        db.query(models.Post)
-        .filter(models.Post.slug == slug, models.Post.is_published == True)
-        .first()
-    )
+    post = _public_posts(db).filter(models.Post.slug == slug).first()
     if not post:
         raise HTTPException(status_code=404, detail="Post not found")
     return post
