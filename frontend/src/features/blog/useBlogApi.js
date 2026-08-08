@@ -95,5 +95,47 @@ export function useBlogApi() {
     return res.json();
   };
 
-  return { getAllPosts, createPost, updatePost, deletePost, getPost, generateSlug };
+  /**
+   * Obtiene los posts archivados (soft deleted).
+   */
+  const getArchivedPosts = async () => {
+    const res = await fetch(`${API_BASE}/archived`, { headers: authHeaders });
+    if (!res.ok) throw new Error("Error fetching archived posts");
+    return res.json();
+  };
+
+  /**
+   * Saca un post del archivo y lo devuelve al estado que tenía.
+   */
+  const restorePost = async (id) => {
+    const res = await fetch(`${API_BASE}/${id}/restore`, {
+      method: "POST",
+      headers: authHeaders,
+    });
+    if (!res.ok) throw new Error("Error restoring post");
+    return res.json();
+  };
+
+  /**
+   * Borrado definitivo. Solo funciona sobre posts ya archivados.
+   */
+  const purgePost = async (id) => {
+    const res = await fetch(`${API_BASE}/${id}/purge`, {
+      method: "DELETE",
+      headers: authHeaders,
+    });
+    if (!res.ok) throw new Error("Error deleting post permanently");
+  };
+
+  return {
+    getAllPosts,
+    createPost,
+    updatePost,
+    deletePost,
+    getPost,
+    generateSlug,
+    getArchivedPosts,
+    restorePost,
+    purgePost,
+  };
 }
