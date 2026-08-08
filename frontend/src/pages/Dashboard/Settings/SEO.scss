@@ -206,27 +206,8 @@
   }
 
   &__save-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background-color: #4f46e5;
-    color: #ffffff;
+    @include dash-primary-btn;
     padding: 0.625rem 1.25rem;
-    border-radius: 0.5rem;
-    font-weight: $fw-medium;
-    font-size: 0.9rem;
-    border: none;
-    cursor: pointer;
-    @include transition(background-color, opacity);
-
-    &:hover {
-      background-color: #4338ca;
-    }
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
   }
 
   &__btn-icon {
