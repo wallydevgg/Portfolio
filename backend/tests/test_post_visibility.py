@@ -63,3 +63,21 @@ def test_dashboard_listing_includes_drafts_but_not_archived(client, db_session, 
     body = client.get("/api/v1/posts/all", headers=auth_headers).json()
 
     assert sorted(p["slug"] for p in body) == ["draft", "published"]
+
+
+def test_fetching_a_post_by_id_requires_a_token(client, db_session):
+    post = make_post(db_session, "secreto", published=False, archived=False)
+
+    response = client.get(f"/api/v1/posts/{post.id}")
+
+    assert response.status_code == 401
+
+
+def test_admin_can_fetch_a_post_in_any_state_by_id(client, db_session, auth_headers):
+    draft = make_post(db_session, "borrador", published=False, archived=False)
+    archived = make_post(db_session, "archivado", published=True, archived=True)
+
+    for post in (draft, archived):
+        response = client.get(f"/api/v1/posts/{post.id}", headers=auth_headers)
+        assert response.status_code == 200
+        assert response.json()["slug"] == post.slug

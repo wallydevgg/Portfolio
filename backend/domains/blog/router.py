@@ -173,7 +173,13 @@ def get_post_by_slug(slug: str, db: Session = Depends(get_db)):
 
 
 @router.get("/{post_id}", response_model=schemas.PostSchema)
-def get_post(post_id: int, db: Session = Depends(get_db)):
+def get_post(
+    post_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Admin-only. Returns posts in any state — the editor and the draft
+    preview both need archived and unpublished posts."""
     return _get_post_or_404(db, post_id)
 
 
