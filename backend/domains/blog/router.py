@@ -35,6 +35,15 @@ def _get_post_or_404(db: Session, post_id: int) -> models.Post:
     return post
 
 
+def _get_public_post_or_404(db: Session, post_id: int) -> models.Post:
+    """Resolve a post for anonymous interaction. Drafts and archived posts are
+    404, not 403: a 403 would confirm the post exists."""
+    post = _public_posts(db).filter(models.Post.id == post_id).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    return post
+
+
 def _sync_tags(db: Session, post: models.Post, tag_names: List[str]) -> None:
     """Replace post tags with the given names (creating missing tags)."""
     if tag_names is None:
@@ -217,7 +226,7 @@ def delete_post(
 
 @router.get("/{post_id}/comments", response_model=List[schemas.CommentSchema])
 def list_comments(post_id: int, db: Session = Depends(get_db)):
-    _get_post_or_404(db, post_id)
+    _get_public_post_or_404(db, post_id)
     return (
         db.query(models.Comment)
         .filter(models.Comment.post_id == post_id)
@@ -233,7 +242,7 @@ def create_comment(
     request: Request,
     db: Session = Depends(get_db),
 ):
-    _get_post_or_404(db, post_id)
+    _get_public_post_or_404(db, post_id)
 
     ip = get_client_ip(request)
     if not rate_limit.check_rate_limit(
@@ -259,7 +268,7 @@ def create_comment(
 @router.post("/{post_id}/like")
 def toggle_like(post_id: int, request: Request, db: Session = Depends(get_db)):
     """Toggle a like for the given post, keyed by client IP (one like per IP)."""
-    _get_post_or_404(db, post_id)
+    _get_public_post_or_404(db, post_id)
     ip = get_client_ip(request) or "unknown"
     existing = (
         db.query(models.PostLike)
@@ -269,7 +278,7 @@ def toggle_like(post_id: int, request: Request, db: Session = Depends(get_db)):
     if existing:
         db.delete(existing)
         db.commit()
-        return {"liked": False, "likes_count": _get_post_or_404(db, post_id).likes_count}
+        return {"liked": False, "likes_count": _get_public_post_or_404(db, post_id).likes_count}
     db.add(models.PostLike(post_id=post_id, ip_address=ip))
     db.commit()
-    return {"liked": True, "likes_count": _get_post_or_404(db, post_id).likes_count}
+    return {"liked": True, "likes_count": _get_public_post_or_404(db, post_id).likes_count}
