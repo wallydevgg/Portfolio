@@ -2,7 +2,6 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
 import { BookOpen, LayoutDashboard, LogOut, Settings, Menu, Briefcase, Code2, FolderOpen, Search, Mail, Bell, ChevronDown, UserRound, FileText, Archive } from "lucide-react";
 import { useState, useContext, useEffect } from "react";
-import { ToastProvider } from "../contexts/ToastContext";
 import "./DashboardLayout.scss";
 import { Switch, ThemeContext } from "@/barrell";
 
@@ -46,8 +45,7 @@ export default function DashboardLayout() {
   }, []);
 
   return (
-    <ToastProvider>
-      <div className={`dashboard ${theme}-theme`}>
+    <div className={`dashboard ${theme}-theme`}>
       {/* Sidebar */}
       <aside className={`dashboard__sidebar ${sidebarOpen ? "dashboard__sidebar--open" : "dashboard__sidebar--closed"}`}>
         <div className="dashboard__sidebar-header">
@@ -213,6 +211,5 @@ export default function DashboardLayout() {
         </div>
       </main>
     </div>
-    </ToastProvider>
   );
 }

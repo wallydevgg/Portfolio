@@ -31,9 +31,15 @@ import ProtectedRoute from "@/components/auth/ProtectedRoute";
 const router = createBrowserRouter(
   [
     {
+      // ToastProvider va aquí, en la raíz, y no dentro de DashboardLayout: la
+      // vista previa vive fuera del layout y también necesita toasts. Con el
+      // provider en dos sitios, qué ruta tenía toasts dependía de por dónde
+      // colgara la página.
       element: (
         <AuthProvider>
-          <Outlet />
+          <ToastProvider>
+            <Outlet />
+          </ToastProvider>
         </AuthProvider>
       ),
       children: [
@@ -80,15 +86,11 @@ const router = createBrowserRouter(
         },
         {
           // Fuera de DashboardLayout a propósito: con el chrome del dashboard
-          // alrededor, la vista previa no mostraría la página real. Eso deja la
-          // página sin el ToastProvider que monta DashboardLayout, así que va
-          // envuelta aquí — useToast lanza si no encuentra provider.
+          // alrededor, la vista previa no mostraría la página real.
           path: "/dashboard/posts/:id/preview",
           element: (
             <ProtectedRoute>
-              <ToastProvider>
-                <PostPreviewPage />
-              </ToastProvider>
+              <PostPreviewPage />
             </ProtectedRoute>
           ),
         },
