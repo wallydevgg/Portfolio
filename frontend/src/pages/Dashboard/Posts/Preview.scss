@@ -1,0 +1,52 @@
+.preview-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: #1f2937;
+  color: #f9fafb;
+  font-size: 0.875rem;
+
+  &__label {
+    opacity: 0.85;
+  }
+
+  &__back,
+  &__publish {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.8rem;
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+
+  &__back {
+    background: transparent;
+    color: inherit;
+  }
+
+  &__publish {
+    background: #2563eb;
+    color: #fff;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.preview-page__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 60vh;
+}

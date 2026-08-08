@@ -7,6 +7,7 @@ import NotFoundPage from "@/pages/error/NotFoundPage";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import PostsPage from "@/pages/Dashboard/Posts/index";
 import PostEditorPage from "@/pages/Dashboard/Posts/Editor";
+import PostPreviewPage from "@/pages/Dashboard/Posts/Preview";
 import ExperiencePage from "@/pages/Dashboard/Experience/index";
 import SkillsPage from "@/pages/Dashboard/Skills/index";
 import ProjectsPage from "@/pages/Dashboard/Projects/index";
@@ -22,6 +23,7 @@ import BlogPage from "@/pages/Blog/BlogPage";
 import BlogPostPage from "@/pages/Blog/BlogPostPage";
 import PrivacyPage from "@/pages/Privacy/Privacy";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ToastProvider } from "@/contexts/ToastContext";
 import LoginPage from "@/pages/Login/Login";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
@@ -73,6 +75,20 @@ const router = createBrowserRouter(
             { path: "settings/notifications", element: <NotificationsSettings /> },
             { path: "settings/cv", element: <CVSettingsPage /> },
           ],
+        },
+        {
+          // Fuera de DashboardLayout a propósito: con el chrome del dashboard
+          // alrededor, la vista previa no mostraría la página real. Eso deja la
+          // página sin el ToastProvider que monta DashboardLayout, así que va
+          // envuelta aquí — useToast lanza si no encuentra provider.
+          path: "/dashboard/posts/:id/preview",
+          element: (
+            <ProtectedRoute>
+              <ToastProvider>
+                <PostPreviewPage />
+              </ToastProvider>
+            </ProtectedRoute>
+          ),
         },
       ],
     },

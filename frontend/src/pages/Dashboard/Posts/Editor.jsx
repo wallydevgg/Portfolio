@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import TiptapEditor from "../../../features/blog/components/TiptapEditor";
-import { ArrowLeft, Save, Send, Loader2 } from "lucide-react";
+import { ArrowLeft, Save, Send, Loader2, Eye } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router";
 import { useBlogApi } from "../../../features/blog/useBlogApi";
 import { useToast } from "../../../contexts/ToastContext";
@@ -82,6 +82,16 @@ export default function PostEditorPage() {
           <h1>{isEditing ? "Edit Post" : "Create New Post"}</h1>
         </div>
         <div className="editor-page__actions">
+          {isEditing && (
+            <button
+              onClick={() => navigate(`/dashboard/posts/${id}/preview`)}
+              disabled={saving || publishing}
+              className="editor-page__save-btn"
+            >
+              <Eye className="icon" />
+              Vista previa
+            </button>
+          )}
           <button
             onClick={() => handleSave(false)}
             disabled={saving || publishing}
