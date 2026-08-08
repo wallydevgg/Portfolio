@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router";
 import { ArrowLeft, Loader2, Send } from "lucide-react";
 import PostArticle from "@/features/blog/PostArticle";
 import { useBlogApi } from "@/features/blog/useBlogApi";
 import { useToast } from "@/contexts/ToastContext";
+import { ThemeContext } from "@/barrell";
 import "@/pages/Blog/BlogPostPage.scss";
 import "./Preview.scss";
 
@@ -16,6 +17,7 @@ export default function PostPreviewPage() {
   const { getPost, updatePost } = useBlogApi();
   const navigate = useNavigate();
   const toast = useToast();
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     (async () => {
@@ -71,9 +73,16 @@ export default function PostPreviewPage() {
         )}
       </div>
 
-      <div className="blog-post-wrapper preview-page">
-        <div className="blog-post">
-          <PostArticle post={post} />
+      {/* El wrapper de tema lo aportan Layout y DashboardLayout, y esta página
+          vive fuera de los dos. Sin él no hay ancestro .dark-theme y las reglas
+          del patrón de fondo y del glass no aplican: el artículo salía sobre un
+          gris plano. Se replica aquí para que la vista previa muestre lo mismo
+          que la página pública. */}
+      <div className={`App ${theme}-theme`}>
+        <div className="blog-post-wrapper preview-page">
+          <div className="blog-post">
+            <PostArticle post={post} />
+          </div>
         </div>
       </div>
     </>
