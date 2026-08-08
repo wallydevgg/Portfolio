@@ -10,107 +10,74 @@
   }
 
   .btn-primary {
-    padding: 0.7rem 1.5rem;
-    background: #009688;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    @include dash-primary-btn;
     margin-bottom: 2rem;
-    font-weight: 500;
-
-    &:hover {
-      background: #00796b;
-    }
   }
 
   .btn-secondary {
-    padding: 0.5rem 1rem;
-    @include theme-color(background-color, #3f3f46, #ccc);
-    @include theme-color(color, #f4f4f5, #333);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-left: 0.5rem;
-
-    &:hover {
-      background: #bbb;
-    }
+    @include dash-ghost-btn;
   }
 
   .btn-small {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.85rem;
-    background: #009688;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
+    @include dash-row-btn;
 
-    &:hover {
-      background: #00796b;
-    }
-
-    &.btn-danger {
-      background: #f44336;
-
-      &:hover {
-        background: #d32f2f;
-      }
+    &.btn-danger:hover {
+      border-color: #f87171;
+      color: #f87171;
+      background: rgba(248, 113, 113, 0.1);
     }
   }
 
   .category-form {
-    @include theme-color(background-color, #27272a, #f5f5f5);
-    padding: 1.5rem;
-    @include theme-color(color, #d4d4d8, #333);
-    border-radius: 4px;
+    @include dash-surface;
+    padding: 1.75rem;
     margin-bottom: 2rem;
 
     h2 {
-      margin-bottom: 1rem;
+      margin: 0 0 1.5rem;
+      font-size: 1.15rem;
     }
 
     .form-group {
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
 
       label {
         display: block;
-        margin-bottom: 0.5rem;
-        font-weight: 500;
+        margin-bottom: 0.45rem;
+        font-size: 0.78rem;
+        font-weight: $fw-semibold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--parrafos);
       }
 
       input {
-        width: 100%;
-        @include theme-color(background-color, #18181b, #ffffff);
-        @include theme-color(color, #f4f4f5, #18181b);
-        padding: 0.5rem;
-        @include theme-color(border-color, #3f3f46, #ddd);
-        border-width: 1px;
-        border-style: solid;
-        border-radius: 4px;
-
-        &:focus {
-          outline: none;
-          border-color: #009688;
-          box-shadow: 0 0 3px rgba(0, 150, 136, 0.3);
-        }
+        @include dash-input;
       }
     }
 
     .form-row {
-      display: flex;
-      gap: 1rem;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem;
 
-      .form-group {
-        flex: 1;
+      @include respond-to(mobile) {
+        grid-template-columns: 1fr;
       }
+
+      .form-group { min-width: 0; }
     }
 
     .form-actions {
       display: flex;
-      gap: 0.5rem;
-      margin-top: 1.5rem;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 1.75rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid $dash-border;
+
+      .btn-primary { margin-bottom: 0; }
+      .btn-secondary { margin-left: 0; }
     }
   }
 
@@ -120,20 +87,24 @@
     gap: 1rem;
 
     .category-item {
-      @include theme-color(border-color, #3f3f46, #ddd);
-        border-width: 1px;
-        border-style: solid;
-      border-radius: 4px;
+      @include dash-surface;
       overflow: hidden;
+      transition: border-color $dash-transition;
 
+      &:hover { border-color: $dash-border-strong; }
+
+      // La cabecera es el control de plegado: se comporta como fila pulsable.
       .category-header {
         display: flex;
         align-items: center;
-        gap: 1rem;
-        @include theme-color(background-color, #27272a, #f5f5f5);
-        padding: 1rem;
-        font-weight: 600;
+        gap: 0.85rem;
+        padding: 0.95rem 1.1rem;
+        background: rgba(0, 0, 0, 0.22);
+        font-weight: $fw-semibold;
         cursor: pointer;
+        transition: background-color $dash-transition;
+
+        &:hover { background: rgba(0, 0, 0, 0.3); }
 
         .expand-btn {
           background: none;
@@ -142,6 +113,7 @@
           display: flex;
           align-items: center;
           padding: 0;
+          color: $dash-accent-skills;
 
           svg {
             width: 20px;
@@ -152,117 +124,121 @@
         h3 {
           flex: 1;
           margin: 0;
+          font-size: 1rem;
         }
       }
 
       .category-content {
         padding: 1.5rem;
-        @include theme-color(background-color, #18181b, #ffffff);
 
         .skill-form {
-          @include theme-color(background-color, #18181b, #f9f9f9);
-          padding: 1rem;
-          border-radius: 4px;
+          padding: 1.25rem;
+          border-radius: $dash-radius;
+          border: 1px solid $dash-border;
+          background: rgba(0, 0, 0, 0.18);
           margin-bottom: 1.5rem;
 
           .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.1rem;
 
             label {
               display: block;
-              margin-bottom: 0.5rem;
-              font-weight: 500;
+              margin-bottom: 0.45rem;
+              font-size: 0.78rem;
+              font-weight: $fw-semibold;
+              text-transform: uppercase;
+              letter-spacing: 0.05em;
+              color: var(--parrafos);
             }
 
-            input {
-              width: 100%;
-              padding: 0.5rem;
-              @include theme-color(border-color, #3f3f46, #ddd);
-        border-width: 1px;
-        border-style: solid;
-              border-radius: 4px;
-
-              &[type="range"] {
-                width: 100%;
-              }
-
-              &:focus {
-                outline: none;
-                border-color: #009688;
-              }
-            }
-
+            input,
             select {
-              width: 100%;
-              padding: 0.5rem;
-              @include theme-color(background-color, #18181b, #ffffff);
-              @include theme-color(color, #f4f4f5, #18181b);
-              @include theme-color(border-color, #3f3f46, #ddd);
-              border-width: 1px;
-              border-style: solid;
-              border-radius: 4px;
+              @include dash-input;
+            }
 
-              &:focus {
-                outline: none;
-                border-color: #009688;
+            // El slider no lleva caja ni foco de campo: es un control distinto.
+            input[type="range"] {
+              width: 100%;
+              padding: 0;
+              border: none;
+              background: transparent;
+              accent-color: $dash-accent-skills;
+
+              &:focus,
+              &:focus-visible {
+                box-shadow: none;
+                border: none;
               }
             }
           }
 
           .form-actions {
             display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
+            gap: 0.6rem;
+            margin-top: 1.25rem;
           }
         }
 
         .skills-list {
           display: flex;
           flex-direction: column;
-          gap: 0.8rem;
+          gap: 0.6rem;
 
           .skill-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.8rem;
-            @include theme-color(background-color, #18181b, #f9f9f9);
-            border-radius: 3px;
-            border-left: 3px solid #009688;
+            gap: 1rem;
+            padding: 0.75rem 0.9rem;
+            border: 1px solid $dash-border;
+            border-left: 3px solid $dash-accent-skills;
+            border-radius: $dash-radius;
+            background: rgba(0, 0, 0, 0.18);
+            transition: border-color $dash-transition, background-color $dash-transition;
+
+            &:hover {
+              background: $dash-hover-bg;
+              border-color: $dash-border-strong;
+              border-left-color: $dash-accent-skills;
+            }
 
             .skill-info {
               display: flex;
-              gap: 1rem;
+              gap: 0.85rem;
               align-items: center;
               flex: 1;
+              min-width: 0;
 
               .skill-name {
                 display: flex;
                 align-items: center;
                 gap: 0.5rem;
-                font-weight: 500;
+                font-weight: $fw-medium;
               }
 
               .skill-icon {
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                color: #009688;
+                color: $dash-accent-skills;
                 flex-shrink: 0;
               }
 
+              // Relleno tintado en vez de sólido: el violeta pleno con texto
+              // blanco a 0.85rem quedaba pesado repetido en cada fila.
               .skill-level {
-                background: #009688;
-                color: white;
-                padding: 0.2rem 0.6rem;
-                border-radius: 3px;
-                font-size: 0.85rem;
+                @include dash-pill;
+                background: rgba(167, 139, 250, 0.16);
+                color: $dash-accent-skills;
+                border: 1px solid rgba(167, 139, 250, 0.3);
+                font-variant-numeric: tabular-nums;
               }
             }
 
             .skill-actions {
               display: flex;
               gap: 0.5rem;
+              flex-shrink: 0;
             }
           }
         }
