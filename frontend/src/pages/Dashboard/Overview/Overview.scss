@@ -1,3 +1,5 @@
+@use "@/styles/abstracts" as *;
+
 .overview-page {
   padding: 2rem;
   color: var(--DM-Title);
@@ -96,6 +98,37 @@
     }
   }
 
+  // Estado vacío: el icono atenuado carga el peso visual para que el hueco se
+  // lea como "todavía nada" y no como algo que falló al cargar.
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 2.5rem 1rem;
+    text-align: center;
+
+    svg {
+      color: $dash-accent-messages;
+      opacity: 0.55;
+      margin-bottom: 0.35rem;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: $fw-semibold;
+      color: var(--DM-Title);
+    }
+
+    span {
+      font-size: 0.82rem;
+      color: var(--parrafos);
+      opacity: 0.85;
+      max-width: 34ch;
+    }
+  }
+
   &__view-all {
     margin-left: auto;
     color: #ff8906;
@@ -133,46 +166,54 @@
     }
 
     &-link {
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      border: 1px solid rgba(167, 169, 190, 0.25);
-      background: var(--BgDark);
-      color: var(--parrafos);
-      font-size: 0.9rem;
-      text-decoration: none;
-      transition: border-color 0.2s, color 0.2s;
-
-      &:hover {
-        border-color: #ff8906;
-        color: #ff8906;
-      }
+      @include dash-ghost-btn;
     }
   }
 }
 
 .overview-card {
+  // --card-accent llega como estilo inline desde index.jsx. El valor de aquí
+  // solo actúa de red por si faltara.
+  --card-accent: #{$color-primary};
+
+  position: relative;
   display: flex;
   align-items: center;
   gap: 1rem;
-  background: var(--BgDark);
-  border: 1px solid rgba(167, 169, 190, 0.2);
-  border-radius: 12px;
   padding: 1.25rem;
+  padding-left: 1.5rem;
   text-decoration: none;
   color: inherit;
-  transition: border-color 0.2s, transform 0.2s;
+  overflow: hidden;
 
-  &:hover {
-    border-color: #ff8906;
-    transform: translateY(-2px);
+  @include dash-surface;
+  @include dash-lift(var(--card-accent));
+
+  // Filete lateral del acento. Va como pseudoelemento y no como border-left
+  // para poder crecer en el hover sin desplazar el contenido.
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--card-accent);
+    opacity: 0.5;
+    transition: opacity $dash-transition, width $dash-transition;
+  }
+
+  &:hover::before {
+    opacity: 1;
+    width: 4px;
   }
 
   &--highlight {
-    border-color: rgba(255, 137, 6, 0.5);
+    border-color: color-mix(in srgb, var(--card-accent) 45%, transparent);
 
-    .overview-card__value {
-      color: #ff8906;
-    }
+    &::before { opacity: 1; }
+
+    .overview-card__value { color: var(--card-accent); }
   }
 
   &__icon {
@@ -181,10 +222,15 @@
     justify-content: center;
     width: 44px;
     height: 44px;
-    border-radius: 10px;
-    background: rgba(255, 137, 6, 0.12);
-    color: #ff8906;
+    border-radius: $dash-radius;
+    background: color-mix(in srgb, var(--card-accent) 14%, transparent);
+    color: var(--card-accent);
     flex-shrink: 0;
+    transition: background-color $dash-transition;
+  }
+
+  &:hover &__icon {
+    background: color-mix(in srgb, var(--card-accent) 22%, transparent);
   }
 
   &__body {
@@ -195,27 +241,50 @@
     gap: 0.15rem;
 
     h2 {
-      font-size: 0.9rem;
-      font-weight: 600;
+      font-size: 0.78rem;
+      font-weight: $fw-semibold;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
       margin: 0;
       color: var(--parrafos);
+      opacity: 0.75;
     }
   }
 
+  // El número es el dato; la unidad lo acompaña sin competir con él.
   &__value {
-    font-size: 1.15rem;
-    font-weight: 700;
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    font-size: 1.75rem;
+    font-weight: $fw-bold;
+    line-height: 1.15;
     white-space: nowrap;
+  }
+
+  &__unit {
+    font-size: 0.8rem;
+    font-weight: $fw-medium;
+    color: var(--parrafos);
   }
 
   &__sub {
     font-size: 0.75rem;
     color: var(--parrafos);
+    opacity: 0.7;
   }
 
   &__chevron {
     color: var(--parrafos);
+    opacity: 0.45;
     flex-shrink: 0;
+    transition: opacity $dash-transition, transform $dash-transition;
+  }
+
+  &:hover &__chevron {
+    opacity: 1;
+    color: var(--card-accent);
+    transform: translateX(2px);
   }
 }
 
@@ -223,13 +292,18 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0.75rem 0;
+  padding: 0.75rem 0.6rem;
+  margin: 0 -0.6rem;
+  border-radius: $dash-radius;
   text-decoration: none;
   color: inherit;
+  transition: background-color $dash-transition;
 
   &:hover {
+    background: $dash-hover-bg;
+
     .overview-message__subject {
-      color: #ff8906;
+      color: $color-primary;
     }
   }
 
@@ -261,37 +335,34 @@
   }
 
   &__status {
-    font-size: 0.7rem;
-    font-weight: 600;
+    @include dash-pill;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    padding: 0.15rem 0.5rem;
-    border-radius: 999px;
-    white-space: nowrap;
     flex-shrink: 0;
 
+    // Mismos colores que los badges de la tabla de Messages: un estado se ve
+    // igual en todo el dashboard.
     &.new {
-      background: rgba(255, 137, 6, 0.15);
-      color: #ff8906;
+      background: rgba(255, 137, 6, 0.16);
+      color: $color-primary;
     }
 
     &.read {
-      background: rgba(167, 169, 190, 0.15);
+      background: rgba(167, 169, 190, 0.14);
       color: var(--parrafos);
     }
 
     &.replied {
-      background: rgba(16, 185, 129, 0.15);
-      color: #10b981;
+      background: rgba(16, 185, 129, 0.16);
+      color: #34d399;
     }
 
     &.spam {
-      background: rgba(239, 68, 68, 0.15);
-      color: #ef4444;
+      background: rgba(239, 68, 68, 0.16);
+      color: #f87171;
     }
 
     &.archived {
-      background: rgba(167, 169, 190, 0.15);
+      background: rgba(167, 169, 190, 0.14);
       color: var(--parrafos);
     }
   }

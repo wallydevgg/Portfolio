@@ -175,6 +175,87 @@
   }
 }
 
+// ── Dashboard surfaces and controls ───────────────────────────────────────────
+// Panel opaco del dashboard: la base de cards, tablas y formularios.
+@mixin dash-surface($radius: $dash-radius-lg) {
+  background: var(--BgDark);
+  border: 1px solid $dash-border;
+  border-radius: $radius;
+}
+
+// Elevación al pasar por encima. El desplazamiento es decorativo, así que se
+// anula con prefers-reduced-motion; el cambio de borde y sombra se mantiene,
+// que es lo que comunica "esto se puede pulsar".
+@mixin dash-lift($accent: $color-primary) {
+  transition: border-color $dash-transition, transform $dash-transition,
+    box-shadow $dash-transition, background-color $dash-transition;
+
+  &:hover {
+    border-color: $accent;
+    transform: translateY(-2px);
+    box-shadow: $dash-shadow-hover;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: border-color $dash-transition, box-shadow $dash-transition;
+
+    &:hover { transform: none; }
+  }
+}
+
+// Foco visible y consistente en todo control editable. Va en :focus-visible y
+// no en :focus para no dibujar el anillo en clics de ratón.
+@mixin dash-focus-ring($accent: $color-primary) {
+  outline: none;
+  border-color: $accent;
+  box-shadow: 0 0 0 3px rgba(255, 137, 6, 0.16);
+}
+
+// Botón fantasma: borde sutil, sin relleno hasta el hover.
+@mixin dash-ghost-btn($accent: $color-primary) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid $dash-border-strong;
+  border-radius: $dash-radius;
+  background: transparent;
+  color: var(--parrafos);
+  font-size: 0.875rem;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color $dash-transition, color $dash-transition,
+    background-color $dash-transition;
+
+  &:hover {
+    border-color: $accent;
+    color: $accent;
+    background: rgba(255, 137, 6, 0.08);
+  }
+
+  &:focus-visible { @include dash-focus-ring($accent); }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Píldora de estado / contador. El color lo pone quien la usa.
+@mixin dash-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: $dash-radius-pill;
+  font-size: 0.72rem;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  line-height: 1.6;
+}
+
 // ── Visually hidden (accessible) ──────────────────────────────────────────────
 @mixin visually-hidden {
   position: absolute;

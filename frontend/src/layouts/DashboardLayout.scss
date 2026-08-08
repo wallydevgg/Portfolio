@@ -92,8 +92,26 @@
     }
 
     &--active {
+      position: relative;
       background: rgba(255, 137, 6, 0.12);
+      font-weight: 600;
       @include theme-color(color, #ff8906, #ff8906);
+
+      // Indicador lateral: el tinte de fondo solo no separaba lo suficiente el
+      // item activo del hover, que también pinta fondo.
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 3px;
+        height: 60%;
+        border-radius: 0 2px 2px 0;
+        background: #ff8906;
+      }
+
+      .icon { color: #ff8906; }
     }
   }
 

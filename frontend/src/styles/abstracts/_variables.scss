@@ -68,6 +68,28 @@ $glass-bg-light-solid: rgba(255, 255, 255, 0.96);
 $content-measure     : 760px;
 $content-padding     : 2.5rem;
 
+// ── Dashboard ─────────────────────────────────────────────────────────────────
+// El dashboard es superficie opaca, no glass: aquí se lee y se edita, y el
+// desenfoque solo resta contraste. Estos tokens son lo que mantiene coherentes
+// radios, transiciones y estados entre todas sus páginas.
+$dash-radius        : 10px;
+$dash-radius-lg     : 12px;
+$dash-radius-pill   : 999px;
+$dash-transition    : 0.18s ease;
+
+$dash-border        : rgba(167, 169, 190, 0.2);
+$dash-border-strong : rgba(167, 169, 190, 0.35);
+$dash-hover-bg      : rgba(167, 169, 190, 0.07);
+$dash-shadow-hover  : 0 8px 24px rgba(0, 0, 0, 0.28);
+
+// Un acento por sección. Cian y violeta son los mismos que usan las columnas de
+// Skills en el home: el dashboard no inventa paleta, la reutiliza.
+$dash-accent-messages   : #22d3ee; // cian
+$dash-accent-posts      : $color-primary; // ámbar de la marca
+$dash-accent-skills     : #a78bfa; // violeta
+$dash-accent-projects   : #2dd4bf; // teal
+$dash-accent-experience : #fbbf24; // dorado
+
 // ── Breakpoints ───────────────────────────────────────────────────────────────
 // Usage: @include respond-to(mobile) { ... }
 $breakpoints: (

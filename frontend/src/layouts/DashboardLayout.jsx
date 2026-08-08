@@ -6,6 +6,13 @@ import { ToastProvider } from "../contexts/ToastContext";
 import "./DashboardLayout.scss";
 import { Switch, ThemeContext } from "@/barrell";
 
+// NavLink marca el item activo; los items del nav eran <Link> y por eso ninguno
+// se resaltaba salvo los del submenú. `extra` añade la clase de sub-item.
+const navLinkClass =
+  (extra = "") =>
+  ({ isActive }) =>
+    `dashboard__nav-link${extra ? ` ${extra}` : ""}${isActive ? " dashboard__nav-link--active" : ""}`;
+
 export default function DashboardLayout() {
   const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -51,11 +58,11 @@ export default function DashboardLayout() {
         </div>
 
         <nav className="dashboard__nav">
-          <Link to="/dashboard" className="dashboard__nav-link">
+          <NavLink to="/dashboard" end className={navLinkClass()}>
             <LayoutDashboard className="icon" />
             {sidebarOpen && <span>Overview</span>}
-          </Link>
-          <Link to="/dashboard/messages" className="dashboard__nav-link">
+          </NavLink>
+          <NavLink to="/dashboard/messages" className={navLinkClass()}>
             <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
               <Mail className="icon" />
               {newMessagesCount > 0 && !sidebarOpen && (
@@ -68,7 +75,7 @@ export default function DashboardLayout() {
                 {newMessagesCount > 0 && <span className="dashboard__badge">{newMessagesCount}</span>}
               </div>
             )}
-          </Link>
+          </NavLink>
           {/* Blog posts group (accordion) */}
           <div className="dashboard__nav-group">
             <button
@@ -94,14 +101,14 @@ export default function DashboardLayout() {
                 <NavLink
                   to="/dashboard/posts"
                   end
-                  className={({ isActive }) => `dashboard__nav-link dashboard__nav-subitem${isActive ? " dashboard__nav-link--active" : ""}`}
+                  className={navLinkClass("dashboard__nav-subitem")}
                 >
                   <BookOpen className="icon" size={16} />
                   <span>All Posts</span>
                 </NavLink>
                 <NavLink
                   to="/dashboard/posts/archived"
-                  className={({ isActive }) => `dashboard__nav-link dashboard__nav-subitem${isActive ? " dashboard__nav-link--active" : ""}`}
+                  className={navLinkClass("dashboard__nav-subitem")}
                 >
                   <Archive className="icon" size={16} />
                   <span>Archived</span>
@@ -109,22 +116,22 @@ export default function DashboardLayout() {
               </div>
             )}
           </div>
-          <Link to="/dashboard/experience" className="dashboard__nav-link">
+          <NavLink to="/dashboard/experience" className={navLinkClass()}>
             <Briefcase className="icon" />
             {sidebarOpen && <span>Experience</span>}
-          </Link>
-          <Link to="/dashboard/about" className="dashboard__nav-link">
+          </NavLink>
+          <NavLink to="/dashboard/about" className={navLinkClass()}>
             <UserRound className="icon" />
             {sidebarOpen && <span>About</span>}
-          </Link>
-          <Link to="/dashboard/skills" className="dashboard__nav-link">
+          </NavLink>
+          <NavLink to="/dashboard/skills" className={navLinkClass()}>
             <Code2 className="icon" />
             {sidebarOpen && <span>Skills</span>}
-          </Link>
-          <Link to="/dashboard/projects" className="dashboard__nav-link">
+          </NavLink>
+          <NavLink to="/dashboard/projects" className={navLinkClass()}>
             <FolderOpen className="icon" />
             {sidebarOpen && <span>Projects</span>}
-          </Link>
+          </NavLink>
 
           {/* Settings group (accordion) */}
           <div className="dashboard__nav-group">
@@ -151,28 +158,28 @@ export default function DashboardLayout() {
                 <NavLink
                   to="/dashboard/settings"
                   end
-                  className={({ isActive }) => `dashboard__nav-link dashboard__nav-subitem${isActive ? " dashboard__nav-link--active" : ""}`}
+                  className={navLinkClass("dashboard__nav-subitem")}
                 >
                   <Settings className="icon" size={16} />
                   <span>Settings</span>
                 </NavLink>
                 <NavLink
                   to="/dashboard/settings/seo"
-                  className={({ isActive }) => `dashboard__nav-link dashboard__nav-subitem${isActive ? " dashboard__nav-link--active" : ""}`}
+                  className={navLinkClass("dashboard__nav-subitem")}
                 >
                   <Search className="icon" size={16} />
                   <span>SEO</span>
                 </NavLink>
                 <NavLink
                   to="/dashboard/settings/notifications"
-                  className={({ isActive }) => `dashboard__nav-link dashboard__nav-subitem${isActive ? " dashboard__nav-link--active" : ""}`}
+                  className={navLinkClass("dashboard__nav-subitem")}
                 >
                   <Bell className="icon" size={16} />
                   <span>Notifications</span>
                 </NavLink>
                 <NavLink
                   to="/dashboard/settings/cv"
-                  className={({ isActive }) => `dashboard__nav-link dashboard__nav-subitem${isActive ? " dashboard__nav-link--active" : ""}`}
+                  className={navLinkClass("dashboard__nav-subitem")}
                 >
                   <FileText className="icon" size={16} />
                   <span>CV</span>
