@@ -41,13 +41,28 @@
   }
 
   .skill-category {
+    // Cada columna recibe --skill-accent como estilo inline desde Skills.jsx.
+    // Este valor solo actúa de red por si el inline faltara.
+    --skill-accent: #{$color-primary};
+
+    @include glass($radius: 14px, $blur: 10px);
+    padding: 1.5rem 1.35rem;
+
+    // Más discreto que las cards del blog: aquí hay tres paneles seguidos y el
+    // mismo peso visual satura la sección.
+    background: rgba(18, 18, 24, 0.42);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), $glass-highlight;
+
+    .light-theme & { background: rgba(255, 255, 255, 0.5); }
+
     h3 {
       font-size: 1.1rem;
       font-weight: $fw-semibold;
-      color: $color-primary;
+      color: var(--skill-accent);
       margin-bottom: 1.5rem;
       padding-bottom: 0.5rem;
-      border-bottom: 1px solid rgba(255, 137, 6, 0.3);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      border-bottom-color: color-mix(in srgb, var(--skill-accent) 35%, transparent);
     }
   }
 
@@ -71,7 +86,7 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        color: $color-primary;
+        color: var(--skill-accent);
         font-size: 1.05rem;
         flex-shrink: 0;
 
@@ -95,9 +110,24 @@
 
       .skill-progress {
         height: 100%;
-        background: linear-gradient(90deg, $color-primary, $color-secondary);
+        // Un solo tono que gana intensidad hacia la derecha. Mezclar con el
+        // secundario enturbiaría el cian y el violeta.
+        background: linear-gradient(
+          90deg,
+          color-mix(in srgb, var(--skill-accent) 55%, transparent),
+          var(--skill-accent)
+        );
         border-radius: 2px;
-        transition: width 0.8s ease;
+        transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+    }
+
+    // Con movimiento reducido el hook revela de entrada; acá se anula además la
+    // transición y el escalonado para que no quede ni el barrido.
+    @media (prefers-reduced-motion: reduce) {
+      .skill-bar .skill-progress {
+        transition: none;
+        transition-delay: 0ms !important;
       }
     }
   }

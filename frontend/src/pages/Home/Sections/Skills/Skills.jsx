@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Skills.scss";
 import { t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
@@ -25,7 +25,7 @@ const SkillIcon = ({ name, icon }) => {
   );
 };
 
-const SkillBar = ({ name, level, icon }) => (
+const SkillBar = ({ name, level, icon, revealed, index }) => (
   <div className="skill-item">
     <div className="skill-header">
       <span className="skill-name">
@@ -35,17 +35,63 @@ const SkillBar = ({ name, level, icon }) => (
       <span className="skill-level">{level}%</span>
     </div>
     <div className="skill-bar">
-      <div className="skill-progress" style={{ width: `${level}%` }} />
+      <div
+        className="skill-progress"
+        style={{
+          width: revealed ? `${level}%` : 0,
+          // Escalonado corto: las barras de una columna entran en cascada en
+          // lugar de todas a la vez.
+          transitionDelay: `${index * 60}ms`,
+        }}
+      />
     </div>
   </div>
 );
 
+/**
+ * Revela el contenido cuando el elemento observado entra en el viewport.
+ *
+ * Con `prefers-reduced-motion` activo arranca revelado: el valor final se ve
+ * de entrada y la transición se anula desde SCSS, sin esperar al scroll.
+ *
+ * `enabled` existe porque el nodo observado solo se monta cuando terminó la
+ * carga; sin él el efecto correría con la ref vacía y no volvería a intentarlo.
+ */
+function useRevealOnScroll(enabled = true) {
+  const ref = useRef(null);
+  const [revealed, setRevealed] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+
+  useEffect(() => {
+    if (!enabled || revealed || !ref.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setRevealed(true);
+        observer.disconnect(); // se anima una sola vez, no en cada scroll
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [enabled, revealed]);
+
+  return [ref, revealed];
+}
+
 // Curated selection: only the strongest/most relevant skills (~21 total),
 // grouped into 3 columns. The full list (56) lives in the dashboard/CV.
+// `accent` es decisión de diseño, no dato de negocio: vive aquí y no en la DB.
+// Se inyecta como custom property y de ahí lo toman barra, icono y título.
 const SKILL_COLUMNS = [
   {
     titleKey: "skills.colLanguages",
-    categories: ["Languages", "Databases"],
+    accent: "#ff8906", // ámbar — el primario de la marca
     skills: [
       "Python",
       "JavaScript (ES6+)",
@@ -58,7 +104,7 @@ const SKILL_COLUMNS = [
   },
   {
     titleKey: "skills.colFrontend",
-    categories: ["Frontend"],
+    accent: "#22d3ee", // cian
     skills: [
       "React",
       "Next.js",
@@ -71,7 +117,7 @@ const SKILL_COLUMNS = [
   },
   {
     titleKey: "skills.colBackend",
-    categories: ["Backend", "DevOps & Cloud", "Architecture & Methodologies"],
+    accent: "#a78bfa", // violeta
     skills: [
       "Django",
       "Django REST Framework",
@@ -84,12 +130,8 @@ const SKILL_COLUMNS = [
   },
 ];
 
-const COLUMN_TITLES = {
-  "skills.colLanguages": t`skills.colLanguages`,
-  "skills.colFrontend": t`skills.colFrontend`,
-  "skills.colBackend": t`skills.colBackend`,
-};
-
+// Los títulos se resuelven dentro de la función a propósito: invocar el macro
+// `t` en el ámbito del módulo lo congelaría en el idioma del primer render.
 const getColumnTitle = (key) => {
   const titles = {
     "skills.colLanguages": t`skills.colLanguages`,
@@ -104,6 +146,7 @@ const Skills = () => {
   const { getSkills } = usePortfolioApi();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [gridRef, revealed] = useRevealOnScroll(!loading);
 
   useEffect(() => {
     getSkills()
@@ -136,10 +179,21 @@ const Skills = () => {
       .map((name) => ({ name, ...skillMap[name] }))
       .filter((s) => s.level !== undefined);
     return (
-      <div key={col.titleKey} className="skill-category">
+      <div
+        key={col.titleKey}
+        className="skill-category"
+        style={{ "--skill-accent": col.accent }}
+      >
         <h3>{getColumnTitle(col.titleKey)}</h3>
-        {items.map((s) => (
-          <SkillBar key={s.name} name={s.name} level={s.level} icon={s.icon} />
+        {items.map((s, i) => (
+          <SkillBar
+            key={s.name}
+            name={s.name}
+            level={s.level}
+            icon={s.icon}
+            revealed={revealed}
+            index={i}
+          />
         ))}
       </div>
     );
@@ -170,7 +224,7 @@ const Skills = () => {
         <div className="space-line"></div>
       </div>
 
-      <div className="skills-grid">
+      <div className="skills-grid" ref={gridRef}>
         {SKILL_COLUMNS.map(renderColumn)}
       </div>
 
