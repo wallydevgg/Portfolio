@@ -73,7 +73,9 @@ export default function ArchivedPostsPage() {
       )}
 
       {!loading && posts.length === 0 && (
-        <div className="posts-page__empty">
+        // posts-table__empty: el &__empty de Posts.scss cuelga de .posts-table,
+        // no de .posts-page.
+        <div className="posts-table__empty">
           <Archive size={40} strokeWidth={1.5} />
           <p>No hay posts archivados.</p>
         </div>
@@ -100,12 +102,24 @@ export default function ArchivedPostsPage() {
                 </td>
                 <td>{formatDate(post.deleted_at)}</td>
                 <td>
-                  <button onClick={() => handleRestore(post)} disabled={busyId === post.id} title="Restaurar">
-                    <RotateCcw className="icon" />
-                  </button>
-                  <button onClick={() => handlePurge(post)} disabled={busyId === post.id} title="Borrar definitivamente">
-                    <Trash2 className="icon" />
-                  </button>
+                  <div className="posts-table__actions">
+                    <button
+                      onClick={() => handleRestore(post)}
+                      disabled={busyId === post.id}
+                      className="action-edit"
+                      title="Restaurar"
+                    >
+                      <RotateCcw className="icon" />
+                    </button>
+                    <button
+                      onClick={() => handlePurge(post)}
+                      disabled={busyId === post.id}
+                      className="action-delete"
+                      title="Borrar definitivamente"
+                    >
+                      <Trash2 className="icon" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
