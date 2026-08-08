@@ -1,10 +1,16 @@
+import { useState } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Underline from '@tiptap/extension-underline'
 import { Bold, Italic, Underline as UnderlineIcon, Link as LinkIcon, List, ListOrdered, Heading2, Quote } from 'lucide-react'
+import UrlDialog from './UrlDialog'
+import './UrlDialog.scss'
 
 export default function TiptapEditor({ content, onChange }) {
+  const [linkDialogOpen, setLinkDialogOpen] = useState(false)
+  const [linkInitialUrl, setLinkInitialUrl] = useState('')
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -38,19 +44,19 @@ export default function TiptapEditor({ content, onChange }) {
     </button>
   );
 
-  const setLink = () => {
-    const previousUrl = editor.getAttributes('link').href
-    const url = window.prompt('URL', previousUrl)
+  const openLinkDialog = () => {
+    setLinkInitialUrl(editor.getAttributes('link').href || '')
+    setLinkDialogOpen(true)
+  }
 
-    if (url === null) {
-      return
-    }
-
-    if (url === '') {
+  // Vaciar el campo y aceptar quita el enlace: es la forma de deshacerlo sin un
+  // botón aparte.
+  const applyLink = (url) => {
+    setLinkDialogOpen(false)
+    if (!url) {
       editor.chain().focus().extendMarkRange('link').unsetLink().run()
       return
     }
-
     editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
   }
 
@@ -73,10 +79,20 @@ export default function TiptapEditor({ content, onChange }) {
         
         <div className="tiptap-toolbar__divider" />
 
-        <ToolbarButton onClick={setLink} isActive={editor.isActive('link')} icon={LinkIcon} />
+        <ToolbarButton onClick={openLinkDialog} isActive={editor.isActive('link')} icon={LinkIcon} />
       </div>
-      
+
       <EditorContent editor={editor} />
+
+      <UrlDialog
+        open={linkDialogOpen}
+        title="Insertar enlace"
+        initialValue={linkInitialUrl}
+        confirmLabel="Aplicar"
+        hint="Dejalo vacío para quitar el enlace."
+        onConfirm={applyLink}
+        onCancel={() => setLinkDialogOpen(false)}
+      />
     </div>
   )
 }

@@ -267,15 +267,18 @@
     margin-bottom: 0.5em;
   }
 
+  // Misma cita que en el post publicado (BlogPostPage.scss:410): raya naranja,
+  // fondo tintado y esquina derecha redondeada. El editor tenía borde gris, así
+  // que las citas no se parecían a lo que se acaba publicando.
   blockquote {
     font-weight: $fw-medium;
     font-style: italic;
-    @include theme-color(color, #f4f4f5, #18181b);
-    @include theme-color(border-left-color, #3f3f46, #e5e7eb);
-    border-left-width: 0.25rem;
-    border-left-style: solid;
+    color: inherit;
+    border-left: 3px solid $color-primary;
+    border-radius: 0 8px 8px 0;
+    background: rgba(255, 137, 6, 0.07);
     margin-top: 1.6em;
     margin-bottom: 1.6em;
-    padding-left: 1em;
+    padding: 0.75rem 1rem 0.75rem 1.25rem;
   }
 }
