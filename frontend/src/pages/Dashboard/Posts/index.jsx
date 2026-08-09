@@ -32,7 +32,7 @@ export default function PostsPage() {
   }, [fetchPosts]);
 
   const handleDelete = async (post) => {
-    if (!window.confirm(`¿Seguro que quieres eliminar "${post.title}"?`)) return;
+    if (!window.confirm(`"${post.title}" se moverá a Archivados. Podés restaurarlo desde ahí.`)) return;
     try {
       setDeletingId(post.id);
       await deletePost(post.id);

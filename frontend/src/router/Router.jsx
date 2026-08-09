@@ -7,6 +7,8 @@ import NotFoundPage from "@/pages/error/NotFoundPage";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import PostsPage from "@/pages/Dashboard/Posts/index";
 import PostEditorPage from "@/pages/Dashboard/Posts/Editor";
+import PostPreviewPage from "@/pages/Dashboard/Posts/Preview";
+import ArchivedPostsPage from "@/pages/Dashboard/Posts/Archived";
 import ExperiencePage from "@/pages/Dashboard/Experience/index";
 import SkillsPage from "@/pages/Dashboard/Skills/index";
 import ProjectsPage from "@/pages/Dashboard/Projects/index";
@@ -22,15 +24,22 @@ import BlogPage from "@/pages/Blog/BlogPage";
 import BlogPostPage from "@/pages/Blog/BlogPostPage";
 import PrivacyPage from "@/pages/Privacy/Privacy";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ToastProvider } from "@/contexts/ToastContext";
 import LoginPage from "@/pages/Login/Login";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
 const router = createBrowserRouter(
   [
     {
+      // ToastProvider va aquí, en la raíz, y no dentro de DashboardLayout: la
+      // vista previa vive fuera del layout y también necesita toasts. Con el
+      // provider en dos sitios, qué ruta tenía toasts dependía de por dónde
+      // colgara la página.
       element: (
         <AuthProvider>
-          <Outlet />
+          <ToastProvider>
+            <Outlet />
+          </ToastProvider>
         </AuthProvider>
       ),
       children: [
@@ -61,6 +70,7 @@ const router = createBrowserRouter(
             { path: "", element: <OverviewPage /> },
             { path: "posts", element: <PostsPage /> },
             { path: "posts/new", element: <PostEditorPage /> },
+            { path: "posts/archived", element: <ArchivedPostsPage /> },
             { path: "posts/:id/edit", element: <PostEditorPage /> },
             { path: "experience", element: <ExperiencePage /> },
             { path: "about", element: <AboutDashboardPage /> },
@@ -73,6 +83,16 @@ const router = createBrowserRouter(
             { path: "settings/notifications", element: <NotificationsSettings /> },
             { path: "settings/cv", element: <CVSettingsPage /> },
           ],
+        },
+        {
+          // Fuera de DashboardLayout a propósito: con el chrome del dashboard
+          // alrededor, la vista previa no mostraría la página real.
+          path: "/dashboard/posts/:id/preview",
+          element: (
+            <ProtectedRoute>
+              <PostPreviewPage />
+            </ProtectedRoute>
+          ),
         },
       ],
     },

@@ -175,6 +175,218 @@
   }
 }
 
+// ── Dashboard surfaces and controls ───────────────────────────────────────────
+// Panel opaco del dashboard: la base de cards, tablas y formularios.
+@mixin dash-surface($radius: $dash-radius-lg) {
+  background: var(--BgDark);
+  border: 1px solid $dash-border;
+  border-radius: $radius;
+}
+
+// Elevación al pasar por encima. El desplazamiento es decorativo, así que se
+// anula con prefers-reduced-motion; el cambio de borde y sombra se mantiene,
+// que es lo que comunica "esto se puede pulsar".
+@mixin dash-lift($accent: $color-primary) {
+  transition: border-color $dash-transition, transform $dash-transition,
+    box-shadow $dash-transition, background-color $dash-transition;
+
+  &:hover {
+    border-color: $accent;
+    transform: translateY(-2px);
+    box-shadow: $dash-shadow-hover;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: border-color $dash-transition, box-shadow $dash-transition;
+
+    &:hover { transform: none; }
+  }
+}
+
+// Foco visible y consistente en todo control editable. Va en :focus-visible y
+// no en :focus para no dibujar el anillo en clics de ratón.
+@mixin dash-focus-ring($accent: $color-primary) {
+  outline: none;
+  border-color: $accent;
+  box-shadow: 0 0 0 3px rgba(255, 137, 6, 0.16);
+}
+
+// Botón fantasma: borde sutil, sin relleno hasta el hover.
+@mixin dash-ghost-btn($accent: $color-primary) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid $dash-border-strong;
+  border-radius: $dash-radius;
+  background: transparent;
+  color: var(--parrafos);
+  font-size: 0.875rem;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color $dash-transition, color $dash-transition,
+    background-color $dash-transition;
+
+  &:hover {
+    border-color: $accent;
+    color: $accent;
+    background: rgba(255, 137, 6, 0.08);
+  }
+
+  &:focus-visible { @include dash-focus-ring($accent); }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Campo de formulario del dashboard. El foco va en naranja para todos los
+// controles: es el color de "acción" del panel.
+@mixin dash-input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border-radius: $dash-radius;
+  border: 1px solid $dash-border-strong;
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--DM-Title);
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: border-color $dash-transition, box-shadow $dash-transition;
+
+  &::placeholder {
+    color: var(--parrafos);
+    opacity: 0.5;
+  }
+
+  &:hover { border-color: rgba(167, 169, 190, 0.5); }
+
+  &:focus,
+  &:focus-visible { @include dash-focus-ring; }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+// Botón de acción principal. Relleno sólido: es el único de su pantalla.
+@mixin dash-primary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1.1rem;
+  border: 1px solid $color-primary;
+  border-radius: $dash-radius;
+  background: $color-primary;
+  color: #1a1400;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: $fw-semibold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: filter $dash-transition, box-shadow $dash-transition;
+
+  &:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 4px 14px rgba(255, 137, 6, 0.25);
+  }
+
+  &:focus-visible { @include dash-focus-ring; }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: none;
+    box-shadow: none;
+  }
+}
+
+// Tabla de listado: cabecera atenuada, filas con hover, sin borde en la última.
+@mixin dash-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    padding: 0.9rem 1rem;
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: $fw-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--parrafos);
+    background: rgba(0, 0, 0, 0.22);
+    border-bottom: 1px solid $dash-border;
+  }
+
+  td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid rgba(167, 169, 190, 0.1);
+  }
+
+  tbody tr {
+    transition: background-color $dash-transition;
+
+    &:hover { background: $dash-hover-bg; }
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+}
+
+// Botones de fila (editar / borrar). Mismo tamaño y radio en todas las páginas;
+// el color solo aparece al pasar por encima.
+@mixin dash-row-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid $dash-border-strong;
+  border-radius: $dash-radius;
+  background: transparent;
+  color: var(--parrafos);
+  font-family: inherit;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: border-color $dash-transition, color $dash-transition,
+    background-color $dash-transition;
+
+  &:hover {
+    border-color: $color-primary;
+    color: $color-primary;
+    background: rgba(255, 137, 6, 0.08);
+  }
+
+  &:focus-visible { @include dash-focus-ring; }
+
+  &--danger:hover {
+    border-color: #f87171;
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.1);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Píldora de estado / contador. El color lo pone quien la usa.
+@mixin dash-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: $dash-radius-pill;
+  font-size: 0.72rem;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  line-height: 1.6;
+}
+
 // ── Visually hidden (accessible) ──────────────────────────────────────────────
 @mixin visually-hidden {
   position: absolute;

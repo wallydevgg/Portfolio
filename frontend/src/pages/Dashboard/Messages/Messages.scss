@@ -1,3 +1,5 @@
+@use "@/styles/abstracts" as *;
+
 .dashboard-messages {
   padding: 2rem;
   color: var(--DM-Title);
@@ -6,7 +8,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.75rem;
 
     h1 {
       font-size: 2rem;
@@ -15,59 +19,106 @@
 
     .messages-stats {
       display: flex;
-      gap: 1rem;
+      gap: 0.5rem;
 
+      // Contadores como píldoras con el número destacado sobre su etiqueta.
       .stat-badge {
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        font-weight: 600;
-        font-size: 0.9rem;
+        @include dash-pill;
+        padding: 0.35rem 0.8rem;
+        font-size: 0.8rem;
 
         &.new {
-          background: rgba(255, 137, 6, 0.2);
-          color: #ff8906;
-          border: 1px solid #ff8906;
+          background: rgba(255, 137, 6, 0.14);
+          color: $color-primary;
+          border: 1px solid rgba(255, 137, 6, 0.4);
         }
 
         &.total {
-          background: rgba(167, 169, 190, 0.2);
+          background: rgba(167, 169, 190, 0.12);
           color: var(--parrafos);
+          border: 1px solid $dash-border;
         }
       }
     }
   }
 
+  // Filtros como pestañas-píldora: el activo se rellena, el resto es fantasma.
   .messages-filters {
     display: flex;
-    gap: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.4rem;
     margin-bottom: 1.5rem;
+    padding: 0.3rem;
+    border-radius: $dash-radius-pill;
+    background: rgba(167, 169, 190, 0.07);
+    border: 1px solid $dash-border;
+    width: fit-content;
 
     button {
       background: transparent;
-      border: 1px solid rgba(167, 169, 190, 0.3);
+      border: 1px solid transparent;
       color: var(--parrafos);
       padding: 0.4rem 1rem;
-      border-radius: 6px;
+      border-radius: $dash-radius-pill;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: $fw-medium;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: background-color $dash-transition, color $dash-transition,
+        border-color $dash-transition;
 
       &:hover {
-        border-color: #ff8906;
-        color: #ff8906;
+        background: $dash-hover-bg;
+        color: var(--DM-Title);
       }
 
+      &:focus-visible { @include dash-focus-ring; }
+
       &.active {
-        background: #ff8906;
-        border-color: #ff8906;
-        color: #fff;
+        background: $color-primary;
+        border-color: $color-primary;
+        color: #1a1400;
+        font-weight: $fw-semibold;
       }
     }
   }
 
+  // Estado vacío del filtro activo.
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 3rem 1rem;
+    text-align: center;
+    color: var(--parrafos);
+
+    svg {
+      color: $dash-accent-messages;
+      opacity: 0.5;
+      margin-bottom: 0.35rem;
+    }
+
+    strong {
+      font-size: 0.95rem;
+      color: var(--DM-Title);
+    }
+
+    span {
+      font-size: 0.82rem;
+      opacity: 0.85;
+    }
+  }
+
+  .loading {
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: var(--parrafos);
+    font-size: 0.9rem;
+  }
+
   .messages-list {
-    background: var(--BgDark);
-    border: 1px solid rgba(167, 169, 190, 0.2);
-    border-radius: 12px;
+    @include dash-surface;
     overflow: hidden;
 
     table {
@@ -75,15 +126,19 @@
       border-collapse: collapse;
 
       th, td {
-        padding: 1rem;
+        padding: 0.9rem 1rem;
         text-align: left;
         border-bottom: 1px solid rgba(167, 169, 190, 0.1);
       }
 
       th {
-        font-weight: 600;
+        font-size: 0.72rem;
+        font-weight: $fw-semibold;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
         color: var(--parrafos);
-        background: rgba(0, 0, 0, 0.2);
+        background: rgba(0, 0, 0, 0.22);
+        border-bottom-color: $dash-border;
       }
 
       tr:last-child td {
@@ -91,40 +146,43 @@
       }
 
       .message-row {
-        transition: background 0.2s;
+        transition: background-color $dash-transition;
 
         &:hover {
-          background: rgba(255, 255, 255, 0.02);
+          background: $dash-hover-bg;
+
+          .btn-view {
+            border-color: $color-primary;
+            color: $color-primary;
+          }
         }
 
-        &.new {
-          background: rgba(255, 137, 6, 0.05);
+        // Un mensaje sin leer se marca con un filete lateral, no tiñendo toda
+        // la fila: el tinte competía con el fondo del hover y hacía que una
+        // fila nueva pareciera estar siempre bajo el cursor.
+        &.new td:first-child {
+          box-shadow: inset 3px 0 0 $color-primary;
         }
 
         .status-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.4rem;
-          padding: 0.3rem 0.6rem;
-          border-radius: 4px;
-          font-size: 0.8rem;
-          font-weight: 600;
+          @include dash-pill;
           text-transform: capitalize;
 
-          &.new { color: #ff8906; background: rgba(255, 137, 6, 0.1); }
-          &.read { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
-          &.replied { color: #10b981; background: rgba(16, 185, 129, 0.1); }
-          &.spam { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
-          &.archived { color: #6b7280; background: rgba(107, 114, 128, 0.1); }
+          &.new { color: $color-primary; background: rgba(255, 137, 6, 0.16); }
+          &.read { color: #60a5fa; background: rgba(96, 165, 250, 0.16); }
+          &.replied { color: #34d399; background: rgba(52, 211, 153, 0.16); }
+          &.spam { color: #f87171; background: rgba(248, 113, 113, 0.16); }
+          &.archived { color: #a1a1aa; background: rgba(161, 161, 170, 0.16); }
         }
 
         .sender-info {
           display: flex;
           flex-direction: column;
-          
+
           .email {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--parrafos);
+            opacity: 0.8;
           }
         }
 
@@ -136,20 +194,9 @@
         }
 
         .btn-view {
-          display: inline-block;
-          padding: 0.4rem 0.8rem;
-          background: transparent;
-          border: 1px solid #ff8906;
-          color: #ff8906;
-          border-radius: 6px;
-          text-decoration: none;
-          font-size: 0.85rem;
-          transition: all 0.2s;
-
-          &:hover {
-            background: #ff8906;
-            color: #fff;
-          }
+          @include dash-ghost-btn;
+          padding: 0.35rem 0.85rem;
+          font-size: 0.82rem;
         }
       }
     }

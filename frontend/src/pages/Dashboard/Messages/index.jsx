@@ -69,7 +69,15 @@ const MessagesPage = () => {
       ) : (
         <div className="messages-list">
           {messages.length === 0 ? (
-            <div className="empty-state">No messages found.</div>
+            <div className="empty-state">
+              <MailOpen size={34} strokeWidth={1.5} />
+              <strong>{filter ? `No ${filter} messages` : "No messages yet"}</strong>
+              <span>
+                {filter
+                  ? "Try a different filter to see other messages."
+                  : "New messages from the contact form will show up here."}
+              </span>
+            </div>
           ) : (
             <table>
               <thead>

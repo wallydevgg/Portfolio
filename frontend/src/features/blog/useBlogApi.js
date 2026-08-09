@@ -40,12 +40,12 @@ export function useBlogApi() {
   /**
    * Crea un nuevo post. is_published: false = Guardar como borrador.
    */
-  const createPost = async ({ title, content, is_published = false }) => {
+  const createPost = async ({ title, content, is_published = false, cover_image = null }) => {
     const slug = generateSlug(title);
     const res = await fetch(`${API_BASE}/`, {
       method: "POST",
       headers: authHeaders,
-      body: JSON.stringify({ title, content, slug, is_published }),
+      body: JSON.stringify({ title, content, slug, is_published, cover_image }),
     });
     if (!res.ok) {
       let detail = "Error creating post";
@@ -95,5 +95,69 @@ export function useBlogApi() {
     return res.json();
   };
 
-  return { getAllPosts, createPost, updatePost, deletePost, getPost, generateSlug };
+  /**
+   * Obtiene los posts archivados (soft deleted).
+   */
+  const getArchivedPosts = async () => {
+    const res = await fetch(`${API_BASE}/archived`, { headers: authHeaders });
+    if (!res.ok) throw new Error("Error fetching archived posts");
+    return res.json();
+  };
+
+  /**
+   * Saca un post del archivo y lo devuelve al estado que tenía.
+   */
+  const restorePost = async (id) => {
+    const res = await fetch(`${API_BASE}/${id}/restore`, {
+      method: "POST",
+      headers: authHeaders,
+    });
+    if (!res.ok) throw new Error("Error restoring post");
+    return res.json();
+  };
+
+  /**
+   * Borrado definitivo. Solo funciona sobre posts ya archivados.
+   */
+  const purgePost = async (id) => {
+    const res = await fetch(`${API_BASE}/${id}/purge`, {
+      method: "DELETE",
+      headers: authHeaders,
+    });
+    if (!res.ok) throw new Error("Error deleting post permanently");
+  };
+
+  /**
+   * Sube una imagen y devuelve { url }. No lleva Content-Type: el navegador lo
+   * pone con el boundary del multipart, y fijarlo a mano rompe la petición.
+   */
+  const uploadImage = async (file) => {
+    const body = new FormData();
+    body.append("file", file);
+
+    const res = await fetch(`${API_BASE}/upload-image`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body,
+    });
+    if (!res.ok) {
+      let detail = "Error subiendo la imagen";
+      try { detail = (await res.json()).detail ?? detail; } catch {}
+      throw new Error(detail);
+    }
+    return res.json();
+  };
+
+  return {
+    getAllPosts,
+    createPost,
+    updatePost,
+    deletePost,
+    getPost,
+    generateSlug,
+    getArchivedPosts,
+    restorePost,
+    purgePost,
+    uploadImage,
+  };
 }

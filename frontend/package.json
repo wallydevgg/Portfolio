@@ -26,6 +26,7 @@
     "@lingui/macro": "^5.9.5",
     "@lingui/react": "^5.9.5",
     "@radix-ui/react-slot": "^1.2.4",
+    "@tiptap/extension-image": "^3.22.4",
     "@tiptap/react": "^3.22.4",
     "@tiptap/starter-kit": "^3.22.4",
     "class-variance-authority": "^0.7.1",

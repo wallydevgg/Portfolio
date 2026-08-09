@@ -1,5 +1,9 @@
 # ✅ GENERADO POR CLAUDE - Archivo: backend/domains/blog/router.py
-from fastapi import APIRouter, Depends, HTTPException, status, Query, Request
+from datetime import datetime, timezone
+
+import uuid
+
+from fastapi import APIRouter, Depends, HTTPException, status, Query, Request, UploadFile, File
 from fastapi.responses import Response
 from sqlalchemy.orm import Session, selectinload
 from sqlalchemy import func
@@ -9,14 +13,49 @@ from core.config import settings
 from core.database import get_db
 from core.net import get_client_ip
 from core.security import get_current_user
+from core.storage import upload_file
 from domains.blog import models, schemas
 from domains.users.models import User
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 
 
+# SVG is deliberately absent: it is an image content type that can carry
+# scripts, and these files are served from a public bucket.
+ALLOWED_IMAGE_TYPES = {
+    "image/png": b"\x89PNG\r\n\x1a\n",
+    "image/jpeg": b"\xff\xd8\xff",
+    "image/gif": b"GIF8",
+    "image/webp": b"RIFF",
+}
+
+MAX_IMAGE_BYTES = 5 * 1024 * 1024
+
+
+def _public_posts(db: Session):
+    """Posts visible to anyone: published and not archived."""
+    return db.query(models.Post).filter(
+        models.Post.deleted_at.is_(None),
+        models.Post.is_published.is_(True),
+    )
+
+
+def _active_posts(db: Session):
+    """Posts the dashboard works with: drafts included, archived excluded."""
+    return db.query(models.Post).filter(models.Post.deleted_at.is_(None))
+
+
 def _get_post_or_404(db: Session, post_id: int) -> models.Post:
     post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    return post
+
+
+def _get_public_post_or_404(db: Session, post_id: int) -> models.Post:
+    """Resolve a post for anonymous interaction. Drafts and archived posts are
+    404, not 403: a 403 would confirm the post exists."""
+    post = _public_posts(db).filter(models.Post.id == post_id).first()
     if not post:
         raise HTTPException(status_code=404, detail="Post not found")
     return post
@@ -79,7 +118,7 @@ def list_posts(
     db: Session = Depends(get_db),
     admin: str = Depends(lambda: None),
 ):
-    query = db.query(models.Post).filter(models.Post.is_published == True).order_by(models.Post.created_at.desc())
+    query = _public_posts(db).order_by(models.Post.created_at.desc())
     return _posts_with_counts(db, query)
 
 
@@ -88,15 +127,14 @@ def list_all_posts(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    query = db.query(models.Post).order_by(models.Post.created_at.desc())
+    query = _active_posts(db).order_by(models.Post.created_at.desc())
     return _posts_with_counts(db, query)
 
 
 @router.get("/rss.xml")
 def get_rss(db: Session = Depends(get_db)):
     posts = (
-        db.query(models.Post)
-        .filter(models.Post.is_published == True)
+        _public_posts(db)
         .order_by(models.Post.created_at.desc())
         .limit(20)
         .all()
@@ -152,20 +190,74 @@ def list_tags(db: Session = Depends(get_db)):
     return db.query(models.Tag).order_by(models.Tag.name.asc()).all()
 
 
+@router.post("/upload-image")
+async def upload_post_image(
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_user),
+):
+    """Admin-only image upload for post covers and inline content.
+
+    Validates three things, in this order: the declared content type, the size,
+    and the actual leading bytes. The last one matters because the content type
+    is whatever the client says it is — without sniffing, anything renamed to
+    .png would land in a public bucket.
+    """
+    if file.content_type not in ALLOWED_IMAGE_TYPES:
+        raise HTTPException(
+            status_code=400,
+            detail="Only PNG, JPEG, GIF and WebP images are allowed",
+        )
+
+    contents = await file.read()
+
+    if len(contents) > MAX_IMAGE_BYTES:
+        raise HTTPException(status_code=413, detail="Image must be 5 MB or smaller")
+
+    if not contents.startswith(ALLOWED_IMAGE_TYPES[file.content_type]):
+        raise HTTPException(status_code=400, detail="File content does not match its type")
+
+    # The extension comes from the validated content type, never from the
+    # uploaded filename.
+    extension = file.content_type.split("/")[1]
+    key = f"blog/{uuid.uuid4()}.{extension}"
+
+    try:
+        url = upload_file(contents, key, content_type=file.content_type)
+    except Exception:
+        raise HTTPException(status_code=502, detail="Could not store the image")
+
+    return {"url": url}
+
+
+@router.get("/archived", response_model=List[schemas.PostSchema])
+def list_archived_posts(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    query = (
+        db.query(models.Post)
+        .filter(models.Post.deleted_at.is_not(None))
+        .order_by(models.Post.deleted_at.desc())
+    )
+    return _posts_with_counts(db, query)
+
+
 @router.get("/slug/{slug}", response_model=schemas.PostSchema)
 def get_post_by_slug(slug: str, db: Session = Depends(get_db)):
-    post = (
-        db.query(models.Post)
-        .filter(models.Post.slug == slug, models.Post.is_published == True)
-        .first()
-    )
+    post = _public_posts(db).filter(models.Post.slug == slug).first()
     if not post:
         raise HTTPException(status_code=404, detail="Post not found")
     return post
 
 
 @router.get("/{post_id}", response_model=schemas.PostSchema)
-def get_post(post_id: int, db: Session = Depends(get_db)):
+def get_post(
+    post_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Admin-only. Returns posts in any state — the editor and the draft
+    preview both need archived and unpublished posts."""
     return _get_post_or_404(db, post_id)
 
 
@@ -193,7 +285,40 @@ def delete_post(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    """Soft delete: the post moves to the archive and keeps its state."""
     db_post = _get_post_or_404(db, post_id)
+    if db_post.deleted_at is None:
+        db_post.deleted_at = datetime.now(timezone.utc)
+        db.commit()
+    return None
+
+
+@router.post("/{post_id}/restore", response_model=schemas.PostSchema)
+def restore_post(
+    post_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    db_post = _get_post_or_404(db, post_id)
+    if db_post.deleted_at is None:
+        raise HTTPException(status_code=409, detail="Post is not archived")
+    db_post.deleted_at = None
+    db.commit()
+    db.refresh(db_post)
+    return db_post
+
+
+@router.delete("/{post_id}/purge", status_code=status.HTTP_204_NO_CONTENT)
+def purge_post(
+    post_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Permanent delete. Only archived posts qualify, so destroying something
+    always takes two deliberate steps."""
+    db_post = _get_post_or_404(db, post_id)
+    if db_post.deleted_at is None:
+        raise HTTPException(status_code=409, detail="Archive the post before deleting it permanently")
     db.delete(db_post)
     db.commit()
     return None
@@ -203,7 +328,7 @@ def delete_post(
 
 @router.get("/{post_id}/comments", response_model=List[schemas.CommentSchema])
 def list_comments(post_id: int, db: Session = Depends(get_db)):
-    _get_post_or_404(db, post_id)
+    _get_public_post_or_404(db, post_id)
     return (
         db.query(models.Comment)
         .filter(models.Comment.post_id == post_id)
@@ -219,7 +344,7 @@ def create_comment(
     request: Request,
     db: Session = Depends(get_db),
 ):
-    _get_post_or_404(db, post_id)
+    _get_public_post_or_404(db, post_id)
 
     ip = get_client_ip(request)
     if not rate_limit.check_rate_limit(
@@ -245,7 +370,7 @@ def create_comment(
 @router.post("/{post_id}/like")
 def toggle_like(post_id: int, request: Request, db: Session = Depends(get_db)):
     """Toggle a like for the given post, keyed by client IP (one like per IP)."""
-    _get_post_or_404(db, post_id)
+    _get_public_post_or_404(db, post_id)
     ip = get_client_ip(request) or "unknown"
     existing = (
         db.query(models.PostLike)
@@ -255,7 +380,7 @@ def toggle_like(post_id: int, request: Request, db: Session = Depends(get_db)):
     if existing:
         db.delete(existing)
         db.commit()
-        return {"liked": False, "likes_count": _get_post_or_404(db, post_id).likes_count}
+        return {"liked": False, "likes_count": _get_public_post_or_404(db, post_id).likes_count}
     db.add(models.PostLike(post_id=post_id, ip_address=ip))
     db.commit()
-    return {"liked": True, "likes_count": _get_post_or_404(db, post_id).likes_count}
+    return {"liked": True, "likes_count": _get_public_post_or_404(db, post_id).likes_count}

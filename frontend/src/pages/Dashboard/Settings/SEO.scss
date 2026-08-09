@@ -55,7 +55,7 @@
     height: 1.75rem;
     margin-top: 0.25rem;
     flex-shrink: 0;
-    color: #6366f1; // indigo-500
+    color: $color-primary;
   }
 
   &__saved-badge {
@@ -171,11 +171,8 @@
       @include theme-color(color, #52525b, #a1a1aa);
     }
 
-    &:focus {
-      outline: none;
-      border-color: #6366f1;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-    }
+    &:focus,
+    &:focus-visible { @include dash-focus-ring; }
   }
 
   &__textarea {
@@ -206,27 +203,8 @@
   }
 
   &__save-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background-color: #4f46e5;
-    color: #ffffff;
+    @include dash-primary-btn;
     padding: 0.625rem 1.25rem;
-    border-radius: 0.5rem;
-    font-weight: $fw-medium;
-    font-size: 0.9rem;
-    border: none;
-    cursor: pointer;
-    @include transition(background-color, opacity);
-
-    &:hover {
-      background-color: #4338ca;
-    }
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
   }
 
   &__btn-icon {

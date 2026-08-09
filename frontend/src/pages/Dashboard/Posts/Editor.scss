@@ -46,59 +46,26 @@
     gap: 0.75rem;
   }
 
+  // Guardar y Vista previa son acciones secundarias: fantasma, para que
+  // Publicar sea el único botón relleno de la barra.
   &__save-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    @include theme-color(background-color, #27272a, #f3f4f6);
-    @include theme-color(color, #d4d4d8, #3f3f46);
-    @include theme-color(border-color, #3f3f46, #d1d5db);
-    border-width: 1px;
-    border-style: solid;
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    font-weight: $fw-medium;
-    font-size: 0.875rem;
-    cursor: pointer;
-    @include transition(all);
+    @include dash-ghost-btn;
 
     .icon {
       width: 1rem;
       height: 1rem;
-    }
-
-    &:hover {
-      @include theme-color(background-color, #3f3f46, #e5e7eb);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
     }
   }
 
+  // Publicar es la acción principal del editor: naranja, como el resto de
+  // acciones primarias del dashboard. "Save Changes" queda a su lado en
+  // fantasma, que es la jerarquía que se busca.
   &__publish-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background-color: #4f46e5;
-    color: #ffffff;
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    font-weight: $fw-medium;
-    font-size: 0.875rem;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    @include transition(background-color);
+    @include dash-primary-btn;
 
     .icon {
       width: 1rem;
       height: 1rem;
-    }
-
-    &:hover {
-      background-color: #4338ca;
     }
 
     &:disabled {
@@ -142,21 +109,129 @@
   }
 
   &__title-input {
-    width: 100%;
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    @include theme-color(border-color, #3f3f46, #d1d5db);
-    border-width: 1px;
-    border-style: solid;
-    background-color: transparent;
-    @include theme-color(color, #f4f4f5, #18181b);
-    outline: none;
-    @include transition(all);
+    @include dash-input;
+    font-size: 1rem;
+  }
 
-    &:focus {
-      border-color: #6366f1;
-      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  &__cover {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 1rem;
+    border: 1px solid $dash-border;
+    border-radius: $dash-radius;
+    background: rgba(0, 0, 0, 0.18);
+  }
+
+  &__cover-preview {
+    width: 220px;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: $dash-radius;
+    border: 1px solid $dash-border-strong;
+    flex-shrink: 0;
+  }
+
+  &__cover-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 0;
+
+    p {
+      margin: 0;
+      font-size: 0.82rem;
+      color: var(--parrafos);
     }
+
+    > div {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+  }
+
+  &__autosave {
+    font-size: 0.8125rem;
+    opacity: 0.7;
+    align-self: center;
+    white-space: nowrap;
+  }
+
+  &__recovery {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #f59e0b;
+    border-radius: 8px;
+    background: rgba(245, 158, 11, 0.1);
+    font-size: 0.875rem;
+  }
+
+  &__recovery-actions {
+    display: flex;
+    gap: 0.5rem;
+
+    button {
+      padding: 0.35rem 0.75rem;
+      border: 1px solid currentColor;
+      border-radius: 6px;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      font-size: 0.8125rem;
+    }
+  }
+}
+
+// Embeds dentro del editor. El iframe se pinta para ver qué se está
+// insertando; el badge recuerda de qué proveedor es.
+.tiptap-embed {
+  position: relative;
+  width: 100%;
+  margin: 1.5rem auto;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid $dash-border-strong;
+  background: rgba(0, 0, 0, 0.35);
+
+  iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  &__badge {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: $dash-radius-pill;
+    background: rgba(0, 0, 0, 0.7);
+    color: $color-primary;
+    font-size: 0.7rem;
+    font-weight: $fw-semibold;
+    pointer-events: none;
+  }
+
+  &--invalid {
+    padding: 1rem;
+    text-align: center;
+    color: #f87171;
+    font-size: 0.85rem;
+    border-color: rgba(248, 113, 113, 0.4);
+  }
+
+  // El nodo es atómico: seleccionarlo tiene que verse.
+  &.ProseMirror-selectednode {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
   }
 }
 
@@ -210,8 +285,8 @@
     }
 
     &--active {
-      @include theme-color(background-color, #27272a, #f3f4f6);
-      @include theme-color(color, #818cf8, #4f46e5);
+      background-color: rgba(255, 137, 6, 0.14);
+      color: $color-primary;
     }
   }
 }
@@ -248,9 +323,12 @@
     margin-bottom: 1.25em;
   }
 
+  // Mismo naranja que los enlaces del post publicado (BlogPostPage.scss:358):
+  // el editor tiene que enseñar el texto como se va a ver.
   a {
-    @include theme-color(color, #818cf8, #4f46e5);
+    color: $color-primary;
     text-decoration: underline;
+    text-underline-offset: 3px;
     cursor: pointer;
     font-weight: $fw-medium;
   }
@@ -274,15 +352,27 @@
     margin-bottom: 0.5em;
   }
 
+  img.post-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 1.5rem auto;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  // Misma cita que en el post publicado (BlogPostPage.scss:410): raya naranja,
+  // fondo tintado y esquina derecha redondeada. El editor tenía borde gris, así
+  // que las citas no se parecían a lo que se acaba publicando.
   blockquote {
     font-weight: $fw-medium;
     font-style: italic;
-    @include theme-color(color, #f4f4f5, #18181b);
-    @include theme-color(border-left-color, #3f3f46, #e5e7eb);
-    border-left-width: 0.25rem;
-    border-left-style: solid;
+    color: inherit;
+    border-left: 3px solid $color-primary;
+    border-radius: 0 8px 8px 0;
+    background: rgba(255, 137, 6, 0.07);
     margin-top: 1.6em;
     margin-bottom: 1.6em;
-    padding-left: 1em;
+    padding: 0.75rem 1rem 0.75rem 1.25rem;
   }
 }

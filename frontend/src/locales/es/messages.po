@@ -90,56 +90,56 @@ msgstr ""
 msgid "5. Third-Party Services"
 msgstr ""
 
-#: src/pages/Blog/BlogPostPage.jsx:198
+#: src/pages/Blog/BlogPostPage.jsx:167
 msgid "blog.actions.like"
 msgstr "Me gusta"
 
-#: src/pages/Blog/BlogPostPage.jsx:205
+#: src/pages/Blog/BlogPostPage.jsx:174
 msgid "blog.actions.share"
 msgstr "Compartir"
 
-#: src/pages/Blog/BlogPostPage.jsx:131
-#: src/pages/Blog/BlogPostPage.jsx:150
+#: src/pages/Blog/BlogPostPage.jsx:132
+#: src/pages/Blog/BlogPostPage.jsx:151
 msgid "blog.backToList"
 msgstr "Volver al blog"
 
-#: src/pages/Blog/BlogPostPage.jsx:259
+#: src/pages/Blog/BlogPostPage.jsx:228
 msgid "blog.comments.contentPlaceholder"
 msgstr "Escribe tu comentario..."
 
-#: src/pages/Blog/BlogPostPage.jsx:220
+#: src/pages/Blog/BlogPostPage.jsx:189
 msgid "blog.comments.empty"
 msgstr "Aún no hay comentarios. ¡Sé el primero en comentar!"
 
-#: src/pages/Blog/BlogPostPage.jsx:112
+#: src/pages/Blog/BlogPostPage.jsx:113
 msgid "blog.comments.error"
 msgstr "No se pudo publicar el comentario. Intenta de nuevo."
 
-#: src/pages/Blog/BlogPostPage.jsx:245
+#: src/pages/Blog/BlogPostPage.jsx:214
 msgid "blog.comments.leaveComment"
 msgstr "Deja un comentario"
 
-#: src/pages/Blog/BlogPostPage.jsx:252
+#: src/pages/Blog/BlogPostPage.jsx:221
 msgid "blog.comments.namePlaceholder"
 msgstr "Tu nombre"
 
-#: src/pages/Blog/BlogPostPage.jsx:102
+#: src/pages/Blog/BlogPostPage.jsx:103
 msgid "blog.comments.rateLimited"
 msgstr "Has publicado demasiados comentarios. Inténtalo de nuevo más tarde."
 
-#: src/pages/Blog/BlogPostPage.jsx:86
+#: src/pages/Blog/BlogPostPage.jsx:87
 msgid "blog.comments.requiredFields"
 msgstr "Completa tu nombre y el comentario."
 
-#: src/pages/Blog/BlogPostPage.jsx:271
+#: src/pages/Blog/BlogPostPage.jsx:240
 msgid "blog.comments.sending"
 msgstr "Publicando..."
 
-#: src/pages/Blog/BlogPostPage.jsx:271
+#: src/pages/Blog/BlogPostPage.jsx:240
 msgid "blog.comments.submit"
 msgstr "Publicar comentario"
 
-#: src/pages/Blog/BlogPostPage.jsx:215
+#: src/pages/Blog/BlogPostPage.jsx:184
 msgid "blog.comments.title"
 msgstr "Comentarios"
 
@@ -156,7 +156,7 @@ msgid "blog.empty.title"
 msgstr "Próximamente"
 
 #: src/pages/Blog/BlogPage.jsx:221
-#: src/pages/Blog/BlogPostPage.jsx:148
+#: src/pages/Blog/BlogPostPage.jsx:149
 msgid "blog.error"
 msgstr "No se pudieron cargar los posts. Intenta de nuevo."
 
@@ -332,18 +332,15 @@ msgstr "Ver más >"
 #~ msgid "skills.backend"
 #~ msgstr "Backend"
 
-#: src/pages/Home/Sections/Skills/Skills.jsx:90
-#: src/pages/Home/Sections/Skills/Skills.jsx:97
+#: src/pages/Home/Sections/Skills/Skills.jsx:139
 msgid "skills.colBackend"
 msgstr "Backend + DevOps"
 
-#: src/pages/Home/Sections/Skills/Skills.jsx:89
-#: src/pages/Home/Sections/Skills/Skills.jsx:96
+#: src/pages/Home/Sections/Skills/Skills.jsx:138
 msgid "skills.colFrontend"
 msgstr "Frontend"
 
-#: src/pages/Home/Sections/Skills/Skills.jsx:88
-#: src/pages/Home/Sections/Skills/Skills.jsx:95
+#: src/pages/Home/Sections/Skills/Skills.jsx:137
 msgid "skills.colLanguages"
 msgstr "Lenguajes + Bases de datos"
 
@@ -355,12 +352,12 @@ msgstr "Lenguajes + Bases de datos"
 #~ msgid "skills.frontend"
 #~ msgstr "Frontend"
 
-#: src/pages/Home/Sections/Skills/Skills.jsx:179
+#: src/pages/Home/Sections/Skills/Skills.jsx:233
 msgid "skills.seeAllInCV"
 msgstr "Ver todas mis skills en el CV"
 
-#: src/pages/Home/Sections/Skills/Skills.jsx:154
-#: src/pages/Home/Sections/Skills/Skills.jsx:168
+#: src/pages/Home/Sections/Skills/Skills.jsx:208
+#: src/pages/Home/Sections/Skills/Skills.jsx:222
 msgid "skills.title"
 msgstr "habilidades"
 

@@ -219,6 +219,9 @@ export default function ExperiencePage() {
         </form>
       )}
 
+      {/* El wrapper es lo que redondea y recorta: una <table> con
+          border-collapse no clipa sus propias esquinas. */}
+      <div className="experience-table-wrap">
       <table className="experience-table">
         <thead>
           <tr>
@@ -252,6 +255,7 @@ export default function ExperiencePage() {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }
