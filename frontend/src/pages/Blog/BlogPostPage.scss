@@ -66,28 +66,27 @@
     }
   }
 
+  // El panel no lleva padding: lo pone __article-inner. La portada es hermana
+  // suya y por eso llega a los bordes sin cálculos que mantener en sincronía.
   &__article {
-    // El padding va por custom property para que la portada calcule su salida
-    // desde el mismo valor. Antes el breakpoint móvil cambiaba el padding y la
-    // portada seguía restando el de escritorio, así que se descuadraba.
-    --article-padding: #{$content-padding};
-
     @include glass;
-    padding: var(--article-padding);
     overflow: hidden;
+  }
 
-    .blog-post__cover {
-      display: block;
-      width: calc(100% + var(--article-padding) * 2);
-      margin: calc(var(--article-padding) * -1) calc(var(--article-padding) * -1) 2rem;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    }
+  &__article-inner {
+    padding: $content-padding;
 
     @include respond-to(mobile) {
-      --article-padding: 1.5rem;
+      padding: 1.5rem;
     }
+  }
+
+  &__cover {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   }
 
   &__tags {

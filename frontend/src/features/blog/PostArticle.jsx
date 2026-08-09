@@ -20,6 +20,10 @@ export default function PostArticle({ post, children }) {
         loading="lazy"
       />
 
+      {/* Todo lo que no es la portada vive aquí, y este wrapper es quien lleva
+          el padding. Así la portada llega a los bordes del panel sin márgenes
+          negativos calculados desde el padding del contenedor. */}
+      <div className="blog-post__article-inner">
       <div className="blog-post__tags">
         {post.category && (
           <span className="blog-post__tag blog-post__tag--category">
@@ -56,6 +60,7 @@ export default function PostArticle({ post, children }) {
       />
 
       {children}
+      </div>
     </article>
   );
 }
