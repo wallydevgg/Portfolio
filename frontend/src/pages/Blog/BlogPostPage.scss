@@ -67,22 +67,26 @@
   }
 
   &__article {
+    // El padding va por custom property para que la portada calcule su salida
+    // desde el mismo valor. Antes el breakpoint móvil cambiaba el padding y la
+    // portada seguía restando el de escritorio, así que se descuadraba.
+    --article-padding: #{$content-padding};
+
     @include glass;
-    padding: $content-padding;
+    padding: var(--article-padding);
     overflow: hidden;
 
-    // Igual que en las cards: sale del padding y mantiene relación fija.
     .blog-post__cover {
       display: block;
-      width: calc(100% + #{$content-padding} * 2);
-      margin: -#{$content-padding} -#{$content-padding} 2rem;
+      width: calc(100% + var(--article-padding) * 2);
+      margin: calc(var(--article-padding) * -1) calc(var(--article-padding) * -1) 2rem;
       aspect-ratio: 16 / 9;
       object-fit: cover;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     @include respond-to(mobile) {
-      padding: 1.5rem;
+      --article-padding: 1.5rem;
     }
   }
 

@@ -105,15 +105,14 @@
     @include flex-column;
     @include glass;
     justify-content: space-between;
-    padding: 1.5rem;
     overflow: hidden;
 
-    // La portada sale del padding para pegarse a los bordes del panel. Relación
-    // fija: sin ella, una imagen alta descuadraría su fila de la rejilla.
+    // El padding vive en los hijos, no en la card. Así la portada llega a los
+    // bordes por construcción, sin depender de márgenes negativos que hay que
+    // mantener en sincronía con el padding.
     &__cover {
       display: block;
-      width: calc(100% + 3rem);
-      margin: -1.5rem -1.5rem 1.25rem;
+      width: 100%;
       aspect-ratio: 16 / 9;
       object-fit: cover;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -162,6 +161,7 @@
 
     &__body {
       flex: 1;
+      padding: 1.5rem 1.5rem 0;
 
       h2 {
         font-size: 1.15rem;
@@ -232,6 +232,7 @@
       justify-content: flex-end;
       align-items: center;
       margin-top: auto;
+      padding: 1rem 1.5rem 1.5rem;
     }
 
     &__link {

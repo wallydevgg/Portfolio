@@ -22,7 +22,7 @@ const FALLBACK_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 4
   </defs>
   <rect width="800" height="400" fill="url(#g)"/>
   <rect width="800" height="400" fill="url(#p)"/>
-  <text x="400" y="212" font-family="'Fira Code', monospace" font-size="30" fill="#ff8906" fill-opacity="0.75" text-anchor="middle">&lt;/&gt; wallydev</text>
+  <text x="400" y="212" font-family="'Fira Code', monospace" font-size="30" fill="#ff8906" fill-opacity="0.75" text-anchor="middle">&lt;/wallydev/blog&gt;</text>
 </svg>`;
 
 export const POST_COVER_FALLBACK = `data:image/svg+xml,${encodeURIComponent(FALLBACK_SVG)}`;
