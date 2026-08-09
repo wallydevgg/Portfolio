@@ -28,8 +28,10 @@ import { ToastProvider } from "@/contexts/ToastContext";
 import LoginPage from "@/pages/Login/Login";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
-const router = createBrowserRouter(
-  [
+// Se exporta para que los tests puedan montar el árbol real con un router en
+// memoria. Comprobar las rutas contra una composición de providers inventada en
+// el test no serviría: lo que se quiere verificar es justo esta.
+export const routes = [
     {
       // ToastProvider va aquí, en la raíz, y no dentro de DashboardLayout: la
       // vista previa vive fuera del layout y también necesita toasts. Con el
@@ -96,13 +98,13 @@ const router = createBrowserRouter(
         },
       ],
     },
-  ],
-  {
-    future: {
-      v7_startTransition: true,
-    },
-  }
-);
+];
+
+const router = createBrowserRouter(routes, {
+  future: {
+    v7_startTransition: true,
+  },
+});
 
 const Router = () => <RouterProvider router={router} />;
 

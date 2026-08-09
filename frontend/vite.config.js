@@ -40,4 +40,13 @@ export default defineConfig({
       },
     },
   },
+  test: {
+    environment: "jsdom",
+    globals: true,
+    setupFiles: "./src/test/setup.js",
+    // Sin procesar CSS: jsdom no calcula layout, así que compilar el SCSS solo
+    // añadiría segundos por test sin comprobar nada.
+    css: false,
+    include: ["src/**/*.test.{js,jsx}"],
+  },
 });
