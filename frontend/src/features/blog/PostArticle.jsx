@@ -1,4 +1,6 @@
 import { Calendar, Tag } from "lucide-react";
+import { renderPostHtml } from "./renderPostHtml";
+import { POST_COVER_FALLBACK } from "./coverImage";
 
 /**
  * Render puro de un post. Sin fetch ni estado: lo usan tanto la página pública
@@ -11,6 +13,13 @@ import { Calendar, Tag } from "lucide-react";
 export default function PostArticle({ post, children }) {
   return (
     <article className="blog-post__article">
+      <img
+        className="blog-post__cover"
+        src={post.cover_image || POST_COVER_FALLBACK}
+        alt=""
+        loading="lazy"
+      />
+
       <div className="blog-post__tags">
         {post.category && (
           <span className="blog-post__tag blog-post__tag--category">
@@ -38,9 +47,12 @@ export default function PostArticle({ post, children }) {
         </span>
       </div>
 
+      {/* renderPostHtml convierte los marcadores data-embed en iframes contra
+          la lista blanca de proveedores. El HTML guardado no trae markup de
+          terceros, así que esto es lo único que los materializa. */}
       <div
         className="blog-post__content"
-        dangerouslySetInnerHTML={{ __html: post.content || "" }}
+        dangerouslySetInnerHTML={{ __html: renderPostHtml(post.content) }}
       />
 
       {children}

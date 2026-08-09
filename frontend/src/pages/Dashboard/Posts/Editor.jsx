@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import TiptapEditor from "../../../features/blog/components/TiptapEditor";
-import { ArrowLeft, Save, Send, Loader2, Eye } from "lucide-react";
+import { ArrowLeft, Save, Send, Loader2, Eye, ImagePlus } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router";
 import { useBlogApi } from "../../../features/blog/useBlogApi";
 import { useToast } from "../../../contexts/ToastContext";
 import { useAutosave } from "@/features/blog/useAutosave";
+import { POST_COVER_FALLBACK } from "@/features/blog/coverImage";
 import "./Editor.scss";
 
 export default function PostEditorPage() {
@@ -18,8 +19,11 @@ export default function PostEditorPage() {
   const [loadingPost, setLoadingPost] = useState(isEditing);
   const [isPublished, setIsPublished] = useState(false);
   const [serverUpdatedAt, setServerUpdatedAt] = useState(null);
+  const [coverImage, setCoverImage] = useState("");
+  const [uploadingCover, setUploadingCover] = useState(false);
+  const coverInputRef = useRef(null);
 
-  const { createPost, updatePost, getPost } = useBlogApi();
+  const { createPost, updatePost, getPost, uploadImage } = useBlogApi();
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -42,6 +46,7 @@ export default function PostEditorPage() {
         setContent(post.content);
         setIsPublished(Boolean(post.is_published));
         setServerUpdatedAt(post.updated_at || post.created_at);
+        setCoverImage(post.cover_image || "");
       } catch {
         toast.error("No se encontró el post.");
         navigate("/dashboard/posts");
@@ -50,6 +55,22 @@ export default function PostEditorPage() {
       }
     })();
   }, [id]);
+
+  const handleCoverPicked = async (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+
+    try {
+      setUploadingCover(true);
+      const { url } = await uploadImage(file);
+      setCoverImage(url);
+    } catch (err) {
+      toast.error(err.message || "No se pudo subir la portada.");
+    } finally {
+      setUploadingCover(false);
+    }
+  };
 
   const handleSave = async (publish = false) => {
     if (!title.trim()) {
@@ -63,11 +84,12 @@ export default function PostEditorPage() {
         await updatePost(id, {
           title,
           content,
+          cover_image: coverImage || null,
           ...(publish && { is_published: true }),
         });
         toast.success(publish ? "Post publicado correctamente." : "Cambios guardados.");
       } else {
-        await createPost({ title, content, is_published: publish });
+        await createPost({ title, content, cover_image: coverImage || null, is_published: publish });
         toast.success(publish ? "Post publicado correctamente." : "Borrador guardado.");
       }
       clearLocal();
@@ -173,8 +195,54 @@ export default function PostEditorPage() {
         </div>
 
         <div className="editor-page__field">
+          <label>Cover Image</label>
+          <div className="editor-page__cover">
+            <img
+              className="editor-page__cover-preview"
+              src={coverImage || POST_COVER_FALLBACK}
+              alt=""
+            />
+            <div className="editor-page__cover-actions">
+              <p>
+                {coverImage
+                  ? "Se usa como portada en el listado y en el post."
+                  : "Sin portada: se usa la imagen por defecto."}
+              </p>
+              <div>
+                <button
+                  type="button"
+                  className="editor-page__save-btn"
+                  onClick={() => coverInputRef.current?.click()}
+                  disabled={uploadingCover}
+                >
+                  {uploadingCover ? <Loader2 className="icon spinning" /> : <ImagePlus className="icon" />}
+                  {coverImage ? "Cambiar" : "Subir portada"}
+                </button>
+                {coverImage && (
+                  <button
+                    type="button"
+                    className="editor-page__save-btn"
+                    onClick={() => setCoverImage("")}
+                    disabled={uploadingCover}
+                  >
+                    Quitar
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+          <input
+            ref={coverInputRef}
+            type="file"
+            accept="image/png,image/jpeg,image/gif,image/webp"
+            hidden
+            onChange={handleCoverPicked}
+          />
+        </div>
+
+        <div className="editor-page__field">
           <label>Content</label>
-          <TiptapEditor content={content} onChange={setContent} />
+          <TiptapEditor content={content} onChange={setContent} onError={toast.error} />
         </div>
       </div>
     </div>

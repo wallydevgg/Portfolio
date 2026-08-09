@@ -69,6 +69,17 @@
   &__article {
     @include glass;
     padding: $content-padding;
+    overflow: hidden;
+
+    // Igual que en las cards: sale del padding y mantiene relación fija.
+    .blog-post__cover {
+      display: block;
+      width: calc(100% + #{$content-padding} * 2);
+      margin: -#{$content-padding} -#{$content-padding} 2rem;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
 
     @include respond-to(mobile) {
       padding: 1.5rem;
@@ -404,6 +415,34 @@
       background: rgba(167, 169, 190, 0.12);
       padding: 0.15rem 0.4rem;
       border-radius: 4px;
+    }
+
+    // Imágenes subidas dentro del cuerpo del post.
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 1.75rem auto;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    // Embeds. renderPostHtml los construye con aspect-ratio en línea; aquí solo
+    // van el encaje y el recorte.
+    .post-embed {
+      margin: 1.75rem auto;
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.35);
+
+      iframe {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
     }
 
     blockquote {

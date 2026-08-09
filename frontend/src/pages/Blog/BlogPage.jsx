@@ -4,6 +4,7 @@ import { Search, Calendar, Tag, ArrowRight, BookOpen, PenLine, X, MessageSquare,
 import "./BlogPage.scss";
 import { t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
+import { POST_COVER_FALLBACK } from "@/features/blog/coverImage";
 
 
 const PostSkeleton = () => (
@@ -78,6 +79,15 @@ const PostCard = ({ post }) => {
 
   return (
     <article className="blog-card">
+      {/* Siempre hay portada: sin cover_image se pinta la de por defecto, para
+          que todas las cards de la rejilla midan lo mismo. */}
+      <img
+        className="blog-card__cover"
+        src={post.cover_image || POST_COVER_FALLBACK}
+        alt=""
+        loading="lazy"
+      />
+
       <div className="blog-card__body">
         <div className="blog-card__tags">
           {post.category && (
