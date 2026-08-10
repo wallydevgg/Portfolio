@@ -44,12 +44,12 @@ export function renderPostHtml(html) {
       return;
     }
 
-    const blockquote = buildBlockquote(doc, provider, id, user, config);
-    if (!blockquote) {
+    const wrapped = buildBlockquote(doc, provider, id, user, config);
+    if (!wrapped) {
       marker.remove();
       return;
     }
-    marker.replaceWith(blockquote);
+    marker.replaceWith(wrapped);
     if (config.script) scripts.add(config.script);
   });
 
@@ -89,12 +89,19 @@ function buildBlockquote(doc, provider, id, user, config) {
   const permalink = embedPermalink(provider, id, user);
   if (!permalink) return null;
 
+  // El blockquote va dentro de un contenedor nuestro porque su script lo
+  // sustituye por su propio elemento, y con él se lleva los anchos que le
+  // pongamos: el fondo claro del reproductor acababa ocupando todo el ancho del
+  // artículo. El contenedor sí sobrevive y es quien limita la caja.
+  const wrap = doc.createElement("div");
+  wrap.className = `post-embed-wrap post-embed-wrap--${provider}`;
+  if (config.maxWidth) wrap.style.maxWidth = config.maxWidth;
+  if (config.minWidth) wrap.style.minWidth = config.minWidth;
+
   const quote = doc.createElement("blockquote");
   quote.className = `post-embed post-embed--${provider}`;
   // Sin aspect-ratio: el script del proveedor decide la altura del reproductor
   // y fijarla desde fuera lo recortaría.
-  if (config.maxWidth) quote.style.maxWidth = config.maxWidth;
-  quote.style.marginInline = "auto";
 
   if (provider === "tiktok") {
     quote.classList.add("tiktok-embed");
@@ -116,5 +123,6 @@ function buildBlockquote(doc, provider, id, user, config) {
   section.appendChild(link);
   quote.appendChild(section);
 
-  return quote;
+  wrap.appendChild(quote);
+  return wrap;
 }

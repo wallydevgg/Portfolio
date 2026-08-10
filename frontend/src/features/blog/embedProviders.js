@@ -48,10 +48,12 @@ export const EMBED_PROVIDERS = {
     match: [/tiktok\.com\/@([A-Za-z0-9_.]+)\/video\/(\d+)/],
     userGroup: 1,
     idGroup: 2,
-    // El snippet oficial admite hasta 605px, pero el vídeo es vertical: a ese
-    // ancho el reproductor deja bandas blancas a los lados. 325px es el mínimo
-    // que TikTok declara y es el que se ajusta al vídeo.
-    maxWidth: "325px",
+    // Las dos medidas del snippet oficial. El mínimo importa: el reproductor de
+    // TikTok tiene un ancho propio y, en una caja más estrecha, se desborda y
+    // el contenedor le recorta el texto por la izquierda. Las bandas que quedan
+    // a los lados son de su propio diseño, no un hueco nuestro.
+    minWidth: "325px",
+    maxWidth: "605px",
   },
 
   instagram: {

@@ -430,9 +430,9 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    // Embeds. renderPostHtml los construye con aspect-ratio en línea; aquí solo
-    // van el encaje y el recorte.
-    .post-embed {
+    // Embeds propios (YouTube): renderPostHtml les pone la proporción en línea
+    // y aquí van el encaje y el recorte.
+    figure.post-embed {
       margin: 1.75rem auto;
       width: 100%;
       border-radius: 10px;
@@ -446,6 +446,33 @@
         height: 100%;
         border: 0;
       }
+    }
+
+    // Embeds de terceros (TikTok, Instagram). Su script reemplaza el
+    // blockquote, así que el que manda es este contenedor: limita el ancho y
+    // redondea. El reproductor de TikTok es de tema claro por dentro y eso no
+    // se puede cambiar desde fuera; lo que sí se evita es que ese blanco se
+    // extienda por todo el ancho del artículo.
+    .post-embed-wrap {
+      margin: 1.75rem auto;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      // Marco oscuro alrededor para que la tarjeta clara se lea como una pieza
+      // colocada a propósito y no como un agujero en la página.
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.35);
+      line-height: 0;
+
+      > blockquote {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: none;
+        border-radius: 0;
+      }
+
+      iframe { display: block; }
     }
 
     blockquote {
