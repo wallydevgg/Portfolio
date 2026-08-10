@@ -90,101 +90,101 @@ msgstr ""
 msgid "5. Third-Party Services"
 msgstr ""
 
-#: src/pages/Blog/BlogPostPage.jsx
+#: src/pages/Blog/BlogPostPage.jsx:179
 msgid "blog.actions.copied"
 msgstr "Enlace copiado"
 
-#: src/pages/Blog/BlogPostPage.jsx
-msgid "blog.actions.shareFailed"
-msgstr "No se pudo compartir"
-
-#: src/pages/Blog/BlogPostPage.jsx:167
+#: src/pages/Blog/BlogPostPage.jsx:171
 msgid "blog.actions.like"
 msgstr "Me gusta"
 
-#: src/pages/Blog/BlogPostPage.jsx:174
+#: src/pages/Blog/BlogPostPage.jsx:183
 msgid "blog.actions.share"
 msgstr "Compartir"
 
-#: src/pages/Blog/BlogPostPage.jsx:132
-#: src/pages/Blog/BlogPostPage.jsx:151
+#: src/pages/Blog/BlogPostPage.jsx:181
+msgid "blog.actions.shareFailed"
+msgstr "No se pudo compartir"
+
+#: src/pages/Blog/BlogPostPage.jsx:136
+#: src/pages/Blog/BlogPostPage.jsx:155
 msgid "blog.backToList"
 msgstr "Volver al blog"
 
-#: src/pages/Blog/BlogPostPage.jsx:228
+#: src/pages/Blog/BlogPostPage.jsx:238
 msgid "blog.comments.contentPlaceholder"
 msgstr "Escribe tu comentario..."
 
-#: src/pages/Blog/BlogPostPage.jsx:189
+#: src/pages/Blog/BlogPostPage.jsx:199
 msgid "blog.comments.empty"
 msgstr "Aún no hay comentarios. ¡Sé el primero en comentar!"
 
-#: src/pages/Blog/BlogPostPage.jsx:113
+#: src/pages/Blog/BlogPostPage.jsx:117
 msgid "blog.comments.error"
 msgstr "No se pudo publicar el comentario. Intenta de nuevo."
 
-#: src/pages/Blog/BlogPostPage.jsx:214
+#: src/pages/Blog/BlogPostPage.jsx:224
 msgid "blog.comments.leaveComment"
 msgstr "Deja un comentario"
 
-#: src/pages/Blog/BlogPostPage.jsx:221
+#: src/pages/Blog/BlogPostPage.jsx:231
 msgid "blog.comments.namePlaceholder"
 msgstr "Tu nombre"
 
-#: src/pages/Blog/BlogPostPage.jsx:103
+#: src/pages/Blog/BlogPostPage.jsx:107
 msgid "blog.comments.rateLimited"
 msgstr "Has publicado demasiados comentarios. Inténtalo de nuevo más tarde."
 
-#: src/pages/Blog/BlogPostPage.jsx:87
+#: src/pages/Blog/BlogPostPage.jsx:91
 msgid "blog.comments.requiredFields"
 msgstr "Completa tu nombre y el comentario."
 
-#: src/pages/Blog/BlogPostPage.jsx:240
+#: src/pages/Blog/BlogPostPage.jsx:250
 msgid "blog.comments.sending"
 msgstr "Publicando..."
 
-#: src/pages/Blog/BlogPostPage.jsx:240
+#: src/pages/Blog/BlogPostPage.jsx:250
 msgid "blog.comments.submit"
 msgstr "Publicar comentario"
 
-#: src/pages/Blog/BlogPostPage.jsx:184
+#: src/pages/Blog/BlogPostPage.jsx:194
 msgid "blog.comments.title"
 msgstr "Comentarios"
 
-#: src/pages/Blog/BlogPage.jsx:28
+#: src/pages/Blog/BlogPage.jsx:29
 msgid "blog.empty.cta"
 msgstr "Crear primer post"
 
-#: src/pages/Blog/BlogPage.jsx:26
+#: src/pages/Blog/BlogPage.jsx:27
 msgid "blog.empty.subtitle"
 msgstr "Estoy escribiendo artículos sobre React, Python, DevOps y más. ¡Vuelve pronto!"
 
-#: src/pages/Blog/BlogPage.jsx:25
+#: src/pages/Blog/BlogPage.jsx:26
 msgid "blog.empty.title"
 msgstr "Próximamente"
 
-#: src/pages/Blog/BlogPage.jsx:221
-#: src/pages/Blog/BlogPostPage.jsx:149
+#: src/pages/Blog/BlogPage.jsx:231
+#: src/pages/Blog/BlogPostPage.jsx:153
 msgid "blog.error"
 msgstr "No se pudieron cargar los posts. Intenta de nuevo."
 
-#: src/pages/Blog/BlogPage.jsx:36
+#: src/pages/Blog/BlogPage.jsx:37
 msgid "blog.noResults"
 msgstr "Ningún post coincide con tu búsqueda"
 
-#: src/pages/Blog/BlogPage.jsx:38
+#: src/pages/Blog/BlogPage.jsx:39
 msgid "blog.noResults.clear"
 msgstr "Limpiar búsqueda"
 
-#: src/pages/Blog/BlogPage.jsx:132
+#: src/pages/Blog/BlogPage.jsx:142
 msgid "blog.readMore"
 msgstr "Leer más"
 
-#: src/pages/Blog/BlogPage.jsx:194
+#: src/pages/Blog/BlogPage.jsx:204
 msgid "blog.searchPlaceholder"
 msgstr "Buscar artículos..."
 
-#: src/pages/Blog/BlogPage.jsx:186
+#: src/pages/Blog/BlogPage.jsx:196
 msgid "blog.subtitle"
 msgstr "Artículos sobre desarrollo fullstack, React, Python, DevOps y arquitectura de software."
 
