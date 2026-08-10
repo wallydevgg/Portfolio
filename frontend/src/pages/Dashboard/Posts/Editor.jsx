@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import TiptapEditor from "../../../features/blog/components/TiptapEditor";
-import { ArrowLeft, Save, Send, Loader2, Eye, ImagePlus } from "lucide-react";
+import { ArrowLeft, Save, Send, Loader2, Eye, ImagePlus, FileText, Archive } from "lucide-react";
+import ConfirmDialog from "@/components/ui/ConfirmDialog/ConfirmDialog";
 import { Link, useNavigate, useParams } from "react-router";
 import { useBlogApi } from "../../../features/blog/useBlogApi";
 import { useToast } from "../../../contexts/ToastContext";
@@ -21,9 +22,11 @@ export default function PostEditorPage() {
   const [serverUpdatedAt, setServerUpdatedAt] = useState(null);
   const [coverImage, setCoverImage] = useState("");
   const [uploadingCover, setUploadingCover] = useState(false);
+  const [archiving, setArchiving] = useState(false);
+  const [confirmArchive, setConfirmArchive] = useState(false);
   const coverInputRef = useRef(null);
 
-  const { createPost, updatePost, getPost, uploadImage } = useBlogApi();
+  const { createPost, updatePost, getPost, uploadImage, deletePost } = useBlogApi();
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -72,34 +75,92 @@ export default function PostEditorPage() {
     }
   };
 
-  const handleSave = async (publish = false) => {
+  /**
+   * `publish`: true publica, false despublica (deja el post como borrador) y
+   * undefined guarda sin tocar el estado de publicación.
+   *
+   * Devuelve true si guardó, para que la vista previa pueda encadenar.
+   */
+  const persist = async ({ publish, silent = false } = {}) => {
     if (!title.trim()) {
       toast.error("El título no puede estar vacío.");
-      return;
+      return false;
     }
-    const setStatus = publish ? setPublishing : setSaving;
+    const campos = {
+      title,
+      content,
+      cover_image: coverImage || null,
+      ...(publish !== undefined && { is_published: publish }),
+    };
+
+    if (isEditing) {
+      await updatePost(id, campos);
+      if (!silent) {
+        toast.success(
+          publish === true ? "Post publicado correctamente."
+          : publish === false ? "Post pasado a borrador."
+          : "Cambios guardados."
+        );
+      }
+      if (publish !== undefined) setIsPublished(publish);
+      clearLocal();
+      return true;
+    }
+
+    const creado = await createPost({ ...campos, is_published: publish === true });
+    if (!silent) toast.success(publish === true ? "Post publicado correctamente." : "Borrador guardado.");
+    clearLocal();
+    return creado;
+  };
+
+  const handleSave = async (publish) => {
+    const setStatus = publish === true ? setPublishing : setSaving;
     try {
       setStatus(true);
-      if (isEditing) {
-        await updatePost(id, {
-          title,
-          content,
-          cover_image: coverImage || null,
-          ...(publish && { is_published: true }),
-        });
-        toast.success(publish ? "Post publicado correctamente." : "Cambios guardados.");
-      } else {
-        await createPost({ title, content, cover_image: coverImage || null, is_published: publish });
-        toast.success(publish ? "Post publicado correctamente." : "Borrador guardado.");
-      }
-      clearLocal();
-      navigate("/dashboard/posts");
+      const ok = await persist({ publish });
+      if (ok) navigate("/dashboard/posts");
     } catch (err) {
       toast.error(err.message || "Error al guardar el post.");
     } finally {
       setStatus(false);
     }
   };
+
+  /**
+   * La vista previa lee el post del servidor, así que lo que no se ha guardado
+   * —imágenes y embeds recién insertados— no aparecía. Se guarda antes de
+   * abrirla, sin cambiar el estado de publicación.
+   */
+  const handlePreview = async () => {
+    try {
+      setSaving(true);
+      const guardado = await persist({ silent: true });
+      if (!guardado) return;
+      const destino = isEditing ? id : guardado.id;
+      navigate(`/dashboard/posts/${destino}/preview`);
+    } catch (err) {
+      toast.error(err.message || "No se pudo guardar antes de la vista previa.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleArchive = async () => {
+    try {
+      setArchiving(true);
+      await deletePost(id);
+      clearLocal();
+      toast.success("Post archivado.");
+      navigate("/dashboard/posts");
+    } catch (err) {
+      toast.error(err.message || "No se pudo archivar el post.");
+    } finally {
+      setArchiving(false);
+      setConfirmArchive(false);
+    }
+  };
+
+  const ocupado = saving || publishing || archiving;
 
   if (loadingPost) {
     return (
@@ -127,34 +188,71 @@ export default function PostEditorPage() {
               `Guardado ${savedAt.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" })}`}
             {autosaveStatus === "error" && "Sin conexión — guardado local"}
           </span>
-          {isEditing && (
-            <button
-              onClick={() => navigate(`/dashboard/posts/${id}/preview`)}
-              disabled={saving || publishing}
-              className="editor-page__save-btn"
-            >
-              <Eye className="icon" />
-              Vista previa
-            </button>
-          )}
+          {/* La barra depende del estado del post: a uno ya publicado no se le
+              ofrece Publicar, sino guardar cambios o devolverlo a borrador. */}
           <button
-            onClick={() => handleSave(false)}
-            disabled={saving || publishing}
+            onClick={handlePreview}
+            disabled={ocupado}
             className="editor-page__save-btn"
+            title="Guarda y abre la vista previa"
+          >
+            <Eye className="icon" />
+            Vista previa
+          </button>
+
+          <button
+            onClick={() => handleSave(undefined)}
+            disabled={ocupado}
+            className={isPublished ? "editor-page__publish-btn" : "editor-page__save-btn"}
           >
             {saving ? <Loader2 className="icon spinning" /> : <Save className="icon" />}
             {isEditing ? "Save Changes" : "Save Draft"}
           </button>
-          <button
-            onClick={() => handleSave(true)}
-            disabled={saving || publishing}
-            className="editor-page__publish-btn"
-          >
-            {publishing ? <Loader2 className="icon spinning" /> : <Send className="icon" />}
-            {isEditing ? "Publish" : "Publish Post"}
-          </button>
+
+          {isPublished ? (
+            <button
+              onClick={() => handleSave(false)}
+              disabled={ocupado}
+              className="editor-page__save-btn"
+              title="Quita el post del blog público y lo deja como borrador"
+            >
+              <FileText className="icon" />
+              Save as Draft
+            </button>
+          ) : (
+            <button
+              onClick={() => handleSave(true)}
+              disabled={ocupado}
+              className="editor-page__publish-btn"
+            >
+              {publishing ? <Loader2 className="icon spinning" /> : <Send className="icon" />}
+              {isEditing ? "Publish" : "Publish Post"}
+            </button>
+          )}
+
+          {isEditing && (
+            <button
+              onClick={() => setConfirmArchive(true)}
+              disabled={ocupado}
+              className="editor-page__save-btn"
+              title="Mover a Archivados"
+            >
+              {archiving ? <Loader2 className="icon spinning" /> : <Archive className="icon" />}
+              Archive
+            </button>
+          )}
         </div>
       </div>
+
+      <ConfirmDialog
+        open={confirmArchive}
+        title="Archivar post"
+        message={`"${title}" se moverá a Archivados. Podés restaurarlo desde ahí.`}
+        confirmLabel="Archivar"
+        busy={archiving}
+        onConfirm={handleArchive}
+        onCancel={() => setConfirmArchive(false)}
+      />
 
       <div className="editor-page__container">
         {recovered && (

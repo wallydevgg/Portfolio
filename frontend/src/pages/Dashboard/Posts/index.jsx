@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router";
-import { Plus, Edit3, Trash2, Loader2, AlertCircle } from "lucide-react";
+import { Plus, Edit3, Trash2, Archive, Loader2, AlertCircle } from "lucide-react";
 import { useBlogApi } from "../../../features/blog/useBlogApi";
 import { useToast } from "../../../contexts/ToastContext";
+import ConfirmDialog from "@/components/ui/ConfirmDialog/ConfirmDialog";
 import "./Posts.scss";
 
 export default function PostsPage() {
@@ -10,7 +11,9 @@ export default function PostsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
-  const { getAllPosts, deletePost } = useBlogApi();
+  // { post, mode: "archive" | "purge" } o null.
+  const [confirming, setConfirming] = useState(null);
+  const { getAllPosts, deletePost, purgePost } = useBlogApi();
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -31,14 +34,25 @@ export default function PostsPage() {
     fetchPosts();
   }, [fetchPosts]);
 
-  const handleDelete = async (post) => {
-    if (!window.confirm(`"${post.title}" se moverá a Archivados. Podés restaurarlo desde ahí.`)) return;
+  const handleConfirm = async () => {
+    const { post, mode } = confirming;
     try {
       setDeletingId(post.id);
-      await deletePost(post.id);
+      if (mode === "archive") {
+        await deletePost(post.id);
+        toast.success(`"${post.title}" archivado.`);
+      } else {
+        // El backend solo purga posts ya archivados: destruir exige dos pasos
+        // deliberados. Desde aquí se encadenan para no obligar a pasar por
+        // Archivados, pero la invariante del servidor se respeta igual.
+        await deletePost(post.id);
+        await purgePost(post.id);
+        toast.success(`"${post.title}" borrado definitivamente.`);
+      }
       setPosts((prev) => prev.filter((p) => p.id !== post.id));
+      setConfirming(null);
     } catch (err) {
-      toast.error("Error al eliminar el post.");
+      toast.error(mode === "archive" ? "Error al archivar el post." : "Error al borrar el post.");
     } finally {
       setDeletingId(null);
     }
@@ -107,15 +121,23 @@ export default function PostsPage() {
                         <Edit3 className="icon" />
                       </button>
                       <button
-                        className="action-delete"
-                        title="Eliminar post"
+                        className="action-edit"
+                        title="Archivar post"
                         disabled={deletingId === post.id}
-                        onClick={() => handleDelete(post)}
+                        onClick={() => setConfirming({ post, mode: "archive" })}
                       >
                         {deletingId === post.id
                           ? <Loader2 className="icon spinning" />
-                          : <Trash2 className="icon" />
+                          : <Archive className="icon" />
                         }
+                      </button>
+                      <button
+                        className="action-delete"
+                        title="Borrar definitivamente"
+                        disabled={deletingId === post.id}
+                        onClick={() => setConfirming({ post, mode: "purge" })}
+                      >
+                        <Trash2 className="icon" />
                       </button>
                     </div>
                   </td>
@@ -132,6 +154,21 @@ export default function PostsPage() {
           </table>
         )}
       </div>
+
+      <ConfirmDialog
+        open={Boolean(confirming)}
+        tone={confirming?.mode === "purge" ? "danger" : "default"}
+        title={confirming?.mode === "purge" ? "Borrar definitivamente" : "Archivar post"}
+        message={
+          confirming?.mode === "purge"
+            ? `"${confirming?.post.title}" se borrará para siempre. Esta acción no se puede deshacer.`
+            : `"${confirming?.post.title}" se moverá a Archivados. Podés restaurarlo desde ahí.`
+        }
+        confirmLabel={confirming?.mode === "purge" ? "Borrar" : "Archivar"}
+        busy={Boolean(deletingId)}
+        onConfirm={handleConfirm}
+        onCancel={() => setConfirming(null)}
+      />
     </div>
   );
 }

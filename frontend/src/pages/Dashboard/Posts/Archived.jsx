@@ -1,15 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router";
-import { ArrowLeft, RotateCcw, Trash2, Loader2, Archive } from "lucide-react";
+import { ArrowLeft, RotateCcw, FileText, Trash2, Loader2, Archive } from "lucide-react";
 import { useBlogApi } from "@/features/blog/useBlogApi";
 import { useToast } from "@/contexts/ToastContext";
+import ConfirmDialog from "@/components/ui/ConfirmDialog/ConfirmDialog";
 import "./Posts.scss";
 
 export default function ArchivedPostsPage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState(null);
-  const { getArchivedPosts, restorePost, purgePost } = useBlogApi();
+  const [purging, setPurging] = useState(null);
+  const { getArchivedPosts, restorePost, purgePost, updatePost } = useBlogApi();
   const toast = useToast();
 
   const fetchPosts = useCallback(async () => {
@@ -27,12 +29,22 @@ export default function ArchivedPostsPage() {
     fetchPosts();
   }, [fetchPosts]);
 
-  const handleRestore = async (post) => {
+  /**
+   * Restaurar devuelve el post al estado que tenía. Con `comoBorrador` además
+   * lo despublica, que es lo que hace falta para retocar algo archivado sin que
+   * vuelva de golpe al blog público.
+   */
+  const handleRestore = async (post, comoBorrador = false) => {
     try {
       setBusyId(post.id);
       await restorePost(post.id);
+      if (comoBorrador && post.is_published) {
+        await updatePost(post.id, { is_published: false });
+      }
       setPosts((prev) => prev.filter((p) => p.id !== post.id));
-      toast.success(`"${post.title}" restaurado.`);
+      toast.success(
+        comoBorrador ? `"${post.title}" restaurado como borrador.` : `"${post.title}" restaurado.`
+      );
     } catch {
       toast.error("No se pudo restaurar el post.");
     } finally {
@@ -40,12 +52,13 @@ export default function ArchivedPostsPage() {
     }
   };
 
-  const handlePurge = async (post) => {
-    if (!window.confirm(`Se borrará "${post.title}" de forma definitiva. Esta acción no se puede deshacer.`)) return;
+  const handlePurge = async () => {
+    const post = purging;
     try {
       setBusyId(post.id);
       await purgePost(post.id);
       setPosts((prev) => prev.filter((p) => p.id !== post.id));
+      setPurging(null);
       toast.success("Post borrado definitivamente.");
     } catch {
       toast.error("No se pudo borrar el post.");
@@ -105,12 +118,22 @@ export default function ArchivedPostsPage() {
                       onClick={() => handleRestore(post)}
                       disabled={busyId === post.id}
                       className="action-edit"
-                      title="Restaurar"
+                      title={post.is_published ? "Restaurar como publicado" : "Restaurar"}
                     >
                       <RotateCcw className="icon" />
                     </button>
+                    {post.is_published && (
+                      <button
+                        onClick={() => handleRestore(post, true)}
+                        disabled={busyId === post.id}
+                        className="action-edit"
+                        title="Restaurar como borrador"
+                      >
+                        <FileText className="icon" />
+                      </button>
+                    )}
                     <button
-                      onClick={() => handlePurge(post)}
+                      onClick={() => setPurging(post)}
                       disabled={busyId === post.id}
                       className="action-delete"
                       title="Borrar definitivamente"
@@ -124,6 +147,17 @@ export default function ArchivedPostsPage() {
           </tbody>
         </table>
       )}
+
+      <ConfirmDialog
+        open={Boolean(purging)}
+        tone="danger"
+        title="Borrar definitivamente"
+        message={`"${purging?.title}" se borrará para siempre. Esta acción no se puede deshacer.`}
+        confirmLabel="Borrar"
+        busy={Boolean(busyId)}
+        onConfirm={handlePurge}
+        onCancel={() => setPurging(null)}
+      />
     </div>
   );
 }
