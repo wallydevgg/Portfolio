@@ -220,6 +220,28 @@
     pointer-events: none;
   }
 
+  // Ficha para los proveedores que solo se hidratan en el post publicado.
+  &--card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1.25rem 1rem;
+    padding-top: 2.25rem;
+    text-align: center;
+
+    strong {
+      font-size: 0.95rem;
+      color: var(--DM-Title);
+    }
+  }
+
+  &__link {
+    font-size: 0.8rem;
+    color: $color-primary;
+    word-break: break-all;
+    text-decoration: underline;
+  }
+
   &--invalid {
     padding: 1rem;
     text-align: center;

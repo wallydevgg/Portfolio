@@ -1,6 +1,40 @@
+import { useEffect, useMemo } from "react";
 import { Calendar, Tag } from "lucide-react";
 import { renderPostHtml } from "./renderPostHtml";
 import { POST_COVER_FALLBACK } from "./coverImage";
+
+/**
+ * Carga los scripts de embed que este post necesita, y solo esos.
+ *
+ * TikTok e Instagram no se dejan meter en un iframe: publican un snippet
+ * público —sin clave— y un script que convierte el blockquote en el embed real.
+ * Es el único código de terceros del blog, así que se carga bajo demanda: una
+ * entrada sin ese tipo de vídeo no descarga nada.
+ *
+ * Si el script ya estaba en la página (al navegar entre posts), se le pide que
+ * vuelva a recorrer el DOM en lugar de añadirlo otra vez.
+ */
+function useEmbedScripts(scripts) {
+  useEffect(() => {
+    if (!scripts.length) return;
+
+    scripts.forEach((src) => {
+      const yaEsta = document.querySelector(`script[src="${src}"]`);
+
+      if (yaEsta) {
+        if (src.includes("instagram") && window.instgrm?.Embeds) {
+          window.instgrm.Embeds.process();
+        }
+        return;
+      }
+
+      const el = document.createElement("script");
+      el.src = src;
+      el.async = true;
+      document.body.appendChild(el);
+    });
+  }, [scripts]);
+}
 
 /**
  * Render puro de un post. Sin fetch ni estado: lo usan tanto la página pública
@@ -11,6 +45,9 @@ import { POST_COVER_FALLBACK } from "./coverImage";
  * pública mete la barra de like y compartir, que la preview no tiene.
  */
 export default function PostArticle({ post, children }) {
+  const { html, scripts } = useMemo(() => renderPostHtml(post.content), [post.content]);
+  useEmbedScripts(scripts);
+
   return (
     <article className="blog-post__article">
       <img
@@ -56,7 +93,7 @@ export default function PostArticle({ post, children }) {
           terceros, así que esto es lo único que los materializa. */}
       <div
         className="blog-post__content"
-        dangerouslySetInnerHTML={{ __html: renderPostHtml(post.content) }}
+        dangerouslySetInnerHTML={{ __html: html }}
       />
 
       {children}

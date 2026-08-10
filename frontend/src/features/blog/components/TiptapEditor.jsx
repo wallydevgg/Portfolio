@@ -94,7 +94,11 @@ export default function TiptapEditor({ content, onChange, onError }) {
       return
     }
     setEmbedDialogOpen(false)
-    editor.chain().focus().setEmbed({ provider: parsed.provider, embedId: parsed.id }).run()
+    editor
+      .chain()
+      .focus()
+      .setEmbed({ provider: parsed.provider, embedId: parsed.id, embedUser: parsed.user })
+      .run()
   }
 
   const handleFilePicked = async (event) => {
