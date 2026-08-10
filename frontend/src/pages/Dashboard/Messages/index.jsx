@@ -13,7 +13,13 @@ const MessagesPage = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("admin_token");
-      const url = new URL(`${import.meta.env.VITE_API_URL || "/api/v1"}/contact`);
+      // La base hace falta porque en desarrollo VITE_API_URL no está definida y
+      // el valor por defecto es relativo ("/api/v1"), con el que new URL lanza.
+      // En producción la variable trae una URL absoluta y la base se ignora.
+      const url = new URL(
+        `${import.meta.env.VITE_API_URL || "/api/v1"}/contact`,
+        window.location.origin
+      );
       if (filter) url.searchParams.append("status_filter", filter);
       
       const res = await fetch(url, {

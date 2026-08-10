@@ -74,11 +74,17 @@ describe("árbol de rutas del dashboard", () => {
       recent_messages: [],
     };
 
+    // /contact devuelve una página, no una lista: la forma importa porque
+    // MessagesPage lee data.items directamente.
+    const paginaVacia = { items: [], total: 0, new_count: 0 };
+
     vi.stubGlobal(
       "fetch",
       vi.fn().mockImplementation((input) => {
         const url = String(input?.url ?? input);
-        const body = url.includes("/dashboard/stats") ? stats : [];
+        let body = [];
+        if (url.includes("/dashboard/stats")) body = stats;
+        else if (url.includes("/contact")) body = paginaVacia;
         return Promise.resolve({ ok: true, status: 200, json: async () => body });
       })
     );
