@@ -11,22 +11,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
-    name: Build Docker Images & Deploy
+  # ─────────────────────────────────────────────
+  # 1. Limpieza de caches (solo en main)
+  # ─────────────────────────────────────────────
+  cleanup-cache:
+    name: Cleanup GitHub Actions Cache
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Cleanup GitHub Actions cache (non-main branches)
+      - name: Cleanup non-main caches
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # GitHub Actions cache quota is 10GB per repo. Caches from PRs and
-          # feature branches accumulate and trigger the "cache quota exceeded"
-          # banner. Delete every cache that is NOT from the main branch.
           echo "Listing caches..."
           gh api "repos/${{ github.repository }}/actions/caches" --paginate \
             --jq '.actions_caches[] | [.id, .ref, .size_in_bytes] | @tsv' \
@@ -37,6 +33,22 @@ jobs:
               fi
             done
           echo "Cache cleanup finished."
+
+  # ─────────────────────────────────────────────
+  # 2. Build de las imágenes Docker
+  # ─────────────────────────────────────────────
+  build:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs: cleanup-cache # Opcional: si quieres que espere al cleanup
+    outputs:
+      frontend-tar: portfolio_frontend.tar
+      backend-tar: portfolio_backend.tar
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -62,9 +74,52 @@ jobs:
           tags: portfolio_backend:latest
           outputs: type=docker,dest=/tmp/portfolio_backend.tar
 
-      - name: Prepare files for transfer
+      - name: Upload Frontend Image Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-image
+          path: /tmp/portfolio_frontend.tar
+          retention-days: 1
+
+      - name: Upload Backend Image Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-image
+          path: /tmp/portfolio_backend.tar
+          retention-days: 1
+
+  # ─────────────────────────────────────────────
+  # 3. Preparar y transferir archivos al VPS
+  # ─────────────────────────────────────────────
+  transfer:
+    name: Transfer Files to VPS
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout repo (solo para docker-compose)
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            docker-compose.prod.yml
+          sparse-checkout-cone: false
+
+      - name: Download Frontend Image
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-image
+          path: /tmp
+
+      - name: Download Backend Image
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-image
+          path: /tmp
+
+      - name: Prepare staging folder
         run: |
-          mkdir staging
+          mkdir -p staging
           cp /tmp/portfolio_frontend.tar staging/
           cp /tmp/portfolio_backend.tar staging/
           cp docker-compose.prod.yml staging/docker-compose.yml
@@ -80,6 +135,16 @@ jobs:
           target: "${{ secrets.VPS_APP_PATH }}/"
           strip_components: 1
 
+  # ─────────────────────────────────────────────
+  # 4. Deploy final en el VPS
+  # ─────────────────────────────────────────────
+  deploy:
+    name: Deploy on VPS
+    runs-on: ubuntu-latest
+    needs: transfer
+    if: github.ref == 'refs/heads/main'
+
+    steps:
       - name: Deploy on VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -123,11 +188,10 @@ jobs:
             docker load -i portfolio_backend.tar
 
             # Cleanup Tars
-            rm portfolio_frontend.tar portfolio_backend.tar
+            rm -f portfolio_frontend.tar portfolio_backend.tar
 
             # Restart Services
             echo "Restarting stack..."
-            # Force remove execution to handle migration from other folders
             docker rm -f portfolio_frontend portfolio_backend || true
             docker compose down
             docker compose up -d
