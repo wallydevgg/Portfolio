@@ -242,12 +242,21 @@
   flex-direction: column;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   border-radius: 0.375rem;
-  overflow: hidden;
+  // Sin overflow:hidden a propósito: recorta bien las esquinas, pero anula el
+  // position:sticky de la barra de herramientas. El redondeo se consigue
+  // redondeando barra y área de texto por separado.
   text-align: left;
   margin-top: 0.5rem;
 }
 
 .tiptap-toolbar {
+  // Se queda pegada arriba al desplazarse: en un post largo, tener que subir
+  // hasta el principio para insertar una imagen rompe la escritura.
+  // El contenedor de scroll es .dashboard__content.
+  position: sticky;
+  top: 0;
+  z-index: 20;
+
   display: flex;
   flex-wrap: wrap;
   align-items: center;
