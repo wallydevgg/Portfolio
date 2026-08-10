@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router";
-import { ArrowLeft, Heart, MessageSquare, Share2, BookOpen, Send, User } from "lucide-react";
+import { ArrowLeft, Heart, MessageSquare, Share2, Check, BookOpen, Send, User } from "lucide-react";
 import "./BlogPostPage.scss";
 import { t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import PostArticle from "@/features/blog/PostArticle";
+import { sharePost } from "@/features/blog/sharePost";
 
 const BlogPostPage = () => {
   useLingui();
@@ -15,6 +16,7 @@ const BlogPostPage = () => {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(0);
   const [liking, setLiking] = useState(false);
+  const [shareState, setShareState] = useState("idle");
 
   // comments
   const [comments, setComments] = useState([]);
@@ -69,14 +71,16 @@ const BlogPostPage = () => {
 
   const handleShare = async () => {
     const url = `${window.location.origin}/blog/${slug}`;
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: post.title, url });
-      } else {
-        await navigator.clipboard.writeText(url);
-      }
-    } catch {
-      // user cancelled or clipboard unavailable
+    const result = await sharePost({ url, title: post.title });
+
+    // Copiar en silencio se percibe como que el botón no funciona, así que el
+    // propio botón confirma durante unos segundos.
+    if (result === "copied") {
+      setShareState("copied");
+      setTimeout(() => setShareState("idle"), 2200);
+    } else if (result === "failed") {
+      setShareState("failed");
+      setTimeout(() => setShareState("idle"), 2200);
     }
   };
 
@@ -171,7 +175,13 @@ const BlogPostPage = () => {
                   onClick={handleShare}
                   aria-label="share"
                 >
-                  <Share2 size={16} /> {t`blog.actions.share`}
+                  {shareState === "copied" ? (
+                    <><Check size={16} /> {t`blog.actions.copied`}</>
+                  ) : shareState === "failed" ? (
+                    <><Share2 size={16} /> {t`blog.actions.shareFailed`}</>
+                  ) : (
+                    <><Share2 size={16} /> {t`blog.actions.share`}</>
+                  )}
                 </button>
               </div>
             </PostArticle>

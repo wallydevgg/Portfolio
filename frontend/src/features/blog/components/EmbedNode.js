@@ -1,6 +1,7 @@
 import { Node, mergeAttributes } from "@tiptap/core";
 import {
   EMBED_PROVIDERS,
+  embedBox,
   embedPermalink,
   embedSrc,
   isValidEmbed,
@@ -77,8 +78,9 @@ export const Embed = Node.create({
 
       // YouTube se puede previsualizar tal cual dentro del editor.
       if (config.type === "iframe") {
-        wrapper.style.aspectRatio = config.ratio;
-        if (config.maxWidth) wrapper.style.maxWidth = config.maxWidth;
+        const { ratio, maxWidth } = embedBox(provider, embedUser);
+        wrapper.style.aspectRatio = ratio;
+        if (maxWidth) wrapper.style.maxWidth = maxWidth;
 
         const iframe = document.createElement("iframe");
         iframe.src = embedSrc(provider, embedId);

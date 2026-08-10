@@ -1,5 +1,6 @@
 import {
   EMBED_PROVIDERS,
+  embedBox,
   embedPermalink,
   embedSrc,
   isValidEmbed,
@@ -39,7 +40,7 @@ export function renderPostHtml(html) {
     }
 
     if (config.type === "iframe") {
-      marker.replaceWith(buildIframe(doc, provider, id, config));
+      marker.replaceWith(buildIframe(doc, provider, id, user, config));
       return;
     }
 
@@ -55,11 +56,13 @@ export function renderPostHtml(html) {
   return { html: doc.body.innerHTML, scripts: [...scripts] };
 }
 
-function buildIframe(doc, provider, id, config) {
+function buildIframe(doc, provider, id, user, config) {
+  const { ratio, maxWidth } = embedBox(provider, user);
+
   const figure = doc.createElement("figure");
   figure.className = `post-embed post-embed--${provider}`;
-  figure.style.aspectRatio = config.ratio;
-  if (config.maxWidth) figure.style.maxWidth = config.maxWidth;
+  figure.style.aspectRatio = ratio;
+  if (maxWidth) figure.style.maxWidth = maxWidth;
 
   const iframe = doc.createElement("iframe");
   // Todos los valores salen de la lista blanca; nada viene del post.
@@ -88,7 +91,10 @@ function buildBlockquote(doc, provider, id, user, config) {
 
   const quote = doc.createElement("blockquote");
   quote.className = `post-embed post-embed--${provider}`;
+  // Sin aspect-ratio: el script del proveedor decide la altura del reproductor
+  // y fijarla desde fuera lo recortaría.
   if (config.maxWidth) quote.style.maxWidth = config.maxWidth;
+  quote.style.marginInline = "auto";
 
   if (provider === "tiktok") {
     quote.classList.add("tiktok-embed");

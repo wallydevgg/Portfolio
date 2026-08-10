@@ -24,7 +24,22 @@ export default function PostEditorPage() {
   const [uploadingCover, setUploadingCover] = useState(false);
   const [archiving, setArchiving] = useState(false);
   const [confirmArchive, setConfirmArchive] = useState(false);
+  const [headerVisible, setHeaderVisible] = useState(true);
   const coverInputRef = useRef(null);
+  const headerRef = useRef(null);
+
+  // El dock solo aparece cuando la cabecera sale de pantalla; con las dos
+  // visibles a la vez se duplicarían los mismos botones.
+  useEffect(() => {
+    const nodo = headerRef.current;
+    if (!nodo) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setHeaderVisible(entry.isIntersecting),
+      { threshold: 0 }
+    );
+    observer.observe(nodo);
+    return () => observer.disconnect();
+  }, [loadingPost]);
 
   const { createPost, updatePost, getPost, uploadImage, deletePost } = useBlogApi();
   const navigate = useNavigate();
@@ -162,6 +177,31 @@ export default function PostEditorPage() {
 
   const ocupado = saving || publishing || archiving;
 
+  // Las mismas acciones de la cabecera, para el dock flotante. Se declaran una
+  // vez para que no puedan divergir entre las dos barras.
+  const acciones = [
+    { key: "preview", label: "Vista previa", icon: Eye, onClick: handlePreview },
+    {
+      key: "save",
+      label: isEditing ? "Save Changes" : "Save Draft",
+      icon: Save,
+      onClick: () => handleSave(undefined),
+      primary: isPublished,
+    },
+    isPublished
+      ? { key: "draft", label: "Save as Draft", icon: FileText, onClick: () => handleSave(false) }
+      : {
+          key: "publish",
+          label: isEditing ? "Publish" : "Publish Post",
+          icon: Send,
+          onClick: () => handleSave(true),
+          primary: true,
+        },
+    ...(isEditing
+      ? [{ key: "archive", label: "Archive", icon: Archive, onClick: () => setConfirmArchive(true) }]
+      : []),
+  ];
+
   if (loadingPost) {
     return (
       <div className="editor-page editor-page--loading">
@@ -173,7 +213,26 @@ export default function PostEditorPage() {
 
   return (
     <div className="editor-page">
-      <div className="editor-page__header">
+      {/* Dock flotante: aparece cuando la cabecera deja de verse, para no tener
+          que subir hasta arriba en un post largo. Iconos que se despliegan con
+          su etiqueta al pasar por encima. */}
+      <div className={`editor-dock${headerVisible ? "" : " editor-dock--visible"}`}>
+        {acciones.map(({ key, label, icon: Icon, onClick, primary }) => (
+          <button
+            key={key}
+            type="button"
+            onClick={onClick}
+            disabled={ocupado}
+            aria-label={label}
+            className={`editor-dock__btn${primary ? " editor-dock__btn--primary" : ""}`}
+          >
+            <Icon className="icon" />
+            <span className="editor-dock__label">{label}</span>
+          </button>
+        ))}
+      </div>
+
+      <div className="editor-page__header" ref={headerRef}>
         <div className="editor-page__title-area">
           <Link to="/dashboard/posts" className="back-btn">
             <ArrowLeft className="icon" />

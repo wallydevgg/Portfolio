@@ -27,12 +27,16 @@ export const EMBED_PROVIDERS = {
     match: [
       /(?:youtube\.com\/watch\?(?:.*&)?v=)([A-Za-z0-9_-]{11})/,
       /(?:youtu\.be\/)([A-Za-z0-9_-]{11})/,
-      /(?:youtube\.com\/shorts\/)([A-Za-z0-9_-]{11})/,
       /(?:youtube\.com\/embed\/)([A-Za-z0-9_-]{11})/,
     ],
+    // Los shorts son verticales, así que se reconocen aparte para poder darles
+    // su proporción: con 16/9 quedaban con dos franjas negras enormes.
+    verticalMatch: [/youtube\.com\/shorts\/([A-Za-z0-9_-]{11})/],
     // nocookie: no deja cookies de seguimiento hasta que se pulsa play.
     src: (id) => `https://www.youtube-nocookie.com/embed/${id}`,
     ratio: "16 / 9",
+    verticalRatio: "9 / 16",
+    verticalMaxWidth: "400px",
     allow: "accelerometer; clipboard-write; encrypted-media; picture-in-picture; web-share",
   },
 
@@ -44,7 +48,10 @@ export const EMBED_PROVIDERS = {
     match: [/tiktok\.com\/@([A-Za-z0-9_.]+)\/video\/(\d+)/],
     userGroup: 1,
     idGroup: 2,
-    maxWidth: "605px",
+    // El snippet oficial admite hasta 605px, pero el vídeo es vertical: a ese
+    // ancho el reproductor deja bandas blancas a los lados. 325px es el mínimo
+    // que TikTok declara y es el que se ajusta al vídeo.
+    maxWidth: "325px",
   },
 
   instagram: {
@@ -68,6 +75,13 @@ export function parseEmbedUrl(url) {
   if (!trimmed) return null;
 
   for (const [provider, config] of Object.entries(EMBED_PROVIDERS)) {
+    // Los verticales se comprueban primero: un short también encajaría en el
+    // patrón genérico si este fuera menos estricto.
+    for (const pattern of config.verticalMatch ?? []) {
+      const found = trimmed.match(pattern);
+      if (found) return { provider, id: found[1], user: "short" };
+    }
+
     for (const pattern of config.match) {
       const found = trimmed.match(pattern);
       if (!found) continue;
@@ -110,6 +124,21 @@ export function embedPermalink(provider, id, user) {
     return `https://www.instagram.com/${kind}/${id}/`;
   }
   return null;
+}
+
+/**
+ * Proporción y ancho del contenedor. Un short de YouTube es vertical y usa los
+ * suyos; el resto, los del proveedor.
+ */
+export function embedBox(provider, user) {
+  const config = EMBED_PROVIDERS[provider];
+  if (!config) return { ratio: null, maxWidth: null };
+
+  const vertical = user === "short";
+  return {
+    ratio: vertical ? config.verticalRatio : config.ratio,
+    maxWidth: vertical ? config.verticalMaxWidth : config.maxWidth,
+  };
 }
 
 /** Script que hay que cargar para hidratar este proveedor, o null. */

@@ -90,6 +90,14 @@ msgstr ""
 msgid "5. Third-Party Services"
 msgstr ""
 
+#: src/pages/Blog/BlogPostPage.jsx
+msgid "blog.actions.copied"
+msgstr "Link copied"
+
+#: src/pages/Blog/BlogPostPage.jsx
+msgid "blog.actions.shareFailed"
+msgstr "Could not share"
+
 #: src/pages/Blog/BlogPostPage.jsx:167
 msgid "blog.actions.like"
 msgstr "Like"
