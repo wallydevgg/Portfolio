@@ -11,6 +11,7 @@ from typing import List
 from core import rate_limit
 from core.config import settings
 from core.database import get_db
+from core.images import build_image_key, validate_image_contents, validate_image_type
 from core.net import get_client_ip
 from core.security import get_current_user
 from core.storage import upload_file
@@ -22,16 +23,6 @@ router = APIRouter(prefix="/posts", tags=["posts"])
 
 # SVG is deliberately absent: it is an image content type that can carry
 # scripts, and these files are served from a public bucket.
-ALLOWED_IMAGE_TYPES = {
-    "image/png": b"\x89PNG\r\n\x1a\n",
-    "image/jpeg": b"\xff\xd8\xff",
-    "image/gif": b"GIF8",
-    "image/webp": b"RIFF",
-}
-
-MAX_IMAGE_BYTES = 5 * 1024 * 1024
-
-
 def _public_posts(db: Session):
     """Posts visible to anyone: published and not archived."""
     return db.query(models.Post).filter(
@@ -202,24 +193,12 @@ async def upload_post_image(
     is whatever the client says it is — without sniffing, anything renamed to
     .png would land in a public bucket.
     """
-    if file.content_type not in ALLOWED_IMAGE_TYPES:
-        raise HTTPException(
-            status_code=400,
-            detail="Only PNG, JPEG, GIF and WebP images are allowed",
-        )
+    validate_image_type(file.content_type)
 
     contents = await file.read()
+    validate_image_contents(file.content_type, contents)
 
-    if len(contents) > MAX_IMAGE_BYTES:
-        raise HTTPException(status_code=413, detail="Image must be 5 MB or smaller")
-
-    if not contents.startswith(ALLOWED_IMAGE_TYPES[file.content_type]):
-        raise HTTPException(status_code=400, detail="File content does not match its type")
-
-    # The extension comes from the validated content type, never from the
-    # uploaded filename.
-    extension = file.content_type.split("/")[1]
-    key = f"blog/{uuid.uuid4()}.{extension}"
+    key = build_image_key("blog", file.content_type)
 
     try:
         url = upload_file(contents, key, content_type=file.content_type)

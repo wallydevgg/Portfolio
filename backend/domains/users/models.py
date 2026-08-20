@@ -11,6 +11,9 @@ class User(Base):
     username = Column(String, unique=True, index=True, nullable=False)
     email = Column(String, unique=True, index=True, nullable=True)
     display_name = Column(String, nullable=True)
+    # URL pública del objeto en MinIO, no el archivo. Igual que la portada
+    # de los posts.
+    avatar_url = Column(String, nullable=True)
     hashed_password = Column(String, nullable=True)
     is_active = Column(Boolean, nullable=False, default=True, server_default="true")
     is_superuser = Column(Boolean, nullable=False, default=False, server_default="false")
