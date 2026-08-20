@@ -9,5 +9,14 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Cloudflare Web Analytics. El token es público por necesidad: el beacon
+         corre en el navegador, así que viaja en este HTML. Es un identificador
+         de sitio, no una credencial. Sin cookies, no requiere consentimiento. -->
+    <script
+      type="module"
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "d8c1dcda67d847ebaa0ee24c215370c4"}'
+    ></script>
   </body>
 </html>
