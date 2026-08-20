@@ -1,7 +1,12 @@
+@use "@/styles/abstracts" as *;
+
+// Todo lo de este archivo cuelga de `.about-dashboard`. Antes .form-group,
+// .btn-save, .image-preview y .layout-option eran selectores globales: una vez
+// cargada esta página, sus estilos se aplicaban al resto del dashboard.
 .about-dashboard {
   padding: 2rem;
   color: var(--DM-Title);
-  max-width: 1200px;
+  max-width: 100%;
 
   &.loading {
     display: flex;
@@ -25,7 +30,7 @@
     }
 
     &-icon {
-      color: #ff8906;
+      color: var(--dash-accent-text);
     }
 
     h1 {
@@ -48,210 +53,194 @@
       grid-template-columns: 1fr;
     }
   }
-}
 
-.about-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.about-card {
-  background: var(--BgDark);
-  border: 1px solid rgba(167, 169, 190, 0.2);
-  border-radius: 12px;
-  padding: 1.5rem;
-
-  h2 {
-    font-size: 1.2rem;
-    margin: 0 0 0.5rem 0;
+  .about-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
 
-  &__desc {
-    color: var(--parrafos);
-    font-size: 0.85rem;
-    margin: 0 0 1.5rem 0;
-  }
-}
+  .about-card {
+    @include dash-glass;
+    padding: 1.5rem;
 
-.form-group {
-  margin-bottom: 1.5rem;
+    h2 {
+      font-size: 1.2rem;
+      margin: 0 0 0.5rem 0;
+    }
 
-  label {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--parrafos);
-  }
-
-  textarea {
-    width: 100%;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(167, 169, 190, 0.2);
-    border-radius: 8px;
-    padding: 1rem;
-    color: var(--DM-Title);
-    font-family: inherit;
-    font-size: 0.95rem;
-    resize: vertical;
-    transition: border-color 0.2s;
-
-    &:focus {
-      outline: none;
-      border-color: #ff8906;
+    &__desc {
+      color: var(--parrafos);
+      font-size: 0.85rem;
+      margin: 0 0 1.5rem 0;
     }
   }
-}
 
-.image-upload-area {
-  width: 100%;
-}
+  .form-group {
+    margin-bottom: 1.5rem;
 
-.image-upload-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  height: 200px;
-  border: 2px dashed rgba(167, 169, 190, 0.3);
-  border-radius: 8px;
-  cursor: pointer;
-  color: var(--parrafos);
-  transition: all 0.2s;
+    label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: $fw-semibold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.45rem;
+      color: var(--parrafos);
+    }
 
-  &:hover {
-    border-color: #ff8906;
-    color: #ff8906;
-    background: rgba(255, 137, 6, 0.05);
+    textarea {
+      @include dash-input;
+      resize: vertical;
+      min-height: 7.5rem;
+      line-height: 1.6;
+    }
   }
-}
 
-.image-preview {
-  position: relative;
-  width: 100%;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid rgba(167, 169, 190, 0.2);
-
-  img {
+  .image-upload-area {
     width: 100%;
-    height: auto;
-    display: block;
   }
 
-  .btn-remove-image {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    border: none;
-    padding: 0.4rem 0.75rem;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    cursor: pointer;
+  .image-upload-placeholder {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0.4rem;
-    backdrop-filter: blur(4px);
+    justify-content: center;
+    gap: 0.75rem;
+    height: 200px;
+    border: 2px dashed $dash-border-strong;
+    border-radius: $dash-radius;
+    cursor: pointer;
+    color: var(--parrafos);
+    transition: border-color $dash-transition, color $dash-transition,
+      background-color $dash-transition;
 
     &:hover {
-      background: #ef4444;
+      border-color: $color-primary;
+      color: var(--dash-accent-text);
+      background: rgba(255, 137, 6, 0.06);
+    }
+
+    &:focus-within { @include dash-focus-ring; }
+  }
+
+  .image-preview {
+    position: relative;
+    width: 100%;
+    border-radius: $dash-radius;
+    overflow: hidden;
+    border: 1px solid $dash-border;
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .btn-remove-image {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: $dash-radius;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.8rem;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      transition: background-color $dash-transition, border-color $dash-transition;
+
+      &:hover {
+        background: #ef4444;
+        border-color: #ef4444;
+      }
+
+      &:focus-visible { @include dash-focus-ring(#f87171); }
     }
   }
-}
 
-.layout-options {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.layout-option {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-  cursor: pointer;
-  padding: 1rem;
-  border-radius: 8px;
-  border: 1px solid rgba(167, 169, 190, 0.2);
-  transition: all 0.2s;
-
-  span {
-    font-size: 0.85rem;
-    color: var(--parrafos);
-    font-weight: 500;
+  .layout-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
   }
 
-  &:hover {
-    border-color: rgba(255, 137, 6, 0.5);
-  }
+  .layout-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: $dash-radius;
+    border: 1px solid $dash-border;
+    transition: border-color $dash-transition, background-color $dash-transition;
 
-  &.active {
-    border-color: #ff8906;
-    background: rgba(255, 137, 6, 0.05);
-    
     span {
-      color: #ff8906;
+      font-size: 0.85rem;
+      color: var(--parrafos);
+      font-weight: $fw-medium;
     }
-    
+
+    &:hover {
+      border-color: rgba(255, 137, 6, 0.5);
+      background: $dash-hover-bg;
+    }
+
+    // El foco visible va aquí y no en el radio: el input real está oculto
+    // dentro de la etiqueta y su anillo no se vería.
+    &:focus-within { @include dash-focus-ring; }
+
+    &.active {
+      border-color: $color-primary;
+      background: rgba(255, 137, 6, 0.07);
+
+      span {
+        color: var(--dash-accent-text);
+      }
+
+      .diagram-img {
+        background: $color-primary;
+      }
+    }
+  }
+
+  .layout-diagram {
+    display: flex;
+    gap: 4px;
+    width: 60px;
+    height: 40px;
+    padding: 4px;
+    background: var(--dash-sunken);
+    border-radius: 4px;
+
+    &.row { flex-direction: row; }
+    &.row-reverse { flex-direction: row-reverse; }
+    &.col { flex-direction: column; }
+    &.col-reverse { flex-direction: column-reverse; }
+
+    .diagram-text {
+      flex: 1;
+      background: rgba(167, 169, 190, 0.3);
+      border-radius: 2px;
+    }
+
     .diagram-img {
-      background: #ff8906;
+      flex: 0.6;
+      background: rgba(167, 169, 190, 0.5);
+      border-radius: 2px;
+      transition: background-color $dash-transition;
     }
   }
-}
 
-.layout-diagram {
-  display: flex;
-  gap: 4px;
-  width: 60px;
-  height: 40px;
-  padding: 4px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-
-  &.row { flex-direction: row; }
-  &.row-reverse { flex-direction: row-reverse; }
-  &.col { flex-direction: column; }
-  &.col-reverse { flex-direction: column-reverse; }
-
-  .diagram-text {
-    flex: 1;
-    background: rgba(167, 169, 190, 0.3);
-    border-radius: 2px;
-  }
-
-  .diagram-img {
-    flex: 0.6;
-    background: rgba(167, 169, 190, 0.5);
-    border-radius: 2px;
-    transition: background 0.2s;
-  }
-}
-
-.btn-save {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: #ff8906;
-  color: white;
-  border: none;
-  padding: 0.6rem 1.25rem;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-
-  &:hover:not(:disabled) {
-    background: #e07600;
-  }
-
-  &:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
+  .btn-save {
+    @include dash-primary-btn;
+    padding: 0.6rem 1.25rem;
   }
 }
 

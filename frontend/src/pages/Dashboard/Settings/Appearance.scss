@@ -1,0 +1,131 @@
+@use "@/styles/abstracts" as *;
+
+// Compartido por las pantallas de Tema e Idioma: las dos son una lista de
+// opciones excluyentes y deben verse igual.
+.appearance-settings {
+  padding: 2rem;
+  color: var(--DM-Title);
+  max-width: 100%;
+
+  &__header {
+    margin-bottom: 2rem;
+
+    &-text {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    &-icon {
+      color: var(--dash-accent-text);
+      flex-shrink: 0;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin: 0 0 0.5rem 0;
+    }
+
+    p {
+      color: var(--parrafos);
+      margin: 0;
+      max-width: 56ch;
+      line-height: 1.6;
+    }
+  }
+
+  &__card {
+    @include dash-glass;
+    padding: 1.75rem;
+  }
+
+  &__options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 1rem;
+  }
+}
+
+// Cada opción es un <label> con un radio dentro: el control nativo sigue
+// recibiendo foco y teclado, y la caja solo lo viste.
+.appearance-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid $dash-border;
+  border-radius: $dash-radius-lg;
+  background: var(--dash-sunken-soft);
+  cursor: pointer;
+  transition: border-color $dash-transition, background-color $dash-transition;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  &:hover {
+    border-color: $dash-border-strong;
+    background: $dash-hover-bg;
+  }
+
+  // El anillo va en la caja: el radio real mide 0×0 y su contorno no se vería.
+  &:focus-within {
+    @include dash-focus-ring;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    flex-shrink: 0;
+    border-radius: $dash-radius;
+    background: rgba(167, 169, 190, 0.12);
+    color: var(--parrafos);
+    transition: background-color $dash-transition, color $dash-transition;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  &__label {
+    font-weight: $fw-semibold;
+    font-size: 0.95rem;
+  }
+
+  &__hint {
+    font-size: 0.78rem;
+    color: var(--parrafos);
+    line-height: 1.5;
+  }
+
+  // Seleccionada: mismo lenguaje que el item activo del menú lateral.
+  &--active {
+    border-color: $color-primary;
+    background: rgba(255, 137, 6, 0.1);
+
+    .appearance-option__icon {
+      background: rgba(255, 137, 6, 0.18);
+      color: var(--dash-accent-text);
+    }
+
+    .appearance-option__label {
+      color: var(--dash-accent-text);
+    }
+  }
+
+  &__check {
+    margin-left: auto;
+    flex-shrink: 0;
+    color: var(--dash-accent-text);
+  }
+}

@@ -3,7 +3,7 @@
 .overview-page {
   padding: 2rem;
   color: var(--DM-Title);
-  max-width: 1100px;
+  max-width: 100%;
 
   &__header {
     margin-bottom: 2rem;
@@ -15,7 +15,7 @@
     }
 
     &-icon {
-      color: #ff8906;
+      color: var(--dash-accent-text);
     }
 
     h1 {
@@ -61,9 +61,7 @@
   }
 
   &__recent {
-    background: var(--BgDark);
-    border: 1px solid rgba(167, 169, 190, 0.2);
-    border-radius: 12px;
+    @include dash-glass;
     padding: 1.5rem;
     margin-bottom: 2rem;
 
@@ -101,37 +99,15 @@
   // Estado vacío: el icono atenuado carga el peso visual para que el hueco se
   // lea como "todavía nada" y no como algo que falló al cargar.
   &__empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.35rem;
+    @include dash-empty-state($dash-accent-messages);
+    // Va dentro del panel de mensajes recientes, que ya tiene su propio
+    // relleno: aquí el del mixin sumaría el doble.
     padding: 2.5rem 1rem;
-    text-align: center;
-
-    svg {
-      color: $dash-accent-messages;
-      opacity: 0.55;
-      margin-bottom: 0.35rem;
-    }
-
-    p {
-      margin: 0;
-      font-size: 0.95rem;
-      font-weight: $fw-semibold;
-      color: var(--DM-Title);
-    }
-
-    span {
-      font-size: 0.82rem;
-      color: var(--parrafos);
-      opacity: 0.85;
-      max-width: 34ch;
-    }
   }
 
   &__view-all {
     margin-left: auto;
-    color: #ff8906;
+    color: var(--dash-accent-text);
     font-size: 0.85rem;
     font-weight: 600;
     text-decoration: none;
@@ -155,7 +131,7 @@
       }
 
       svg {
-        color: #ff8906;
+        color: var(--dash-accent-text);
       }
     }
 
@@ -176,18 +152,29 @@
   // solo actúa de red por si faltara.
   --card-accent: #{$color-primary};
 
+  // Los cinco acentos están pensados sobre fondo oscuro: sobre blanco ninguno
+  // pasa de 2.5:1, muy por debajo del mínimo para texto. La versión de texto se
+  // oscurece manteniendo el tono; al 58% las cinco quedan por encima de 4.5:1.
+  // Rellenos, bordes y filetes siguen usando el acento pleno, que ahí el
+  // contraste no es requisito de lectura.
+  --card-accent-text: var(--card-accent);
+
+  .light-theme & {
+    --card-accent-text: color-mix(in srgb, var(--card-accent) 58%, #000);
+  }
+
   position: relative;
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1.25rem;
+  padding: 0.75rem 0.5rem;
   padding-left: 1.5rem;
   text-decoration: none;
   color: inherit;
   overflow: hidden;
 
-  @include dash-surface;
-  @include dash-lift(var(--card-accent));
+  @include dash-glass;
+  @include dash-glass-lift(var(--card-accent));
 
   // Filete lateral del acento. Va como pseudoelemento y no como border-left
   // para poder crecer en el hover sin desplazar el contenido.
@@ -208,12 +195,19 @@
     width: 4px;
   }
 
-  &--highlight {
+  // El &.& duplica la clase para ganarle en especificidad al borde que
+  // dash-glass fija bajo `.dark-theme`: sin eso, la tarjeta destacada perdía su
+  // borde de acento justo en el tema donde se ve.
+  &--highlight#{&}--highlight {
     border-color: color-mix(in srgb, var(--card-accent) 45%, transparent);
 
-    &::before { opacity: 1; }
+    &::before {
+      opacity: 1;
+    }
 
-    .overview-card__value { color: var(--card-accent); }
+    .overview-card__value {
+      color: var(--card-accent-text);
+    }
   }
 
   &__icon {
@@ -224,7 +218,7 @@
     height: 44px;
     border-radius: $dash-radius;
     background: color-mix(in srgb, var(--card-accent) 14%, transparent);
-    color: var(--card-accent);
+    color: var(--card-accent-text);
     flex-shrink: 0;
     transition: background-color $dash-transition;
   }
@@ -283,7 +277,7 @@
 
   &:hover &__chevron {
     opacity: 1;
-    color: var(--card-accent);
+    color: var(--card-accent-text);
     transform: translateX(2px);
   }
 }
@@ -303,7 +297,7 @@
     background: $dash-hover-bg;
 
     .overview-message__subject {
-      color: $color-primary;
+      color: var(--dash-accent-text);
     }
   }
 
@@ -343,7 +337,7 @@
     // igual en todo el dashboard.
     &.new {
       background: rgba(255, 137, 6, 0.16);
-      color: $color-primary;
+      color: var(--dash-accent-text);
     }
 
     &.read {

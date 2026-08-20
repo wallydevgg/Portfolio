@@ -126,6 +126,14 @@
   .light-theme & { border-color: rgba(15, 14, 23, 0.16); }
 }
 
+// ── Patrón de circuito ────────────────────────────────────────────────────────
+// Fondo de marca por tema. Se combina casi siempre con content-scrim, que es
+// quien lo atenúa por debajo de la zona de contenido.
+@mixin circuit-bg {
+  .dark-theme & { background-image: $circuit-dark; }
+  .light-theme & { background-image: $circuit-light; }
+}
+
 // ── Atenuador del patrón de fondo ─────────────────────────────────────────────
 // Oscurece el patrón de circuito de forma progresiva: casi limpio arriba, donde
 // está la cabecera, y muy atenuado a partir de la zona de contenido. Se aplica
@@ -183,6 +191,81 @@
   border-radius: $radius;
 }
 
+// Variante semi-glass de la superficie anterior: mismo radio y mismo papel,
+// pero translúcida y con desenfoque de fondo. Se reserva para lo que se mira
+// —cards de Overview, Projects y Settings, y los contenedores de formulario— y
+// se deja fuera de las tablas densas, donde el desenfoque solo resta contraste.
+//
+// El desenfoque necesita algo detrás que desenfocar: quien lo provee es la capa
+// ambiental de `.dashboard__main`. Sin ella esto se vería como una caja gris.
+@mixin dash-glass($radius: $dash-radius-lg) {
+  background: var(--BgDark);
+  border: 1px solid $dash-border;
+  border-radius: $radius;
+
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    // El tema claro se queda opaco a propósito: ver arriba, en $dash-glass-bg.
+    .dark-theme & {
+      background: $dash-glass-bg;
+      border-color: $dash-glass-border;
+      box-shadow: $dash-glass-shadow, $dash-glass-highlight;
+      -webkit-backdrop-filter: blur($dash-glass-blur) saturate($dash-glass-saturate);
+      backdrop-filter: blur($dash-glass-blur) saturate($dash-glass-saturate);
+    }
+  }
+}
+
+// Semi-glass del chrome: barra lateral y cabecera. Más cerrado que dash-glass
+// porque encima va texto de menú, no cifras sueltas. Ver $dash-chrome-bg.
+//
+// A diferencia de dash-glass, aquí sí hay versión de tema claro: la barra y la
+// cabecera ya se pintan con theme-color, así que el texto cambia de color con
+// el tema y no hay riesgo de blanco sobre fondo claro.
+@mixin dash-chrome {
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .dark-theme & {
+      background-color: $dash-chrome-bg;
+      -webkit-backdrop-filter: blur($dash-chrome-blur) saturate($dash-chrome-saturate);
+      backdrop-filter: blur($dash-chrome-blur) saturate($dash-chrome-saturate);
+    }
+
+    .light-theme & {
+      background-color: $dash-chrome-bg-light;
+      -webkit-backdrop-filter: blur($dash-chrome-blur) saturate($dash-chrome-saturate);
+      backdrop-filter: blur($dash-chrome-blur) saturate($dash-chrome-saturate);
+    }
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .dark-theme & { background-color: $dash-chrome-bg-solid; }
+    .light-theme & { background-color: $dash-chrome-bg-light-solid; }
+  }
+}
+
+// Elevación para superficies glass. Igual que dash-lift, pero conservando el
+// reflejo interior: si la sombra del hover lo pisa, la tarjeta pierde el borde
+// de luz y deja de leerse como vidrio a mitad de la interacción.
+@mixin dash-glass-lift($accent: $color-primary) {
+  transition: border-color $dash-transition, transform $dash-transition,
+    box-shadow $dash-transition, background-color $dash-transition;
+
+  &:hover {
+    border-color: $accent;
+    transform: translateY(-2px);
+    box-shadow: $dash-shadow-hover;
+  }
+
+  .dark-theme &:hover {
+    box-shadow: $dash-glass-shadow-hi, $dash-glass-highlight-hi;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: border-color $dash-transition, box-shadow $dash-transition;
+
+    &:hover { transform: none; }
+  }
+}
+
 // Elevación al pasar por encima. El desplazamiento es decorativo, así que se
 // anula con prefers-reduced-motion; el cambio de borde y sombra se mantiene,
 // que es lo que comunica "esto se puede pulsar".
@@ -208,7 +291,9 @@
 @mixin dash-focus-ring($accent: $color-primary) {
   outline: none;
   border-color: $accent;
-  box-shadow: 0 0 0 3px rgba(255, 137, 6, 0.16);
+  // color-mix en vez de un rgba fijo: así el halo sigue al acento que se pase,
+  // que es lo que hace que el foco de Skills sea violeta y el de Projects teal.
+  box-shadow: 0 0 0 3px color-mix(in srgb, #{$accent} 22%, transparent);
 }
 
 // Botón fantasma: borde sutil, sin relleno hasta el hover.
@@ -230,7 +315,9 @@
 
   &:hover {
     border-color: $accent;
-    color: $accent;
+    // El borde puede llevar el naranja pleno; el texto no, que sobre blanco no
+    // llega al contraste mínimo.
+    color: var(--dash-accent-text, #{$accent});
     background: rgba(255, 137, 6, 0.08);
   }
 
@@ -249,7 +336,7 @@
   padding: 0.6rem 0.75rem;
   border-radius: $dash-radius;
   border: 1px solid $dash-border-strong;
-  background: rgba(0, 0, 0, 0.22);
+  background: var(--dash-sunken);
   color: var(--DM-Title);
   font-family: inherit;
   font-size: 0.9rem;
@@ -316,7 +403,7 @@
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--parrafos);
-    background: rgba(0, 0, 0, 0.22);
+    background: var(--dash-sunken);
     border-bottom: 1px solid $dash-border;
   }
 
@@ -355,7 +442,7 @@
 
   &:hover {
     border-color: $color-primary;
-    color: $color-primary;
+    color: var(--dash-accent-text, #{$color-primary});
     background: rgba(255, 137, 6, 0.08);
   }
 
@@ -370,6 +457,106 @@
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+}
+
+// Botón de fila de solo icono. Comparte con dash-row-btn el radio, el borde y
+// la semántica de color del hover; lo que cambia es que es cuadrado. La altura
+// se iguala a mano (2.05rem ≈ 0.4rem·2 + 1.4·0.82rem + 2px de borde) para que
+// una fila con iconos y otra con texto no midan distinto.
+@mixin dash-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.05rem;
+  height: 2.05rem;
+  padding: 0;
+  border: 1px solid $dash-border-strong;
+  border-radius: $dash-radius;
+  background: transparent;
+  color: var(--parrafos);
+  cursor: pointer;
+  transition: border-color $dash-transition, color $dash-transition,
+    background-color $dash-transition;
+
+  .icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &:hover {
+    border-color: $color-primary;
+    color: var(--dash-accent-text, #{$color-primary});
+    background: rgba(255, 137, 6, 0.08);
+  }
+
+  &:focus-visible { @include dash-focus-ring; }
+
+  &--danger:hover {
+    border-color: #f87171;
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.1);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Estado vacío. El icono atenuado carga el peso visual para que el hueco se lea
+// como "todavía nada" y no como algo que falló al cargar; debajo van el titular,
+// una línea de contexto y, si la hay, la acción que lo resuelve.
+@mixin dash-empty-state($accent: $color-primary) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 3.5rem 1.5rem;
+  text-align: center;
+  color: var(--parrafos);
+
+  > svg {
+    color: $accent;
+    opacity: 0.45;
+    margin-bottom: 0.5rem;
+
+    // Sobre blanco, un acento claro al 45% deja de verse: se oscurece con el
+    // mismo criterio que el resto y se le sube algo la presencia.
+    .light-theme & {
+      color: color-mix(in srgb, #{$accent} 58%, #000);
+      opacity: 0.6;
+    }
+  }
+
+  p,
+  strong {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: $fw-semibold;
+    color: var(--DM-Title);
+  }
+
+  span {
+    font-size: 0.83rem;
+    opacity: 0.85;
+    max-width: 38ch;
+    line-height: 1.6;
+  }
+
+  // La acción se separa del texto lo justo para no leerse como parte de él.
+  .dash-empty-action {
+    @include dash-primary-btn;
+    margin-top: 1rem;
+
+    .icon,
+    svg {
+      width: 1rem;
+      height: 1rem;
+      // El icono del botón no hereda el atenuado del icono del estado vacío.
+      color: inherit;
+      opacity: 1;
+    }
   }
 }
 

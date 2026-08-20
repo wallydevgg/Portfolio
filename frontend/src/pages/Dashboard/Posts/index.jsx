@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router";
-import { Plus, Edit3, Trash2, Archive, Loader2, AlertCircle } from "lucide-react";
+import { Plus, Edit3, Trash2, Archive, Loader2, AlertCircle, FileText } from "lucide-react";
 import { useBlogApi } from "../../../features/blog/useBlogApi";
 import { useToast } from "../../../contexts/ToastContext";
 import ConfirmDialog from "@/components/ui/ConfirmDialog/ConfirmDialog";
@@ -146,7 +146,17 @@ export default function PostsPage() {
               {posts.length === 0 && !loading && (
                 <tr>
                   <td colSpan="4" className="posts-table__empty">
-                    No posts created yet.
+                    <div className="posts-table__empty-inner">
+                      <FileText size={38} strokeWidth={1.5} />
+                      <p>No posts created yet.</p>
+                      <span>
+                        Los posts que escribas aparecerán acá, publicados o en borrador.
+                      </span>
+                      <Link to="/dashboard/posts/new" className="dash-empty-action">
+                        <Plus className="icon" />
+                        Create Post
+                      </Link>
+                    </div>
                   </td>
                 </tr>
               )}

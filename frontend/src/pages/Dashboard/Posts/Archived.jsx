@@ -89,63 +89,72 @@ export default function ArchivedPostsPage() {
         <div className="posts-page__empty-state">
           <Archive size={40} strokeWidth={1.5} />
           <p>No hay posts archivados.</p>
+          <span>
+            Los posts que archives desde el listado se guardan acá y podés restaurarlos cuando quieras.
+          </span>
+          <Link to="/dashboard/posts" className="dash-empty-action">
+            <FileText className="icon" />
+            Ver posts
+          </Link>
         </div>
       )}
 
       {!loading && posts.length > 0 && (
-        <table className="posts-table">
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>Estado</th>
-              <th>Archivado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {posts.map((post) => (
-              <tr key={post.id}>
-                <td>{post.title}</td>
-                <td>
-                  <span className={`posts-table__status posts-table__status--${post.is_published ? "published" : "draft"}`}>
-                    {post.is_published ? "Published" : "Draft"}
-                  </span>
-                </td>
-                <td>{formatDate(post.deleted_at)}</td>
-                <td>
-                  <div className="posts-table__actions">
-                    <button
-                      onClick={() => handleRestore(post)}
-                      disabled={busyId === post.id}
-                      className="action-edit"
-                      title={post.is_published ? "Restaurar como publicado" : "Restaurar"}
-                    >
-                      <RotateCcw className="icon" />
-                    </button>
-                    {post.is_published && (
+        <div className="posts-page__table-container">
+          <table className="posts-table">
+            <thead className="posts-table__head">
+              <tr>
+                <th>Título</th>
+                <th>Estado</th>
+                <th>Archivado</th>
+                <th className="text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody className="posts-table__body">
+              {posts.map((post) => (
+                <tr key={post.id}>
+                  <td className="posts-table__title-col">{post.title}</td>
+                  <td>
+                    <span className={`posts-table__status posts-table__status--${post.is_published ? "published" : "draft"}`}>
+                      {post.is_published ? "Published" : "Draft"}
+                    </span>
+                  </td>
+                  <td>{formatDate(post.deleted_at)}</td>
+                  <td>
+                    <div className="posts-table__actions">
                       <button
-                        onClick={() => handleRestore(post, true)}
+                        onClick={() => handleRestore(post)}
                         disabled={busyId === post.id}
                         className="action-edit"
-                        title="Restaurar como borrador"
+                        title={post.is_published ? "Restaurar como publicado" : "Restaurar"}
                       >
-                        <FileText className="icon" />
+                        <RotateCcw className="icon" />
                       </button>
-                    )}
-                    <button
-                      onClick={() => setPurging(post)}
-                      disabled={busyId === post.id}
-                      className="action-delete"
-                      title="Borrar definitivamente"
-                    >
-                      <Trash2 className="icon" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                      {post.is_published && (
+                        <button
+                          onClick={() => handleRestore(post, true)}
+                          disabled={busyId === post.id}
+                          className="action-edit"
+                          title="Restaurar como borrador"
+                        >
+                          <FileText className="icon" />
+                        </button>
+                      )}
+                      <button
+                        onClick={() => setPurging(post)}
+                        disabled={busyId === post.id}
+                        className="action-delete"
+                        title="Borrar definitivamente"
+                      >
+                        <Trash2 className="icon" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       <ConfirmDialog

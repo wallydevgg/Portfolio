@@ -2,7 +2,7 @@
 
 .experience-page {
   padding: 2rem;
-  max-width: 1200px;
+  max-width: 100%;
 
   h1 {
     margin-bottom: 1.5rem;
@@ -19,7 +19,7 @@
   }
 
   .experience-form {
-    @include dash-surface;
+    @include dash-glass;
     padding: 1.75rem;
     margin-bottom: 2rem;
 
@@ -91,6 +91,10 @@
 
   .experience-table {
     @include dash-table;
+
+    tbody tr:hover {
+      background: rgba(251, 191, 36, 0.06);
+    }
 
     .actions {
       display: flex;

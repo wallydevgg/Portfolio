@@ -1,7 +1,9 @@
+@use "@/styles/abstracts" as *;
+
 .notifications-settings {
   padding: 2rem;
   color: var(--DM-Title);
-  max-width: 800px;
+  max-width: 100%;
 
   .settings-header {
     margin-bottom: 2rem;
@@ -25,9 +27,9 @@
     align-items: center;
     gap: 0.5rem;
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: $dash-radius;
     margin-bottom: 2rem;
-    font-weight: 500;
+    font-weight: $fw-medium;
 
     &.success {
       background: rgba(16, 185, 129, 0.1);
@@ -43,9 +45,7 @@
   }
 
   .settings-section {
-    background: var(--BgDark);
-    border: 1px solid rgba(167, 169, 190, 0.2);
-    border-radius: 12px;
+    @include dash-glass;
     padding: 2rem;
     margin-bottom: 2rem;
 
@@ -68,22 +68,7 @@
       }
 
       input {
-        background: rgba(0, 0, 0, 0.2);
-        border: 1px solid rgba(167, 169, 190, 0.3);
-        border-radius: 6px;
-        padding: 0.8rem 1rem;
-        color: #fff;
-        font-family: inherit;
-
-        &:focus {
-          outline: none;
-          border-color: #ff8906;
-        }
-
-        &:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
+        @include dash-input;
       }
 
       small {
@@ -103,9 +88,10 @@
 
     .events-list {
       margin-top: 2rem;
-      background: rgba(0, 0, 0, 0.1);
+      background: var(--dash-sunken-soft);
+      border: 1px solid $dash-border;
       padding: 1.5rem;
-      border-radius: 8px;
+      border-radius: $dash-radius;
 
       h3 {
         font-size: 1rem;
@@ -115,25 +101,8 @@
     }
 
     .btn-test {
+      @include dash-ghost-btn;
       margin-top: 1.5rem;
-      background: transparent;
-      border: 1px solid #3b82f6;
-      color: #3b82f6;
-      padding: 0.6rem 1.2rem;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-
-      &:hover:not(:disabled) {
-        background: #3b82f6;
-        color: #fff;
-      }
-
-      &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
     }
   }
 
@@ -142,27 +111,8 @@
     justify-content: flex-end;
 
     .btn-save {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: #ff8906;
-      color: #fff;
-      border: none;
-      padding: 0.8rem 2rem;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.2s;
-
-      &:hover:not(:disabled) {
-        background: #e07600;
-      }
-
-      &:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
-      }
+      @include dash-primary-btn;
+      padding: 0.65rem 1.5rem;
     }
   }
 
@@ -199,11 +149,13 @@
         height: 0;
 
         &:checked + .slider {
-          background-color: #ff8906;
+          background-color: $color-primary;
         }
 
-        &:focus + .slider {
-          box-shadow: 0 0 1px #ff8906;
+        // El halo del foco va en el slider, que es lo visible: el input real
+        // mide 0×0 y su outline no se vería en ninguna parte.
+        &:focus-visible + .slider {
+          box-shadow: 0 0 0 3px rgba(255, 137, 6, 0.28);
         }
 
         &:checked + .slider:before {

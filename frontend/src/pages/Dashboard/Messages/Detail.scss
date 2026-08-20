@@ -1,7 +1,9 @@
+@use "@/styles/abstracts" as *;
+
 .message-detail {
   padding: 2rem;
   color: var(--DM-Title);
-  max-width: 900px;
+  max-width: 100%;
   margin: 0 auto;
 
   .detail-header {
@@ -14,16 +16,22 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      background: transparent;
+      padding: 0.35rem 0.5rem;
+      margin-left: -0.5rem;
       border: none;
+      border-radius: $dash-radius;
+      background: transparent;
       color: var(--parrafos);
+      font-family: inherit;
       cursor: pointer;
       font-size: 1rem;
-      transition: color 0.2s;
+      transition: color $dash-transition;
 
       &:hover {
-        color: #ff8906;
+        color: var(--dash-accent-text);
       }
+
+      &:focus-visible { @include dash-focus-ring; }
     }
 
     .actions {
@@ -31,40 +39,25 @@
       gap: 0.8rem;
 
       .btn-action {
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 0.4rem 0.8rem;
-        background: transparent;
-        border: 1px solid rgba(167, 169, 190, 0.3);
-        color: var(--parrafos);
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 0.85rem;
-        transition: all 0.2s;
-
-        &:hover {
-          border-color: #fff;
-          color: #fff;
-        }
+        @include dash-row-btn;
 
         &.warning:hover {
-          border-color: #f59e0b;
-          color: #f59e0b;
+          border-color: #fbbf24;
+          color: #fbbf24;
+          background: rgba(251, 191, 36, 0.1);
         }
 
         &.danger:hover {
-          border-color: #ef4444;
-          color: #ef4444;
+          border-color: #f87171;
+          color: #f87171;
+          background: rgba(248, 113, 113, 0.1);
         }
       }
     }
   }
 
   .message-card {
-    background: var(--BgDark);
-    border: 1px solid rgba(167, 169, 190, 0.2);
-    border-radius: 12px;
+    @include dash-glass;
     margin-bottom: 2rem;
     overflow: hidden;
 
@@ -95,17 +88,16 @@
       }
 
       .status-badge {
+        @include dash-pill;
         padding: 0.3rem 0.8rem;
-        border-radius: 20px;
         font-size: 0.8rem;
-        font-weight: 600;
         text-transform: capitalize;
 
-        &.new { color: #ff8906; background: rgba(255, 137, 6, 0.1); }
-        &.read { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
-        &.replied { color: #10b981; background: rgba(16, 185, 129, 0.1); }
-        &.spam { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
-        &.archived { color: #6b7280; background: rgba(107, 114, 128, 0.1); }
+        &.new { color: var(--dash-accent-text); background: rgba(255, 137, 6, 0.16); }
+        &.read { color: #60a5fa; background: rgba(96, 165, 250, 0.16); }
+        &.replied { color: #34d399; background: rgba(52, 211, 153, 0.16); }
+        &.spam { color: #f87171; background: rgba(248, 113, 113, 0.16); }
+        &.archived { color: #a1a1aa; background: rgba(161, 161, 170, 0.16); }
       }
     }
 
@@ -121,7 +113,7 @@
 
     .card-footer {
       padding: 1rem 1.5rem;
-      background: rgba(0, 0, 0, 0.2);
+      background: var(--dash-sunken);
       border-top: 1px solid rgba(167, 169, 190, 0.1);
 
       .tech-meta {
@@ -131,7 +123,7 @@
         color: var(--parrafos);
 
         strong {
-          color: #fff;
+          color: var(--DM-Title);
         }
       }
     }
@@ -147,9 +139,9 @@
     }
 
     .reply-card {
-      background: rgba(16, 185, 129, 0.05);
-      border: 1px solid rgba(16, 185, 129, 0.2);
-      border-radius: 8px;
+      background: rgba(52, 211, 153, 0.06);
+      border: 1px solid rgba(52, 211, 153, 0.22);
+      border-radius: $dash-radius;
       padding: 1.5rem;
       margin-bottom: 1rem;
 
@@ -159,7 +151,7 @@
         margin-bottom: 1rem;
         font-size: 0.9rem;
 
-        strong { color: #10b981; }
+        strong { color: #34d399; }
         .date { color: var(--parrafos); }
       }
 
@@ -172,9 +164,7 @@
   }
 
   .reply-section {
-    background: var(--BgDark);
-    border: 1px solid rgba(167, 169, 190, 0.2);
-    border-radius: 12px;
+    @include dash-glass;
     padding: 1.5rem;
 
     h3 {
@@ -188,43 +178,17 @@
       gap: 1rem;
 
       textarea {
-        width: 100%;
-        background: rgba(0, 0, 0, 0.2);
-        border: 1px solid rgba(167, 169, 190, 0.3);
-        border-radius: 8px;
+        @include dash-input;
         padding: 1rem;
-        color: #fff;
-        font-family: inherit;
         resize: vertical;
-
-        &:focus {
-          outline: none;
-          border-color: #ff8906;
-        }
+        min-height: 7.5rem;
+        line-height: 1.6;
       }
 
       button {
+        @include dash-primary-btn;
         align-self: flex-start;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: #ff8906;
-        color: #fff;
-        border: none;
-        padding: 0.8rem 1.5rem;
-        border-radius: 6px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s;
-
-        &:hover:not(:disabled) {
-          background: #e07600;
-        }
-
-        &:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
+        padding: 0.65rem 1.5rem;
       }
     }
   }

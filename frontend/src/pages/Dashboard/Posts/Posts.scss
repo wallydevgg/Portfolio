@@ -4,8 +4,11 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  max-width: 72rem;
+  max-width: 100%;
   margin: 0 auto;
+  // Relleno propio, como el resto de páginas del dashboard: __content ya no lo
+  // pone y sin esto la tabla quedaba pegada al canto del panel.
+  padding: 2rem;
   text-align: left;
 
   &__header {
@@ -74,27 +77,8 @@
 
   // Estado vacío fuera de tabla (Archivados): aquí sí es un div y puede ser flex.
   &__empty-state {
-    @include dash-surface;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 3rem 1.5rem;
-    text-align: center;
-    color: var(--parrafos);
-
-    svg {
-      color: $color-primary;
-      opacity: 0.45;
-      margin-bottom: 0.3rem;
-    }
-
-    p {
-      margin: 0;
-      font-size: 0.95rem;
-      font-weight: $fw-semibold;
-      color: var(--DM-Title);
-    }
+    @include dash-glass;
+    @include dash-empty-state;
   }
 }
 
@@ -106,7 +90,7 @@
 
   // Misma cabecera que el resto de listados del dashboard.
   &__head {
-    background: rgba(0, 0, 0, 0.22);
+    background: var(--dash-sunken);
     color: var(--parrafos);
     border-bottom: 1px solid $dash-border;
 
@@ -138,6 +122,10 @@
 
       &:hover {
         background: $dash-hover-bg;
+      }
+
+      &:has(> .posts-table__empty):hover {
+        background: transparent;
       }
     }
 
@@ -175,50 +163,33 @@
     justify-content: flex-end;
     gap: 0.5rem;
 
-    // Estos son de icono, no de texto como en Experience o Skills, pero
-    // comparten radio, área de pulsación y semántica de hover: naranja para la
-    // acción normal, rojo para la destructiva.
+    // Son de icono, no de texto como en Experience o Skills, pero comparten
+    // borde, radio, altura y semántica de hover: naranja para la acción normal,
+    // rojo para la destructiva.
     button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 2rem;
-      height: 2rem;
-      padding: 0;
-      background: transparent;
-      border: 1px solid transparent;
-      border-radius: $dash-radius;
-      color: var(--parrafos);
-      cursor: pointer;
-      transition: color $dash-transition, border-color $dash-transition,
-        background-color $dash-transition;
-
-      .icon {
-        width: 1rem;
-        height: 1rem;
-      }
-
-      &:focus-visible { @include dash-focus-ring; }
-
-      &.action-edit:hover {
-        color: $color-primary;
-        border-color: rgba(255, 137, 6, 0.4);
-        background: rgba(255, 137, 6, 0.1);
-      }
+      @include dash-icon-btn;
 
       &.action-delete:hover {
+        border-color: #f87171;
         color: #f87171;
-        border-color: rgba(248, 113, 113, 0.4);
         background: rgba(248, 113, 113, 0.1);
       }
     }
   }
 
   // Se aplica a un <td colSpan>, así que no puede cambiar de display: un td en
-  // flex deja de comportarse como celda y rompe la fila.
-  &__empty {
-    padding: 2.5rem 1.5rem;
+  // flex deja de comportarse como celda y rompe la fila. El maquetado va en el
+  // div interior.
+  //
+  // Lleva el `td` delante para empatar en especificidad con `&__body td`, que
+  // si no le devuelve su relleno de celda y descuadra el estado vacío.
+  td#{&}__empty {
+    padding: 0;
     text-align: center;
     color: var(--parrafos);
+  }
+
+  &__empty-inner {
+    @include dash-empty-state;
   }
 }

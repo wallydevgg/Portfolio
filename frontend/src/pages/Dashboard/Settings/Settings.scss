@@ -1,7 +1,9 @@
+@use "@/styles/abstracts" as *;
+
 .settings-page {
   padding: 2rem;
   color: var(--DM-Title);
-  max-width: 900px;
+  max-width: 100%;
 
   &__header {
     margin-bottom: 2rem;
@@ -13,7 +15,7 @@
     }
 
     &-icon {
-      color: #ff8906;
+      color: var(--dash-accent-text);
     }
 
     h1 {
@@ -32,7 +34,7 @@
     align-items: center;
     gap: 0.5rem;
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: $dash-radius;
     margin-bottom: 1.5rem;
     background: rgba(239, 68, 68, 0.1);
     color: #ef4444;
@@ -47,9 +49,7 @@
   }
 
   &__summary {
-    background: var(--BgDark);
-    border: 1px solid rgba(167, 169, 190, 0.2);
-    border-radius: 12px;
+    @include dash-glass;
     padding: 1.5rem;
     margin-bottom: 2rem;
 
@@ -93,7 +93,7 @@
     font-size: 0.85rem;
     padding: 1rem;
     border: 1px dashed rgba(167, 169, 190, 0.3);
-    border-radius: 8px;
+    border-radius: $dash-radius;
 
     svg {
       flex-shrink: 0;
@@ -101,7 +101,7 @@
     }
 
     code {
-      background: rgba(0, 0, 0, 0.2);
+      background: var(--dash-sunken);
       padding: 0.1rem 0.35rem;
       border-radius: 4px;
       font-size: 0.8rem;
@@ -110,21 +110,23 @@
 }
 
 .settings-card {
+  --card-accent: #{$color-primary};
+  // Ver la nota en .overview-card: el acento pleno no se lee sobre blanco.
+  --card-accent-text: var(--card-accent);
+
+  .light-theme & {
+    --card-accent-text: color-mix(in srgb, var(--card-accent) 58%, #000);
+  }
+
   display: flex;
   align-items: center;
   gap: 1rem;
-  background: var(--BgDark);
-  border: 1px solid rgba(167, 169, 190, 0.2);
-  border-radius: 12px;
   padding: 1.5rem;
   text-decoration: none;
   color: inherit;
-  transition: border-color 0.2s, transform 0.2s;
 
-  &:hover {
-    border-color: #ff8906;
-    transform: translateY(-2px);
-  }
+  @include dash-glass;
+  @include dash-glass-lift(var(--card-accent));
 
   &__icon {
     display: flex;
@@ -132,10 +134,15 @@
     justify-content: center;
     width: 48px;
     height: 48px;
-    border-radius: 10px;
-    background: rgba(255, 137, 6, 0.12);
-    color: #ff8906;
+    border-radius: $dash-radius;
+    background: color-mix(in srgb, var(--card-accent) 14%, transparent);
+    color: var(--card-accent-text);
     flex-shrink: 0;
+    transition: background-color $dash-transition;
+  }
+
+  &:hover &__icon {
+    background: color-mix(in srgb, var(--card-accent) 22%, transparent);
   }
 
   &__body {
@@ -156,15 +163,11 @@
   }
 
   &__tag {
-    font-size: 0.7rem;
-    font-weight: 600;
+    @include dash-pill;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    padding: 0.15rem 0.5rem;
-    border-radius: 999px;
     background: rgba(167, 169, 190, 0.15);
     color: var(--parrafos);
-    white-space: nowrap;
   }
 
   &__body p {
@@ -176,7 +179,15 @@
 
   &__chevron {
     color: var(--parrafos);
+    opacity: 0.45;
     flex-shrink: 0;
+    transition: opacity $dash-transition, transform $dash-transition;
+  }
+
+  &:hover &__chevron {
+    opacity: 1;
+    color: var(--card-accent-text);
+    transform: translateX(2px);
   }
 }
 
