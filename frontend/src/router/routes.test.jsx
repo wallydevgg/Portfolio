@@ -51,6 +51,10 @@ function fakeToken() {
 
 const RUTAS = [
   "/dashboard",
+  "/dashboard/settings",
+  "/dashboard/settings/profile",
+  "/dashboard/settings/theme",
+  "/dashboard/settings/language",
   "/dashboard/posts",
   "/dashboard/posts/archived",
   "/dashboard/messages",
@@ -78,12 +82,23 @@ describe("árbol de rutas del dashboard", () => {
     // MessagesPage lee data.items directamente.
     const paginaVacia = { items: [], total: 0, new_count: 0 };
 
+    // El perfil que la cabecera usa para el nombre y la inicial.
+    const perfil = {
+      id: 2,
+      username: "wallydev",
+      email: "admin@example.com",
+      display_name: "Waldir",
+      avatar_url: "https://cdn.example.test/avatars/abc.png",
+      is_superuser: true,
+    };
+
     vi.stubGlobal(
       "fetch",
       vi.fn().mockImplementation((input) => {
         const url = String(input?.url ?? input);
         let body = [];
         if (url.includes("/dashboard/stats")) body = stats;
+        else if (url.includes("/users/me")) body = perfil;
         else if (url.includes("/contact")) body = paginaVacia;
         return Promise.resolve({ ok: true, status: 200, json: async () => body });
       })
@@ -101,6 +116,91 @@ describe("árbol de rutas del dashboard", () => {
 
     expect(screen.queryByText(/Unexpected Application Error/i)).toBeNull();
     expect(screen.queryByText(/must be used within/i)).toBeNull();
+  });
+
+  /**
+   * El avatar sacaba la inicial de `user.sub`, que es el id numérico del JWT:
+   * con el id 2 en la esquina aparecía un "2". El nombre hay que pedirlo a
+   * /users/me, porque el token no lo lleva.
+   */
+  it("la cabecera muestra el nombre del perfil, no el id del token", async () => {
+    renderRuta("/dashboard");
+
+    await waitFor(() => {
+      expect(screen.getByText("Waldir")).toBeInTheDocument();
+    });
+
+    const avatar = document.querySelector(".dashboard__user-avatar");
+    expect(avatar).not.toBeNull();
+    // Con avatar_url el círculo lleva la foto; el alt conserva el nombre.
+    expect(avatar.querySelector("img")).toHaveAttribute("alt", "Waldir");
+    // El `sub` del token de prueba es "1"; que no vuelva a colarse un dígito.
+    expect(avatar.textContent.trim()).not.toMatch(/\d/);
+  });
+
+  it("cae a la inicial cuando el perfil no trae foto", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockImplementation((input) => {
+        const url = String(input?.url ?? input);
+        const body =
+          url.includes("/users/me") ?
+            { id: 2, username: "wallydev", display_name: "Waldir", avatar_url: null }
+          : [];
+        return Promise.resolve({ ok: true, status: 200, json: async () => body });
+      })
+    );
+
+    renderRuta("/dashboard/projects");
+
+    await waitFor(() => {
+      const avatar = document.querySelector(".dashboard__user-avatar");
+      expect(avatar?.textContent.trim()).toBe("W");
+    });
+    expect(document.querySelector(".dashboard__user-avatar img")).toBeNull();
+  });
+
+  it('cae a "Admin" mientras el perfil no ha llegado', async () => {
+    // /users/me falla: la cabecera no debe quedarse vacía ni romper. Se usa una
+    // ruta de listado, que se conforma con [], y no /dashboard, que necesita el
+    // objeto de estadísticas entero.
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockImplementation((input) => {
+        const url = String(input?.url ?? input);
+        if (url.includes("/users/me")) return Promise.reject(new Error("sin red"));
+        return Promise.resolve({ ok: true, status: 200, json: async () => [] });
+      })
+    );
+
+    renderRuta("/dashboard/projects");
+
+    await waitFor(() => {
+      expect(screen.getByText("Admin")).toBeInTheDocument();
+    });
+
+    const avatar = document.querySelector(".dashboard__user-avatar");
+    expect(avatar.textContent.trim()).toBe("A");
+  });
+
+  /**
+   * La preferencia de tema puede valer "system", pero la clase del shell se
+   * compone con `${theme}-theme`. Cuando las dos cosas eran la misma variable,
+   * elegir "seguir al sistema" producía `system-theme`, que no existe en
+   * ninguna hoja de estilos: el panel se quedaba sin tema.
+   */
+  it('con la preferencia "system" el shell resuelve a una clase real', async () => {
+    window.localStorage.setItem("theme", "system");
+
+    renderRuta("/dashboard/projects");
+
+    await waitFor(() => {
+      expect(document.querySelector(".dashboard")).not.toBeNull();
+    });
+
+    const shell = document.querySelector(".dashboard");
+    expect(shell.className).not.toMatch(/system-theme/);
+    expect(shell.className).toMatch(/(dark|light)-theme/);
   });
 
   it("manda a /login cuando no hay sesión", async () => {
