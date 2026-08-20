@@ -1,14 +1,18 @@
+import logging
 from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
+from core.config import settings
 from core.database import get_db
 from core.events import emit_event
 from core.net import get_client_ip
 from core.security import get_current_user
 from domains.contact import models, schemas, service
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -32,7 +36,22 @@ def submit_contact_form(
         raise HTTPException(status_code=429, detail="Too many requests. Please try again later.")
 
     # 3. Captcha verification
+    #
+    # verify_turnstile devuelve None cuando no hay secreto configurado. Antes se
+    # comparaba solo contra 0.0, así que ese None pasaba de largo: el formulario
+    # quedaba sin captcha y sin ninguna señal de que lo estuviera.
     captcha_score = service.verify_turnstile(payload.turnstile_token, client_ip)
+
+    if captcha_score is None and settings.TURNSTILE_REQUIRED:
+        logger.error(
+            "TURNSTILE_SECRET_KEY sin configurar y TURNSTILE_REQUIRED activo: "
+            "se rechaza el envío. Configurá la clave o poné TURNSTILE_REQUIRED=false."
+        )
+        raise HTTPException(
+            status_code=503,
+            detail="The contact form is temporarily unavailable.",
+        )
+
     if captcha_score == 0.0:
         raise HTTPException(status_code=400, detail="Captcha verification failed.")
 

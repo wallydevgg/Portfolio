@@ -61,6 +61,13 @@ jobs:
           push: false
           tags: portfolio_frontend:latest
           outputs: type=docker,dest=/tmp/portfolio_frontend.tar
+          # VITE_TURNSTILE_SITE_KEY es opcional: la site key es pública y vive
+          # en el código (src/features/contact/turnstile.js), esto solo la
+          # sobrescribe. Antes era obligatoria y estaba vacía, así que el widget
+          # desaparecía del bundle al compilar, sin error ni aviso.
+          #
+          # Los comentarios van aquí y no dentro del bloque de abajo: `|` es un
+          # escalar literal y Docker leería cada línea como un build-arg.
           build-args: |
             VITE_TURNSTILE_SITE_KEY=${{ secrets.VITE_TURNSTILE_SITE_KEY }}
             VITE_API_URL=https://wallydev.dev/api/v1
@@ -160,6 +167,11 @@ jobs:
             cd "${{ secrets.VPS_APP_PATH }}"
 
             # Create .env file for production
+            #
+            # TURNSTILE_REQUIRED=true hace que el formulario de contacto
+            # responda 503 si falta TURNSTILE_SECRET_KEY, en vez de aceptar sin
+            # comprobar. Es deliberado: lo contrario dejó el endpoint abierto
+            # durante días sin que nada lo delatara.
             echo "Creating .env file..."
             cat > .env <<EOF
             POSTGRES_SERVER=vps-postgres
@@ -180,6 +192,7 @@ jobs:
             SMTP_FROM=${{ secrets.SMTP_FROM }}
             CONTACT_TO_EMAIL=${{ secrets.CONTACT_TO_EMAIL }}
             TURNSTILE_SECRET_KEY=${{ secrets.TURNSTILE_SECRET_KEY }}
+            TURNSTILE_REQUIRED=true
             EOF
 
             # Load Images
@@ -195,6 +208,30 @@ jobs:
             docker rm -f portfolio_frontend portfolio_backend || true
             docker compose down
             docker compose up -d
+
+            # Database migrations
+            #
+            # El pipeline no las corría, así que cualquier despliegue con una
+            # columna nueva dejaba el modelo pidiendo algo que la tabla no tenía
+            # y toda consulta a esa tabla fallaba. Pasó con users.avatar_url: el
+            # dashboard entero devolvía 500 hasta correr esto a mano.
+            #
+            # Va después de `up -d` porque necesita el contenedor en marcha, y
+            # con reintentos porque Postgres tarda unos segundos en aceptar
+            # conexiones tras el arranque.
+            echo "Running database migrations..."
+            for attempt in 1 2 3 4 5; do
+              if docker exec portfolio_backend alembic upgrade head; then
+                echo "Migrations applied."
+                break
+              fi
+              if [ "$attempt" = "5" ]; then
+                echo "Migrations failed after 5 attempts." >&2
+                exit 1
+              fi
+              echo "Attempt $attempt failed, retrying in 5s..."
+              sleep 5
+            done
 
             # Maintenance
             docker image prune -f

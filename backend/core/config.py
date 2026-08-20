@@ -53,8 +53,18 @@ class Settings(BaseSettings):
     # can be overridden at runtime from the dashboard (notification_settings table).
     CONTACT_TO_EMAIL: str = "contact@wallydev.dev"
 
-    # Cloudflare Turnstile (empty secret = captcha verification skipped)
+    # Cloudflare Turnstile.
+    #
+    # TURNSTILE_REQUIRED por defecto en True: sin secreto configurado el
+    # formulario deja de aceptar envíos en vez de aceptarlos sin comprobar. Lo
+    # contrario ya pasó —un .env sin la clave dejó el endpoint abierto durante
+    # días sin que nada avisara— y el fallo era invisible porque llegaban
+    # mensajes con normalidad.
+    #
+    # Para desarrollo hay dos salidas: las claves de prueba que publica
+    # Cloudflare (1x0000... siempre pasa) o TURNSTILE_REQUIRED=false.
     TURNSTILE_SECRET_KEY: str = ""
+    TURNSTILE_REQUIRED: bool = True
 
     # IP geolocation via ipapi.co (HTTPS, free tier). Failures are non-fatal.
     GEOLOCATION_ENABLED: bool = True

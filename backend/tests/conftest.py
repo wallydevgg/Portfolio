@@ -21,6 +21,26 @@ from domains.blog.router import router as blog_router
 from domains.users.models import User
 
 
+# Las dos tablas de `domains/settings/models.py` declaran sus server_default con
+# casts `::jsonb`, que solo entiende Postgres: crearlas en SQLite falla con
+# "unrecognized token: :".
+#
+# Antes no molestaba porque este conftest solo importaba los modelos de blog y
+# usuarios, y esas tablas nunca llegaban a registrarse. En cuanto una prueba
+# importa algo que arrastre `domains.settings.models` —contacto lo hace, vía
+# `core.events`— el create_all pasa a verlas y revienta el resto de la suite.
+# Excluirlas a mano deja explícito lo que antes era una coincidencia.
+POSTGRES_ONLY_TABLES = {"seo_settings", "notification_settings"}
+
+
+def _sqlite_tables():
+    return [
+        table
+        for name, table in Base.metadata.tables.items()
+        if name not in POSTGRES_ONLY_TABLES
+    ]
+
+
 @pytest.fixture()
 def db_session():
     engine = create_engine(
@@ -28,7 +48,7 @@ def db_session():
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
-    Base.metadata.create_all(bind=engine)
+    Base.metadata.create_all(bind=engine, tables=_sqlite_tables())
     TestingSession = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     session = TestingSession()
     try:

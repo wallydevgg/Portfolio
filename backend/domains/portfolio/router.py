@@ -1,3 +1,5 @@
+from enum import Enum
+
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
 from core.database import get_db
@@ -10,7 +12,44 @@ import uuid
 
 router = APIRouter(tags=["portfolio"])
 
-CV_FILE_NAME = "cv/Waldir_Apaza_CV.pdf"
+
+class CVLanguage(str, Enum):
+    """Idiomas con CV propio.
+
+    Es un Enum y no un str suelto para que FastAPI rechace cualquier otro valor
+    con un 422 antes de llegar al cuerpo del endpoint: sin eso, un `lang`
+    arbitrario se colaría en la clave del objeto.
+    """
+
+    es = "es"
+    en = "en"
+
+
+# Clave del archivo anterior al CV por idioma. Sigue aquí porque en producción
+# hay un PDF subido con ella y no puede desaparecer porque cambiemos el
+# esquema: mientras no exista el del idioma pedido, se sirve este.
+LEGACY_CV_KEY = "cv/Waldir_Apaza_CV.pdf"
+
+MAX_CV_BYTES = 10 * 1024 * 1024
+PDF_SIGNATURE = b"%PDF-"
+
+
+def _cv_key(lang: CVLanguage) -> str:
+    return f"cv/cv-{lang.value}.pdf"
+
+
+def _public_url(key: str) -> str:
+    return f"{settings.MINIO_PUBLIC_URL}/{settings.MINIO_BUCKET}/{key}"
+
+
+def _cv_url(lang: CVLanguage):
+    """URL del CV de ese idioma, con caída al archivo antiguo."""
+    key = _cv_key(lang)
+    if file_exists(key):
+        return _public_url(key)
+    if file_exists(LEGACY_CV_KEY):
+        return _public_url(LEGACY_CV_KEY)
+    return None
 
 # === EXPERIENCE ENDPOINTS ===
 
@@ -178,30 +217,50 @@ async def upload_image(file: UploadFile = File(...)):
 
 # === CV ENDPOINTS ===
 
-@router.post("/cv", dependencies=[Depends(get_current_user)])
-async def upload_cv(file: UploadFile = File(...)):
-    """Upload (or replace) the CV PDF. Stored at a fixed key so the public
-    URL never changes."""
-    if file.content_type != "application/pdf" and not file.filename.lower().endswith(".pdf"):
+@router.get("/cv")
+def get_cvs():
+    """Público: la URL del CV de cada idioma, o null si no hay ninguno.
+
+    Devuelve el mapa entero y no un solo archivo para que el frontend pueda
+    elegir por idioma y caer al otro sin una segunda petición.
+    """
+    return {lang.value: _cv_url(lang) for lang in CVLanguage}
+
+
+@router.post("/cv/{lang}", dependencies=[Depends(get_current_user)])
+async def upload_cv(lang: CVLanguage, file: UploadFile = File(...)):
+    """Sube (o reemplaza) el CV de un idioma.
+
+    La clave es fija por idioma, así que la URL pública no cambia al reemplazar
+    el archivo y el botón de la portada sigue funcionando.
+
+    Se comprueban tipo, tamaño y firma. El tipo declarado lo pone el cliente:
+    sin mirar los bytes, cualquier cosa renombrada a .pdf acabaría servida desde
+    un bucket público.
+    """
+    if file.content_type != "application/pdf":
         raise HTTPException(status_code=400, detail="Only PDF files are allowed")
 
+    contents = await file.read()
+
+    if len(contents) > MAX_CV_BYTES:
+        raise HTTPException(status_code=413, detail="The PDF must be 10 MB or smaller")
+
+    if not contents.startswith(PDF_SIGNATURE):
+        raise HTTPException(status_code=400, detail="File content does not match its type")
+
     try:
-        contents = await file.read()
-        url = upload_file(contents, CV_FILE_NAME, content_type="application/pdf")
-        return {"url": url}
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        url = upload_file(contents, _cv_key(lang), content_type="application/pdf")
+    except Exception:
+        raise HTTPException(status_code=502, detail="Could not store the CV")
 
-@router.get("/cv")
-def get_cv():
-    """Public: return the CV public URL (or 404 if not uploaded yet)."""
-    if not file_exists(CV_FILE_NAME):
-        raise HTTPException(status_code=404, detail="CV not uploaded")
-    return {"url": f"{settings.MINIO_PUBLIC_URL}/{settings.MINIO_BUCKET}/{CV_FILE_NAME}"}
+    return {"lang": lang.value, "url": url}
 
-@router.delete("/cv", status_code=204, dependencies=[Depends(get_current_user)])
-def delete_cv():
-    """Delete the uploaded CV."""
-    if not file_exists(CV_FILE_NAME):
+
+@router.delete("/cv/{lang}", status_code=204, dependencies=[Depends(get_current_user)])
+def delete_cv(lang: CVLanguage):
+    """Borra el CV de un idioma. No toca el de los demás."""
+    key = _cv_key(lang)
+    if not file_exists(key):
         raise HTTPException(status_code=404, detail="CV not uploaded")
-    delete_file(CV_FILE_NAME)
+    delete_file(key)
