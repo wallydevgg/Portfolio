@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Save, Bell, CheckCircle } from "lucide-react";
 import "./Notifications.scss";
+import { getStoredToken } from "@/features/auth/tokenStorage";
 
 const NotificationsSettings = () => {
   const [settings, setSettings] = useState({
@@ -27,7 +28,7 @@ const NotificationsSettings = () => {
 
   const fetchSettings = async () => {
     try {
-      const token = localStorage.getItem("admin_token");
+      const token = getStoredToken();
       const url = `${import.meta.env.VITE_API_URL || "/api/v1"}/settings/notifications`;
       const res = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` }
@@ -49,7 +50,7 @@ const NotificationsSettings = () => {
     setMessage({ text: "", type: "" });
     
     try {
-      const token = localStorage.getItem("admin_token");
+      const token = getStoredToken();
       const url = `${import.meta.env.VITE_API_URL || "/api/v1"}/settings/notifications`;
       const res = await fetch(url, {
         method: "PUT",
@@ -78,7 +79,7 @@ const NotificationsSettings = () => {
     setMessage({ text: "", type: "" });
     
     try {
-      const token = localStorage.getItem("admin_token");
+      const token = getStoredToken();
       const url = `${import.meta.env.VITE_API_URL || "/api/v1"}/settings/notifications/test`;
       const res = await fetch(url, {
         method: "POST",

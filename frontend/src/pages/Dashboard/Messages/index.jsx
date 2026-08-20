@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { Mail, MailOpen, Reply, AlertTriangle, Archive, Trash2 } from "lucide-react";
 import "./Messages.scss";
+import { getStoredToken } from "@/features/auth/tokenStorage";
 
 const MessagesPage = () => {
   const [messages, setMessages] = useState([]);
@@ -12,7 +13,7 @@ const MessagesPage = () => {
   const fetchMessages = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("admin_token");
+      const token = getStoredToken();
       // La base hace falta porque en desarrollo VITE_API_URL no está definida y
       // el valor por defecto es relativo ("/api/v1"), con el que new URL lanza.
       // En producción la variable trae una URL absoluta y la base se ignora.
@@ -107,11 +108,11 @@ const MessagesPage = () => {
                     <td>{new Date(msg.created_at).toLocaleDateString()}</td>
                     <td>
                       <div className="sender-info">
-                        <strong>{msg.name}</strong>
-                        <span className="email">{msg.email}</span>
+                        <strong title={msg.name}>{msg.name}</strong>
+                        <span className="email" title={msg.email}>{msg.email}</span>
                       </div>
                     </td>
-                    <td className="subject-cell">{msg.subject}</td>
+                    <td className="subject-cell" title={msg.subject}>{msg.subject}</td>
                     <td>{msg.country || "-"}</td>
                     <td>
                       <Link to={`/dashboard/messages/${msg.id}`} className="btn-view">

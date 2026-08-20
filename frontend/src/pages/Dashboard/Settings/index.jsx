@@ -7,14 +7,42 @@ import {
   Globe,
   Loader2,
   Mail,
+  Languages,
+  Palette,
   Settings,
   ShieldCheck,
+  UserRound,
 } from "lucide-react";
 import "./Settings.scss";
+import { getStoredToken } from "@/features/auth/tokenStorage";
 
 const API_BASE = import.meta.env.VITE_API_URL || "/api/v1";
 
 const SECTIONS = [
+  {
+    to: "/dashboard/settings/profile",
+    icon: UserRound,
+    title: "Profile Photo",
+    description:
+      "Upload the picture shown next to your name in the panel and on blog comment replies.",
+    tag: "avatar",
+  },
+  {
+    to: "/dashboard/settings/theme",
+    icon: Palette,
+    title: "Theme",
+    description:
+      "Choose light, dark, or follow your operating system setting.",
+    tag: "appearance",
+  },
+  {
+    to: "/dashboard/settings/language",
+    icon: Languages,
+    title: "Language",
+    description:
+      "Interface language for the dashboard and the public site.",
+    tag: "en / es",
+  },
   {
     to: "/dashboard/settings/seo",
     icon: Globe,
@@ -50,7 +78,7 @@ export default function SettingsPage() {
     let cancelled = false;
     const fetchSummary = async () => {
       try {
-        const token = localStorage.getItem("admin_token");
+        const token = getStoredToken();
         const res = await fetch(`${API_BASE}/settings/notifications`, {
           headers: { Authorization: `Bearer ${token}` },
         });

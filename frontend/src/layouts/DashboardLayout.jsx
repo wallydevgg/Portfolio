@@ -1,9 +1,12 @@
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
-import { BookOpen, LayoutDashboard, LogOut, Settings, Menu, Briefcase, Code2, FolderOpen, Search, Mail, Bell, ChevronDown, UserRound, FileText, Archive } from "lucide-react";
+import { BookOpen, LayoutDashboard, LogOut, Settings, Menu, Briefcase, Code2, FolderOpen, Search, Mail, Bell, ChevronDown, UserRound, FileText, Archive, Palette, Languages } from "lucide-react";
 import { useState, useContext, useEffect } from "react";
+import { t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import "./DashboardLayout.scss";
-import { Switch, ThemeContext } from "@/barrell";
+import { ThemeContext } from "@/barrell";
+import { getStoredToken } from "@/features/auth/tokenStorage";
 
 // NavLink marca el item activo; los items del nav eran <Link> y por eso ninguno
 // se resaltaba salvo los del submenú. `extra` añade la clase de sub-item.
@@ -13,19 +16,25 @@ const navLinkClass =
     `dashboard__nav-link${extra ? ` ${extra}` : ""}${isActive ? " dashboard__nav-link--active" : ""}`;
 
 export default function DashboardLayout() {
-  const { user, logout } = useAuth();
+  // Suscribe el menú al cambio de idioma: sin esto las etiquetas se quedan
+  // en el idioma con el que se montó el layout.
+  useLingui();
+  const { profile, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const { theme } = useContext(ThemeContext);
   const [newMessagesCount, setNewMessagesCount] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const displayName = profile?.display_name || profile?.username || "Admin";
+  const initial = displayName.charAt(0).toUpperCase();
   const [settingsOpen, setSettingsOpen] = useState(() => location.pathname.startsWith("/dashboard/settings"));
   const [postsOpen, setPostsOpen] = useState(() => location.pathname.startsWith("/dashboard/posts"));
 
   useEffect(() => {
     const fetchUnreadCount = async () => {
       try {
-        const token = localStorage.getItem("admin_token");
+        const token = getStoredToken();
         const url = `${import.meta.env.VITE_API_URL || "/api/v1"}/contact?status_filter=new&page_size=1`;
         const res = await fetch(url, {
           headers: { Authorization: `Bearer ${token}` }
@@ -49,7 +58,18 @@ export default function DashboardLayout() {
       {/* Sidebar */}
       <aside className={`dashboard__sidebar ${sidebarOpen ? "dashboard__sidebar--open" : "dashboard__sidebar--closed"}`}>
         <div className="dashboard__sidebar-header">
-          {sidebarOpen && <span>Admin</span>}
+          {sidebarOpen && (
+            <div className="dashboard__identity">
+              <div className="dashboard__user-avatar" title={displayName}>
+                {profile?.avatar_url ? (
+                  <img src={profile.avatar_url} alt={displayName} />
+                ) : (
+                  initial
+                )}
+              </div>
+              <span title={profile?.email || undefined}>{displayName}</span>
+            </div>
+          )}
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="dashboard__menu-btn">
             <Menu className="icon" />
           </button>
@@ -58,7 +78,7 @@ export default function DashboardLayout() {
         <nav className="dashboard__nav">
           <NavLink to="/dashboard" end className={navLinkClass()}>
             <LayoutDashboard className="icon" />
-            {sidebarOpen && <span>Overview</span>}
+            {sidebarOpen && <span>{t`Overview`}</span>}
           </NavLink>
           <NavLink to="/dashboard/messages" className={navLinkClass()}>
             <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
@@ -69,7 +89,7 @@ export default function DashboardLayout() {
             </div>
             {sidebarOpen && (
               <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
-                <span>Messages</span>
+                <span>{t`Messages`}</span>
                 {newMessagesCount > 0 && <span className="dashboard__badge">{newMessagesCount}</span>}
               </div>
             )}
@@ -88,7 +108,7 @@ export default function DashboardLayout() {
               }}
             >
               <BookOpen className="icon" />
-              {sidebarOpen && <span>Blog Posts</span>}
+              {sidebarOpen && <span>{t`Blog Posts`}</span>}
               {sidebarOpen && (
                 <ChevronDown className={`dashboard__chevron ${postsOpen ? "dashboard__chevron--open" : ""}`} size={16} />
               )}
@@ -102,33 +122,33 @@ export default function DashboardLayout() {
                   className={navLinkClass("dashboard__nav-subitem")}
                 >
                   <BookOpen className="icon" size={16} />
-                  <span>All Posts</span>
+                  <span>{t`All Posts`}</span>
                 </NavLink>
                 <NavLink
                   to="/dashboard/posts/archived"
                   className={navLinkClass("dashboard__nav-subitem")}
                 >
                   <Archive className="icon" size={16} />
-                  <span>Archived</span>
+                  <span>{t`Archived`}</span>
                 </NavLink>
               </div>
             )}
           </div>
           <NavLink to="/dashboard/experience" className={navLinkClass()}>
             <Briefcase className="icon" />
-            {sidebarOpen && <span>Experience</span>}
+            {sidebarOpen && <span>{t`Experience`}</span>}
           </NavLink>
           <NavLink to="/dashboard/about" className={navLinkClass()}>
             <UserRound className="icon" />
-            {sidebarOpen && <span>About</span>}
+            {sidebarOpen && <span>{t`About`}</span>}
           </NavLink>
           <NavLink to="/dashboard/skills" className={navLinkClass()}>
             <Code2 className="icon" />
-            {sidebarOpen && <span>Skills</span>}
+            {sidebarOpen && <span>{t`Skills`}</span>}
           </NavLink>
           <NavLink to="/dashboard/projects" className={navLinkClass()}>
             <FolderOpen className="icon" />
-            {sidebarOpen && <span>Projects</span>}
+            {sidebarOpen && <span>{t`Projects`}</span>}
           </NavLink>
 
           {/* Settings group (accordion) */}
@@ -145,7 +165,7 @@ export default function DashboardLayout() {
               }}
             >
               <Settings className="icon" />
-              {sidebarOpen && <span>Settings</span>}
+              {sidebarOpen && <span>{t`Settings`}</span>}
               {sidebarOpen && (
                 <ChevronDown className={`dashboard__chevron ${settingsOpen ? "dashboard__chevron--open" : ""}`} size={16} />
               )}
@@ -159,28 +179,49 @@ export default function DashboardLayout() {
                   className={navLinkClass("dashboard__nav-subitem")}
                 >
                   <Settings className="icon" size={16} />
-                  <span>Settings</span>
+                  <span>{t`Settings`}</span>
                 </NavLink>
                 <NavLink
                   to="/dashboard/settings/seo"
                   className={navLinkClass("dashboard__nav-subitem")}
                 >
                   <Search className="icon" size={16} />
-                  <span>SEO</span>
+                  <span>{t`SEO`}</span>
                 </NavLink>
                 <NavLink
                   to="/dashboard/settings/notifications"
                   className={navLinkClass("dashboard__nav-subitem")}
                 >
                   <Bell className="icon" size={16} />
-                  <span>Notifications</span>
+                  <span>{t`Notifications`}</span>
                 </NavLink>
                 <NavLink
                   to="/dashboard/settings/cv"
                   className={navLinkClass("dashboard__nav-subitem")}
                 >
                   <FileText className="icon" size={16} />
-                  <span>CV</span>
+                  <span>{t`CV`}</span>
+                </NavLink>
+                <NavLink
+                  to="/dashboard/settings/profile"
+                  className={navLinkClass("dashboard__nav-subitem")}
+                >
+                  <UserRound className="icon" size={16} />
+                  <span>{t`Profile`}</span>
+                </NavLink>
+                <NavLink
+                  to="/dashboard/settings/theme"
+                  className={navLinkClass("dashboard__nav-subitem")}
+                >
+                  <Palette className="icon" size={16} />
+                  <span>{t`Theme`}</span>
+                </NavLink>
+                <NavLink
+                  to="/dashboard/settings/language"
+                  className={navLinkClass("dashboard__nav-subitem")}
+                >
+                  <Languages className="icon" size={16} />
+                  <span>{t`Language`}</span>
                 </NavLink>
               </div>
             )}
@@ -190,22 +231,13 @@ export default function DashboardLayout() {
         <div className="dashboard__sidebar-footer">
           <button onClick={logout} className="dashboard__logout-btn">
             <LogOut className="icon" />
-            {sidebarOpen && <span>Logout</span>}
+            {sidebarOpen && <span>{t`Logout`}</span>}
           </button>
         </div>
       </aside>
 
       {/* Main Content */}
       <main className="dashboard__main">
-        <header className="dashboard__header">
-          <div className="dashboard__header-controls">
-            <Switch />
-            <div className="dashboard__user-avatar">
-              {user?.sub?.charAt(0).toUpperCase() || "A"}
-            </div>
-          </div>
-        </header>
-
         <div className="dashboard__content">
           <Outlet />
         </div>

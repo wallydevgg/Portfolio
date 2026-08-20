@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate, useLocation } from "react-router";
-import { Lock, User, Shield, AlertCircle } from "lucide-react";
+import { Lock, User, Shield, AlertCircle, Check } from "lucide-react";
+import { getRememberPreference } from "@/features/auth/tokenStorage";
 import "./Login.scss";
 
 export default function LoginPage() {
@@ -9,6 +10,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  // Arranca como se dejó la última vez. La preferencia se guarda aparte del
+  // token, así que sobrevive a una sesión que no se recordó.
+  const [remember, setRemember] = useState(getRememberPreference);
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -31,7 +35,7 @@ export default function LoginPage() {
       });
       if (!response.ok) throw new Error("Invalid credentials");
       const data = await response.json();
-      login(data.access_token);
+      login(data.access_token, remember);
       navigate(from, { replace: true });
     } catch {
       setError("Usuario o contraseña incorrectos.");
@@ -107,6 +111,22 @@ export default function LoginPage() {
               />
             </div>
           </div>
+
+          {/* Remember me */}
+          <label className="login__remember">
+            <input
+              type="checkbox"
+              checked={remember}
+              onChange={(e) => setRemember(e.target.checked)}
+            />
+            <span className="login__remember-box" aria-hidden="true">
+              <Check size={12} strokeWidth={3} />
+            </span>
+            <span className="login__remember-text">
+              Remember me
+              <small>Keep this session for 7 days</small>
+            </span>
+          </label>
 
           {/* Submit */}
           <button type="submit" className="login__btn" disabled={loading}>

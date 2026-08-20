@@ -26,6 +26,9 @@ import PrivacyPage from "@/pages/Privacy/Privacy";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ToastProvider } from "@/contexts/ToastContext";
 import LoginPage from "@/pages/Login/Login";
+import ProfileSettingsPage from "@/pages/Dashboard/Settings/Profile";
+import ThemeSettingsPage from "@/pages/Dashboard/Settings/Theme";
+import LanguageSettingsPage from "@/pages/Dashboard/Settings/Language";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
 // Se exporta para que los tests puedan montar el árbol real con un router en
@@ -84,6 +87,9 @@ export const routes = [
             { path: "settings/seo", element: <SeoSettingsPage /> },
             { path: "settings/notifications", element: <NotificationsSettings /> },
             { path: "settings/cv", element: <CVSettingsPage /> },
+            { path: "settings/profile", element: <ProfileSettingsPage /> },
+            { path: "settings/theme", element: <ThemeSettingsPage /> },
+            { path: "settings/language", element: <LanguageSettingsPage /> },
           ],
         },
         {

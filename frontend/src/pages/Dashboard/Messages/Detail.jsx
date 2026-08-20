@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { ArrowLeft, Send, Trash2, AlertTriangle, Archive, Check } from "lucide-react";
 import "./Detail.scss";
+import { getStoredToken } from "@/features/auth/tokenStorage";
 
 const MessageDetail = () => {
   const { id } = useParams();
@@ -13,7 +14,7 @@ const MessageDetail = () => {
 
   const fetchMessage = async () => {
     try {
-      const token = localStorage.getItem("admin_token");
+      const token = getStoredToken();
       const url = `${import.meta.env.VITE_API_URL || "/api/v1"}/contact/${id}`;
       const res = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` }
@@ -41,7 +42,7 @@ const MessageDetail = () => {
 
   const updateStatus = async (newStatus) => {
     try {
-      const token = localStorage.getItem("admin_token");
+      const token = getStoredToken();
       const url = `${import.meta.env.VITE_API_URL || "/api/v1"}/contact/${id}/status`;
       await fetch(url, {
         method: "PATCH",
@@ -60,7 +61,7 @@ const MessageDetail = () => {
   const deleteMessage = async () => {
     if (!window.confirm("Are you sure you want to delete this message?")) return;
     try {
-      const token = localStorage.getItem("admin_token");
+      const token = getStoredToken();
       const url = `${import.meta.env.VITE_API_URL || "/api/v1"}/contact/${id}`;
       await fetch(url, {
         method: "DELETE",
@@ -78,7 +79,7 @@ const MessageDetail = () => {
     
     setReplying(true);
     try {
-      const token = localStorage.getItem("admin_token");
+      const token = getStoredToken();
       const url = `${import.meta.env.VITE_API_URL || "/api/v1"}/contact/${id}/reply`;
       const res = await fetch(url, {
         method: "POST",

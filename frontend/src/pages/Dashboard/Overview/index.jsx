@@ -13,6 +13,7 @@ import {
   PlusCircle,
 } from "lucide-react";
 import "./Overview.scss";
+import { getStoredToken } from "@/features/auth/tokenStorage";
 
 const API_BASE = import.meta.env.VITE_API_URL || "/api/v1";
 
@@ -33,7 +34,7 @@ export default function OverviewPage() {
     let cancelled = false;
     const fetchStats = async () => {
       try {
-        const token = localStorage.getItem("admin_token");
+        const token = getStoredToken();
         const res = await fetch(`${API_BASE}/dashboard/stats`, {
           headers: { Authorization: `Bearer ${token}` },
         });
