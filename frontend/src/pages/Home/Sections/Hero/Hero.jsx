@@ -14,23 +14,27 @@ import { useEffect, useState } from "react";
 import { usePortfolioApi } from "@/features/portfolio/usePortfolioApi";
 
 const Hero = () => {
-  useLingui();
-  const { getCV } = usePortfolioApi();
-  const [cvUrl, setCvUrl] = useState(null);
+  const { i18n } = useLingui();
+  const { getCVs } = usePortfolioApi();
+  const [cvs, setCvs] = useState(null);
 
   useEffect(() => {
-    getCV()
-      .then((data) => {
-        if (data) setCvUrl(data.url);
-      })
+    getCVs()
+      .then(setCvs)
       .catch(() => {});
   }, []);
+
+  // El CV del idioma que está viendo la persona, con caída al otro: tener uno
+  // solo en inglés es mejor que deshabilitar el botón.
+  const locale = i18n.locale?.split("-")[0] === "es" ? "es" : "en";
+  const other = locale === "es" ? "en" : "es";
+  const cvUrl = cvs?.[locale] || cvs?.[other] || null;
 
   const handleDownloadCV = () => {
     if (!cvUrl) return;
     const link = document.createElement("a");
     link.href = cvUrl;
-    link.download = "Waldir_Apaza_CV.pdf";
+    link.download = `Waldir_Apaza_CV_${locale.toUpperCase()}.pdf`;
     link.target = "_blank";
     link.rel = "noreferrer";
     link.click();

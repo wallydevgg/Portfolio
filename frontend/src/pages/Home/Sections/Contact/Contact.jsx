@@ -4,6 +4,7 @@ import { Send, CheckCircle } from "lucide-react";
 import "./Contact.scss";
 import { t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
+import { TURNSTILE_SITE_KEY, loadTurnstile } from "@/features/contact/turnstile";
 
 const INITIAL = { name: "", email: "", subject: "", message: "", website: "" };
 
@@ -32,17 +33,30 @@ const Contact = () => {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
   const turnstileRef = useRef(null);
+  const widgetIdRef = useRef(null);
 
-  // Load Turnstile script
+  // El widget se monta explícitamente en vez de dejar que el script escanee el
+  // DOM: el escaneo automático solo corre una vez al cargar, y este formulario
+  // aparece y desaparece con el estado `sent`.
   useEffect(() => {
-    const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
-    if (siteKey && !window.turnstile) {
-      const script = document.createElement("script");
-      script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
-      script.async = true;
-      script.defer = true;
-      document.head.appendChild(script);
-    }
+    let widgetId = null;
+    let cancelled = false;
+
+    loadTurnstile().then((turnstile) => {
+      if (cancelled || !turnstile || !turnstileRef.current) return;
+      widgetId = turnstile.render(turnstileRef.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        theme: "dark",
+      });
+      widgetIdRef.current = widgetId;
+    });
+
+    return () => {
+      cancelled = true;
+      if (widgetId !== null && window.turnstile) {
+        window.turnstile.remove(widgetId);
+      }
+    };
   }, []);
 
   const handle = (e) =>
@@ -54,10 +68,12 @@ const Contact = () => {
     setError("");
     
     try {
-      // Get Turnstile token if widget exists
+      // El token se pide por id de widget, no por nodo: con render() explícito
+      // el id es la referencia fiable. Si el script no cargó, va vacío y lo
+      // rechaza el servidor, que es quien decide.
       let token = "";
-      if (window.turnstile && turnstileRef.current) {
-        token = window.turnstile.getResponse(turnstileRef.current) || "";
+      if (window.turnstile && widgetIdRef.current !== null) {
+        token = window.turnstile.getResponse(widgetIdRef.current) || "";
       }
 
       const payload = {
@@ -85,9 +101,10 @@ const Contact = () => {
       setError(err.message || t`contact.error`);
     } finally {
       setLoading(false);
-      // Reset Turnstile widget for next attempt
-      if (window.turnstile && turnstileRef.current) {
-        window.turnstile.reset(turnstileRef.current);
+      // Un token de Turnstile es de un solo uso: sin reset, un segundo envío
+      // reutilizaría el ya gastado y el servidor lo rechazaría.
+      if (window.turnstile && widgetIdRef.current !== null) {
+        window.turnstile.reset(widgetIdRef.current);
       }
     }
   };
@@ -176,15 +193,11 @@ const Contact = () => {
             />
           </div>
 
-          {import.meta.env.VITE_TURNSTILE_SITE_KEY && (
-            <div 
-              className="cf-turnstile" 
-              data-sitekey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
-              data-theme="dark"
-              ref={turnstileRef}
-              style={{ marginBottom: "1rem" }}
-            ></div>
-          )}
+          {/* Sin condicional: el contenedor existe siempre y lo rellena
+              turnstile.render(). Antes el bloque colgaba de una variable de
+              entorno y, con esa variable vacía en el build, desaparecía entero
+              del bundle sin dejar rastro. */}
+          <div ref={turnstileRef} style={{ marginBottom: "1rem" }} />
 
           <button type="submit" className="contact__submit" disabled={loading}>
             <Send size={15} />

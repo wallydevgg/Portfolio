@@ -166,11 +166,11 @@ export function usePortfolioApi() {
 
   // === CV ===
 
-  async function uploadCV(file) {
+  async function uploadCV(file, lang) {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch(`${BASE_URL}/cv`, {
+    const res = await fetch(`${BASE_URL}/cv/${lang}`, {
       method: "POST",
       headers,
       body: formData,
@@ -179,15 +179,15 @@ export function usePortfolioApi() {
     return res.json();
   }
 
-  async function getCV() {
+  /** { es: url|null, en: url|null }. Nunca 404: si no hay ninguno, van los dos a null. */
+  async function getCVs() {
     const res = await fetch(`${BASE_URL}/cv`);
-    if (res.status === 404) return null;
     if (!res.ok) throw new Error("Failed to fetch CV");
     return res.json();
   }
 
-  async function deleteCV() {
-    const res = await fetch(`${BASE_URL}/cv`, { method: "DELETE", headers });
+  async function deleteCV(lang) {
+    const res = await fetch(`${BASE_URL}/cv/${lang}`, { method: "DELETE", headers });
     if (!res.ok) throw new Error("Failed to delete CV");
     return true;
   }
@@ -227,7 +227,7 @@ export function usePortfolioApi() {
     deleteProject,
     uploadImage,
     uploadCV,
-    getCV,
+    getCVs,
     deleteCV,
     getAbout,
     updateAbout,
