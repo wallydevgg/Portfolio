@@ -82,6 +82,16 @@
     font-size: 1.25rem;
     gap: 1%;
 
+    // El relleno superior deja libre la esquina donde vive el botón que abre y
+    // cierra el panel: sin él, el primer elemento queda debajo y no se puede
+    // pulsar para cerrar.
+    padding: 5.5rem 1.5rem 2rem;
+
+    // En pantallas bajas —o en horizontal— siete elementos centrados no caben,
+    // y sin esto los de los extremos se recortan sin forma de alcanzarlos.
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
     li {
       margin: 0.5rem 0;
       @include flex-center;
@@ -122,4 +132,17 @@
   }
 
   .resume { margin: 0 auto; }
+}
+
+// Tema e idioma comparten fila en la cabecera del panel: apilados ocupaban dos
+// entradas del menú y empujaban los enlaces fuera de la vista en móviles bajos.
+.menu__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  width: 100%;
+  border-bottom: 1px solid rgba(167, 169, 190, 0.18);
 }

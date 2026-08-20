@@ -1,76 +1,87 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 
 export const ThemeContext = createContext();
 
+const STORAGE_KEY = "theme";
+const DARK_QUERY = "(prefers-color-scheme: dark)";
+
+function systemTheme() {
+  return window.matchMedia(DARK_QUERY).matches ? "dark" : "light";
+}
+
+/**
+ * Se guardan dos cosas distintas y conviene no confundirlas:
+ *
+ * - `preference`: lo que eligió la persona. "light", "dark" o "system".
+ * - `theme`: el valor ya resuelto, siempre "light" o "dark".
+ *
+ * Antes había una sola variable y podía valer "system". Los tres sitios que
+ * componen la clase con `${theme}-theme` producían entonces `system-theme`, que
+ * no existe en ninguna hoja de estilos: elegir "seguir al sistema" dejaba la
+ * interfaz sin tema. Al separar las dos, esos tres consumidores siguen leyendo
+ * `theme` y nunca reciben un valor que no puedan usar.
+ */
 export const ThemeProvider = ({ children }) => {
-  const getInitialTheme = () => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "light" || savedTheme === "dark") {
-      return savedTheme;
-    }
-    // "system", null or anything else: resolve the OS preference immediately
-    // so the .dark-theme/.light-theme classes are always applied on first paint.
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  };
+  const [preference, setPreference] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved === "light" || saved === "dark" || saved === "system"
+      ? saved
+      : "system";
+  });
 
-  const [theme, setTheme] = useState(getInitialTheme);
+  // Se resuelve en el primer render y no en un efecto: si empezara vacío, el
+  // primer pintado saldría sin clase de tema y parpadearía.
+  const [resolved, setResolved] = useState(() =>
+    (localStorage.getItem(STORAGE_KEY) === "light" ||
+      localStorage.getItem(STORAGE_KEY) === "dark")
+      ? localStorage.getItem(STORAGE_KEY)
+      : systemTheme()
+  );
+
+  // Solo se escucha al sistema mientras la preferencia sea "system"; con una
+  // elección explícita, que el sistema cambie no debe mover nada.
+  useEffect(() => {
+    if (preference !== "system") {
+      setResolved(preference);
+      return;
+    }
+
+    setResolved(systemTheme());
+
+    const media = window.matchMedia(DARK_QUERY);
+    const onChange = (event) => setResolved(event.matches ? "dark" : "light");
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, [preference]);
 
   useEffect(() => {
-    const systemThemeListener = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    );
-    const handleSystemThemeChange = (e) => {
-      if (theme === "system") {
-        setTheme(e.matches ? "dark" : "light");
-      }
-    };
-
-    systemThemeListener.addEventListener("change", handleSystemThemeChange);
-
-    return () => {
-      systemThemeListener.removeEventListener(
-        "change",
-        handleSystemThemeChange
-      );
-    };
-  }, [theme]);
+    document.documentElement.setAttribute("data-theme", resolved);
+  }, [resolved]);
 
   useEffect(() => {
-    if (theme === "system") {
-      const systemPrefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      document.documentElement.setAttribute(
-        "data-theme",
-        systemPrefersDark ? "dark" : "light"
-      );
-    } else {
-      document.documentElement.setAttribute("data-theme", theme);
-    }
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+    localStorage.setItem(STORAGE_KEY, preference);
+  }, [preference]);
 
-  const toggleTheme = () => {
-    if (theme === "light") {
-      setTheme("dark");
-    } else if (theme === "dark") {
-      setTheme("light");
-    } else {
-      // theme === "system": resolve to the opposite of the OS preference
-      const systemPrefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      setTheme(systemPrefersDark ? "light" : "dark");
-    }
-  };
+  const toggleTheme = useCallback(() => {
+    // El botón de dos estados sigue funcionando igual: alterna a partir de lo
+    // que se está viendo, aunque la preferencia fuese "system".
+    setPreference(resolved === "dark" ? "light" : "dark");
+  }, [resolved]);
 
-  const followSystemTheme = () => {
-    setTheme("system");
-  };
+  const followSystemTheme = useCallback(() => setPreference("system"), []);
+
+  const value = useMemo(
+    () => ({
+      theme: resolved,
+      preference,
+      setThemePreference: setPreference,
+      toggleTheme,
+      followSystemTheme,
+    }),
+    [resolved, preference, toggleTheme, followSystemTheme]
+  );
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, followSystemTheme }}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 };

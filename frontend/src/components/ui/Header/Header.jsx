@@ -71,6 +71,7 @@ const Header = () => {
             isOpen={isOpen}
             openMenu={openMenu}
             closeMenu={closeMenu}
+            handleLinkClick={handleLinkClick}
           />
         </div>
       </nav>

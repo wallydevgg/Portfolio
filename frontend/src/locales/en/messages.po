@@ -12,6 +12,11 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. js-lingui-explicit-id
+#: src/components/ui/Header/Header.test.jsx:62
+#~ msgid "menu.toggleAria"
+#~ msgstr "Show navigation menu"
+
+#. js-lingui-explicit-id
 #: src/pages/Home/Sections/Experience/listExperience.jsx:27
 #~ msgid "experience.2.resp.1"
 #~ msgstr "Design UX/UI and web development. I've made and developed engaging and functional websites using technologies like CMS, Next.js, Payload, React and PostgreSQL."
@@ -50,7 +55,7 @@ msgstr ""
 #~ msgid "{0}"
 #~ msgstr ""
 
-#: src/pages/Home/Sections/Hero/Hero.jsx:48
+#: src/pages/Home/Sections/Hero/Hero.jsx:52
 msgid "+5 years building scalable <0>fullstack web applications</0>"
 msgstr "+5 years building scalable <0>fullstack web applications</0>"
 
@@ -89,6 +94,34 @@ msgstr ""
 #: src/pages/Privacy/Privacy.jsx:58
 msgid "5. Third-Party Services"
 msgstr ""
+
+#: src/layouts/DashboardLayout.jsx:143
+msgid "About"
+msgstr "About"
+
+#: src/layouts/DashboardLayout.jsx:125
+msgid "All Posts"
+msgstr "All Posts"
+
+#: src/pages/Dashboard/Settings/Theme.jsx:27
+msgid "Always use the dark theme."
+msgstr "Always use the dark theme."
+
+#: src/pages/Dashboard/Settings/Theme.jsx:21
+msgid "Always use the light theme."
+msgstr "Always use the light theme."
+
+#: src/pages/Dashboard/Settings/Theme.jsx:44
+msgid "Applies to the dashboard and to the public site. The choice is saved on this device."
+msgstr "Applies to the dashboard and to the public site. The choice is saved on this device."
+
+#: src/layouts/DashboardLayout.jsx:132
+msgid "Archived"
+msgstr "Archived"
+
+#: src/layouts/DashboardLayout.jsx:111
+msgid "Blog Posts"
+msgstr "Blog Posts"
 
 #: src/pages/Blog/BlogPostPage.jsx:179
 msgid "blog.actions.copied"
@@ -188,6 +221,10 @@ msgstr "Search articles..."
 msgid "blog.subtitle"
 msgstr "Articles about fullstack development, React, Python, DevOps and software architecture."
 
+#: src/pages/Dashboard/Settings/Language.jsx:36
+msgid "Changes the interface language of the dashboard and the public site. The choice is saved on this device."
+msgstr "Changes the interface language of the dashboard and the public site. The choice is saved on this device."
+
 #: src/pages/Privacy/Privacy.jsx:43
 msgid "Contact form submissions are stored securely in our database. We retain this information for up to 12 months, after which it may be permanently deleted. Spam messages are deleted periodically."
 msgstr ""
@@ -228,6 +265,18 @@ msgstr "Message sent! I'll get back to you soon."
 msgid "contact.title"
 msgstr "contact"
 
+#: src/layouts/DashboardLayout.jsx:203
+msgid "CV"
+msgstr "CV"
+
+#: src/pages/Dashboard/Settings/Theme.jsx:26
+msgid "Dark"
+msgstr "Dark"
+
+#: src/pages/Dashboard/Settings/Language.jsx:26
+msgid "Default language."
+msgstr "Default language."
+
 #: src/hooks/useExperience.jsx:30
 msgid "Design UX/UI and web development. I've made and developed engaging and functional websites using technologies like CMS, Next.js, Payload, React and PostgreSQL."
 msgstr "Design UX/UI and web development. I've made and developed engaging and functional websites using technologies like CMS, Next.js, Payload, React and PostgreSQL."
@@ -245,54 +294,96 @@ msgstr "Development of WordPress sites and custom plugins. Design UX/UI and web 
 msgid "experience.title"
 msgstr "experience"
 
+#: src/layouts/DashboardLayout.jsx:139
+msgid "Experience"
+msgstr "Experience"
+
+#: src/pages/Dashboard/Settings/Theme.jsx:33
+msgid "Follow your operating system setting."
+msgstr "Follow your operating system setting."
+
 #: src/hooks/useExperience.jsx:17
 #: src/hooks/useExperience.jsx:28
 msgid "Full Stack Developer"
 msgstr "Full Stack Developer"
 
-#: src/pages/Home/Sections/Hero/Hero.jsx:80
+#: src/pages/Dashboard/Settings/Language.jsx:26
+msgid "Full translation."
+msgstr "Full translation."
+
+#: src/pages/Home/Sections/Hero/Hero.jsx:84
 msgid "hero.contactButton"
 msgstr "Contact me"
 
-#: src/pages/Home/Sections/Hero/Hero.jsx:86
+#: src/pages/Home/Sections/Hero/Hero.jsx:90
 msgid "hero.cvNotUploaded"
 msgstr "CV not uploaded yet"
 
-#: src/pages/Home/Sections/Hero/Hero.jsx:91
+#: src/pages/Home/Sections/Hero/Hero.jsx:95
 msgid "hero.downloadCV"
 msgstr "Download CV"
 
-#: src/pages/Home/Sections/Hero/Hero.jsx:97
+#: src/pages/Home/Sections/Hero/Hero.jsx:101
 msgid "hero.status"
 msgstr "Available for work"
 
-#: src/pages/Home/Sections/Hero/Hero.jsx:43
+#: src/pages/Home/Sections/Hero/Hero.jsx:47
 msgid "Hi! I'm <0>Waldir Apaza</0>"
 msgstr "Hi! I'm <0>Waldir Apaza</0>"
+
+#: src/layouts/DashboardLayout.jsx:224
+#: src/pages/Dashboard/Settings/Language.jsx:35
+#: src/pages/Dashboard/Settings/Language.jsx:45
+msgid "Language"
+msgstr "Language"
 
 #: src/pages/Privacy/Privacy.jsx:19
 msgid "Last updated: August 2026"
 msgstr ""
 
-#: src/components/ui/Header/Menu/Menu.jsx:31
+#: src/pages/Dashboard/Settings/Theme.jsx:20
+msgid "Light"
+msgstr "Light"
+
+#: src/layouts/DashboardLayout.jsx:234
+msgid "Logout"
+msgstr "Logout"
+
+#: src/components/ui/Header/navItems.js:42
 msgid "menu.about"
 msgstr "about-me"
 
-#: src/components/ui/Header/Menu/Menu.jsx:42
+#: src/components/ui/Header/navItems.js:46
 msgid "menu.blog"
 msgstr "blog"
 
-#: src/components/ui/Header/Menu/Menu.jsx:37
+#: src/components/ui/Header/navItems.js:44
 msgid "menu.contact"
 msgstr "contact"
 
-#: src/components/ui/Header/Menu/Menu.jsx:18
+#: src/components/ui/Header/navItems.js:38
 msgid "menu.experience"
 msgstr "experience"
 
-#: src/components/ui/Header/Menu/Menu.jsx:24
+#: src/components/ui/Header/navItems.js:40
 msgid "menu.projects"
 msgstr "projects"
+
+#: src/components/ui/Header/navItems.js:54
+msgid "menu.toggleAria"
+msgstr "Show navigation menu"
+
+#: src/layouts/DashboardLayout.jsx:92
+msgid "Messages"
+msgstr "Messages"
+
+#: src/layouts/DashboardLayout.jsx:196
+msgid "Notifications"
+msgstr "Notifications"
+
+#: src/layouts/DashboardLayout.jsx:81
+msgid "Overview"
+msgstr "Overview"
 
 #: src/hooks/useExperience.jsx:21
 msgid "Performed extensive diagnostic, quality and feature validation testing, optimizing code and generating detailed reports to ensure software quality."
@@ -301,6 +392,14 @@ msgstr "Performed extensive diagnostic, quality and feature validation testing, 
 #: src/pages/Privacy/Privacy.jsx:18
 msgid "Privacy Policy"
 msgstr ""
+
+#: src/layouts/DashboardLayout.jsx:210
+msgid "Profile"
+msgstr "Profile"
+
+#: src/layouts/DashboardLayout.jsx:151
+msgid "Projects"
+msgstr "Projects"
 
 #: src/pages/Privacy/Privacy.jsx:36
 msgid "Protecting the website against spam, bots, and abuse (via Cloudflare Turnstile and rate limiting)."
@@ -336,6 +435,19 @@ msgstr "See less"
 msgid "experience.seeMore"
 msgstr "See More"
 
+#: src/layouts/DashboardLayout.jsx:189
+msgid "SEO"
+msgstr "SEO"
+
+#: src/layouts/DashboardLayout.jsx:168
+#: src/layouts/DashboardLayout.jsx:182
+msgid "Settings"
+msgstr "Settings"
+
+#: src/layouts/DashboardLayout.jsx:147
+msgid "Skills"
+msgstr "Skills"
+
 #: src/pages/Home/Sections/Skills/Skills.jsx:66
 #~ msgid "skills.backend"
 #~ msgstr "Backend"
@@ -369,9 +481,19 @@ msgstr "See all my skills in the CV"
 msgid "skills.title"
 msgstr "skills"
 
+#: src/pages/Dashboard/Settings/Theme.jsx:32
+msgid "System"
+msgstr "System"
+
 #: src/pages/Privacy/Privacy.jsx:33
 msgid "The information collected is used exclusively for:"
 msgstr ""
+
+#: src/layouts/DashboardLayout.jsx:217
+#: src/pages/Dashboard/Settings/Theme.jsx:43
+#: src/pages/Dashboard/Settings/Theme.jsx:53
+msgid "Theme"
+msgstr "Theme"
 
 #: src/pages/Privacy/Privacy.jsx:59
 msgid "This website uses Cloudflare Turnstile to prevent spam. Turnstile may collect technical information about your device and browser to verify that you are a human. This data is processed in accordance with Cloudflare's Privacy Policy."

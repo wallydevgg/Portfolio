@@ -1,51 +1,54 @@
-import React, { useState } from "react";
-import { Icon, Switch } from "../../../../barrell";
 import { Link } from "react-router";
-import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { Switch } from "@/barrell";
+import { useLingui } from "@lingui/react";
+import LangSwitch from "../../Buttons/Switch/LangSwitch";
+import { NAV_ITEMS, menuToggleLabel, navLabel } from "../navItems";
 import "./MenuButton.scss";
 
-const MenuButton = ({ openMenu, closeMenu, isOpen }) => {
-  const [open, setOpen] = useState(false);
+/**
+ * Menú desplegable de móvil y tablet.
+ *
+ * Comparte la lista con el menú de escritorio (NAV_ITEMS). Antes tenía su
+ * propia copia con tres entradas en inglés fijo, sin #contact, sin #blog y sin
+ * el selector de idioma.
+ *
+ * El estado de apertura viene de Header, que ya lo pasaba por props: este
+ * componente lo ignoraba y llevaba un `useState` propio, así que había dos
+ * fuentes de verdad para lo mismo. También usa el `handleLinkClick` de Header,
+ * que descuenta la altura de la barra fija al hacer scroll — la versión de
+ * aquí saltaba a la sección y dejaba el título tapado.
+ */
+const MenuButton = ({ openMenu, closeMenu, isOpen, handleLinkClick }) => {
+  useLingui();
 
-  const toggleMenu = () => {
-    setOpen(!open);
-  };
-
-  const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
+  const toggleMenu = () => (isOpen ? closeMenu() : openMenu());
 
   return (
     <>
-      <div className={`overlay ${open ? "open" : ""}`} onClick={toggleMenu} />
-      <div className={`menu ${open ? "open" : ""}`}>
+      <div className={`overlay ${isOpen ? "open" : ""}`} onClick={closeMenu} />
+      <div className={`menu ${isOpen ? "open" : ""}`}>
         <ul>
-          <li>
+          <li className="menu__controls">
             <Switch />
+            <LangSwitch />
           </li>
-          <li>
-            <Link to="/" onClick={() => scrollToSection("experience")}>
-              <span className="hashTag">#</span>experience
-            </Link>
-          </li>
-          <li>
-            <Link to="/" onClick={() => scrollToSection("projects")}>
-              <span className="hashTag">#</span>projects
-            </Link>
-          </li>
-          <li>
-            <Link to="/" onClick={() => scrollToSection("about")}>
-              <span className="hashTag">#</span>about
-            </Link>
-          </li>
+          {NAV_ITEMS.map((item) => (
+            <li key={item.key}>
+              <Link to={item.to} onClick={() => handleLinkClick(item.section)}>
+                <span className="hashTag">#</span>
+                {navLabel(item.key)}
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
-      <button className="menu-toggle" onClick={toggleMenu} aria-label="monstrar menu de navegacion">
-        <span className={`menu-toggle__icon ${open ? "open" : ""}`} />
+      <button
+        className="menu-toggle"
+        onClick={toggleMenu}
+        aria-expanded={isOpen}
+        aria-label={menuToggleLabel()}
+      >
+        <span className={`menu-toggle__icon ${isOpen ? "open" : ""}`} />
       </button>
     </>
   );

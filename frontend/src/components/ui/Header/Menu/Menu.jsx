@@ -1,47 +1,23 @@
-// ✅ GENERADO POR CLAUDE - Archivo: frontend/src/components/ui/Header/Menu/Menu.jsx
 import { Link } from "react-router";
 import { Switch } from "@/barrell";
-import "./Menu.scss";
-import LangSwitch from "../../Buttons/Switch/LangSwitch";
-import { t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
+import LangSwitch from "../../Buttons/Switch/LangSwitch";
+import { NAV_ITEMS, navLabel } from "../navItems";
+import "./Menu.scss";
 
 const Menu = ({ handleLinkClick }) => {
   useLingui();
   return (
     <nav className="menu-header">
       <ul>
-
-        <li>
-          <Link to="/" onClick={() => handleLinkClick("experience")}>
-            <span className="hashTag">#</span>
-            {t`menu.experience`}
-          </Link>
-        </li>
-        <li>
-          <Link to="/" onClick={() => handleLinkClick("projects")}>
-            <span className="hashTag">#</span>
-            {t`menu.projects`}
-          </Link>
-        </li>
-
-        <li>
-          <Link to="/" onClick={() => handleLinkClick("about")}>
-            <span className="hashTag">#</span>
-            {t`menu.about`}
-          </Link>
-        </li>
-        <li>
-          <Link to="/" onClick={() => handleLinkClick("contact")}>
-            <span className="hashTag">#</span>
-            {t`menu.contact`}
-          </Link>
-        </li>        <li>
-          <Link to="/blog" onClick={() => handleLinkClick("")}>
-            <span className="hashTag">#</span>
-            {t`menu.blog`}
-          </Link>
-        </li>
+        {NAV_ITEMS.map((item) => (
+          <li key={item.key}>
+            <Link to={item.to} onClick={() => handleLinkClick(item.section)}>
+              <span className="hashTag">#</span>
+              {navLabel(item.key)}
+            </Link>
+          </li>
+        ))}
         <li>
           <Switch />
         </li>

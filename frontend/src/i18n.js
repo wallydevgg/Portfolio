@@ -30,6 +30,16 @@ export function dynamicActivate(locale) {
     es: esMessages,
   };
   i18n.loadAndActivate({ locale: normalized, messages: messages[normalized] });
+
+  // La detección de arranque lee `fromStorage("locale")`, pero nadie escribía
+  // esa clave: el idioma elegido se perdía en cada recarga y volvía al del
+  // navegador. Se guarda aquí, que es el único sitio por el que se cambia.
+  try {
+    localStorage.setItem("locale", normalized);
+  } catch {
+    // Modo privado o almacenamiento lleno: el idioma sigue activo en esta
+    // sesión, solo no sobrevive a la recarga.
+  }
 }
 
 // Activate the default locale on load
